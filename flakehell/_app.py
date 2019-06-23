@@ -6,7 +6,6 @@ import toml
 from flake8.main.application import Application
 from flake8.options.aggregator import aggregate_options
 from ._checkers import FlakeHellCheckersManager
-# from ._style import FlakeHellStyleGuideManager
 
 
 class FlakeHellApplication(Application):
@@ -26,12 +25,6 @@ class FlakeHellApplication(Application):
         )
         self.options.__dict__.update(self.get_toml_config())
         super().parse_configuration_and_cli(argv=argv)
-
-    # def make_guide(self):
-    #     self.guide = FlakeHellStyleGuideManager(
-    #         self.options, self.formatter
-    #     )
-    #     super().make_guide()
 
     def make_file_checker_manager(self):
         self.file_checker_manager = FlakeHellCheckersManager(
