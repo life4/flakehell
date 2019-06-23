@@ -89,10 +89,16 @@ class FlakeHellCheckersManager(Manager):
             if '*' not in pattern and REX_NAME.sub('-', pattern).lower() == plugin_name:
                 return rules
 
-        # try to find match by pattern
+        # try to find match by pattern and select the longest
+        best_match = (0, [])
         for pattern, rules in plugins.items():
-            if fnmatch(filename=plugin_name, patterns=[pattern]):
-                return rules
+            if not fnmatch(filename=plugin_name, patterns=[pattern]):
+                continue
+            match = len(pattern)
+            if match > best_match[0]:
+                best_match = match, rules
+        if best_match[0]:
+            return best_match[1]
 
         return []
 

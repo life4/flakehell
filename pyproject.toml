@@ -1,2 +1,6 @@
 [tool.flakehell]
-plugins = {"*" = ["+*", "-W503", "-C408"]}
+max_line_length = 120
+
+[tool.flakehell.plugins]
+"*" = ["+*", "-C408"]
+"flake8-quotes" = ["+*"]
