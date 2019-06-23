@@ -26,23 +26,27 @@ class FlakeHellCheckersManager(Manager):
                             check=check,
                             options=self.options,
                         )
-                        if not checker.should_process:
+                        # if checker.should_process:
+                        #     continue
+                        if not self._should_create_file_checker(filename=filename, argument=argument):
                             continue
+                        self.checkers.append(checker)
 
-                        if filename == '-':
-                            self.checkers.append(checker)
-                            continue
+    def _should_create_file_checker(self, filename, argument) -> bool:
+        if filename == '-':
+            return True
+        if fnmatch(filename=filename, patterns=self.options.filename):
+            return True
 
-                        if fnmatch(filename=filename, patterns=self.options.filename):
-                            self.checkers.append(checker)
-                            continue
-
-                        if not self.options._running_from_vcs and not self.options.diff:
-                            if argument == filename:
-                                self.checkers.append(checker)
-                                continue
+        if self.options._running_from_vcs:
+            return False
+        if self.options.diff:
+            return False
+        return argument == filename
 
     def report(self):
+        self.run_serial()
+
         results_reported = results_found = 0
         for checker in self.checkers:
             results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
@@ -59,7 +63,6 @@ class FlakeHellCheckersManager(Manager):
     def _handle_results(self, filename, results, check):
         if not results:
             return 0
-        print(check)
         rules = self._get_plugin_rules(
             plugin_name=check['plugin_name'],
             plugins=self.options.plugins,
@@ -82,12 +85,12 @@ class FlakeHellCheckersManager(Manager):
     def _get_plugin_rules(plugin_name: str, plugins: Dict[str, List[str]]) -> List[str]:
         plugin_name = REX_NAME.sub('-', plugin_name).lower()
         # try to find exact match
-        for pattern, rules in plugins:
+        for pattern, rules in plugins.items():
             if '*' not in pattern and REX_NAME.sub('-', pattern).lower() == plugin_name:
                 return rules
 
         # try to find match by pattern
-        for pattern, rules in plugins:
+        for pattern, rules in plugins.items():
             if fnmatch(filename=plugin_name, patterns=[pattern]):
                 return rules
 
@@ -102,7 +105,6 @@ class FlakeHellCheckersManager(Manager):
         for rule in rules:
             if fnmatch(code, patterns=[rule[1:]]):
                 include = rule[0] == '+'
-        print(code, rules, include)
         return include
 
 

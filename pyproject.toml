@@ -1,2 +1,2 @@
 [tool.flakehell]
-plugins = {"flake8-*" = ["+E*", "+W*", "-W503"]}
+plugins = {"*" = ["+*", "-W503", "-C408"]}
