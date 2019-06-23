@@ -5,6 +5,10 @@ from ._plugin import get_plugin_name
 
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{0,5}$')
 
+ALIASES = {
+    'logging-format': 'G',
+}
+
 
 def discover(app, argv):
     plugins_codes = defaultdict(list)
@@ -13,6 +17,7 @@ def discover(app, argv):
     for check_type, checks in app.check_plugins.to_dictionary().items():
         for check in checks:
             code = check['name']
+            code = ALIASES.get(code, code)
             if not REX_CODE.match(code):
                 continue
             plugins_codes[(check_type, get_plugin_name(check))].append(code)
