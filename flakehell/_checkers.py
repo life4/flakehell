@@ -4,6 +4,8 @@ from typing import List, Dict
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
+from ._plugin import get_plugin_name
+
 
 REX_NAME = re.compile(r"[-_.]+")
 
@@ -64,7 +66,7 @@ class FlakeHellCheckersManager(Manager):
         if not results:
             return 0
         rules = self._get_plugin_rules(
-            plugin_name=check['plugin_name'],
+            plugin_name=get_plugin_name(check),
             plugins=self.options.plugins,
         )
         reported_results_count = 0
