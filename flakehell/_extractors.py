@@ -38,7 +38,8 @@ def extract_default(name):
 
 
 def extract(name):
-    function_name = 'extract_' + name.replace('-', '_')
+    name = name.replace('-', '_')
+    function_name = 'extract_' + name
 
     # use ad-hoc extractor if available
     if function_name in globals():
@@ -101,3 +102,19 @@ def extract_pep8ext_naming():
             if code[0] == 'N':
                 codes[code] = message
     return codes
+
+
+def extract_wemake_python_styleguide():
+    from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
+
+    codes = dict()
+    for module in (best_practices, complexity, consistency, naming):
+        for checker_name in dir(module):
+            if not checker_name.endswith('Violation'):
+                continue
+            checker = getattr(module, checker_name)
+            if not hasattr(checker, 'code'):
+                continue
+            code = 'Z' + str(checker.code).zfill(3)
+            codes[code] = checker.error_template
+        return codes
