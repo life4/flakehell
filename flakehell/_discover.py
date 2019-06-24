@@ -10,10 +10,10 @@ ALIASES = {
 }
 
 
-def discover(app, argv):
+def discover(app):
     plugins_codes = defaultdict(list)
 
-    app.initialize(argv)
+    app.initialize([])
     for check_type, checks in app.check_plugins.to_dictionary().items():
         for check in checks:
             code = check['name']
