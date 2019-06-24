@@ -104,6 +104,46 @@ def extract_pep8ext_naming():
     return codes
 
 
+def extract_flake8_alfred():
+    return {'B1': 'banned symbol'}
+
+
+def extract_flake8_eradicate():
+    return {'E800': 'Found commented out code: {0}'}
+
+
+def extract_flake8_annotations_complexity():
+    from flake8_annotations_complexity.checker import AnnotationsComplexityChecker
+
+    code, message = AnnotationsComplexityChecker._error_message_template.split(' ', maxsplit=1)
+    return {code: message}
+
+
+def extract_flake8_string_format():
+    from flake8_string_format import StringFormatChecker
+
+    return {'P{}'.format(c): m for c, m in StringFormatChecker.ERRORS.items()}
+
+
+def extract_flake8_broken_line():
+    from flake8_broken_line import N400
+
+    code, message = N400.split(': ')
+    return {code: message}
+
+
+def extract_flake8_bandit():
+    from bandit.core.extension_loader import MANAGER
+
+    codes = dict()
+    for blacklist in MANAGER.blacklist.values():
+        for check in blacklist:
+            codes[check['id']] = check['message']
+    for plugin in MANAGER.plugins:
+        codes[plugin.plugin._test_id] = plugin.name.replace('_', ' ')
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 
