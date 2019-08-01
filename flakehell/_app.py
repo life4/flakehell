@@ -3,9 +3,13 @@ from typing import Dict, Any, List
 
 
 import toml
+from entrypoints import EntryPoint
 from flake8.main.application import Application
+from flake8.plugins.manager import Plugin
 from flake8.options.aggregator import aggregate_options
 from ._checkers import FlakeHellCheckersManager
+from .formatters import FORMATTERS
+from ._constants import NAME
 
 
 class FlakeHellApplication(Application):
@@ -13,6 +17,7 @@ class FlakeHellApplication(Application):
     Reloaded flake8 original entrypoint to provide support for some features:
     + pyproject.toml support
     + replace CheckersManager to support for `plugins` option
+    + register custom formatters
     """
 
     def get_toml_config(self) -> Dict[str, Any]:
@@ -37,3 +42,22 @@ class FlakeHellApplication(Application):
             arguments=self.args,
             checker_plugins=self.check_plugins,
         )
+
+    def find_plugins(self):
+        """Patched finder to directly register custom formatters.
+        """
+        super().find_plugins()
+        for name, cls in FORMATTERS.items():
+            entry_point = EntryPoint.from_string(
+                epstr='{package}.formatters:{class_name}'.format(
+                    package=NAME,
+                    class_name=cls.__name__,
+                ),
+                name=name,
+            )
+            self.formatting_plugins.plugins[name] = Plugin(
+                name=name,
+                entry_point=entry_point,
+                local=True,
+            )
+            self.formatting_plugins.names.append(name)

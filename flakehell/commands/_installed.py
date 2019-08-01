@@ -11,5 +11,8 @@ def installed_command(argv) -> CommandResult:
         return ExitCodes.NO_PLUGINS_INSTALLED, 'no plugins installed'
     width = max(len(p['name']) for p in plugins)
     for plugin in plugins:
-        print('{} | {}'.format(plugin['name'].ljust(width), ', '.join(plugin['codes'])))
+        print('{name} | {codes}'.format(
+            name=plugin['name'].ljust(width),
+            codes=', '.join(plugin['codes']),
+        ))
     return 0, ''
