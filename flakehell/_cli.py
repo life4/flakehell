@@ -4,24 +4,30 @@ from typing import List, NoReturn
 
 from ._constants import NAME, ExitCodes
 from .commands import COMMANDS
+from ._types import CommandResult
 
 
 logger = getLogger(NAME)
 
 
-def main(argv: List[str] = None) -> NoReturn:
-    if argv is None:
-        argv = sys.argv[1:]
+def main(argv: List[str] = None) -> CommandResult:
     if not argv:
-        logger.error('No command provided. Available: {}.'.format(', '.join(sorted(COMMANDS))))
-        sys.exit(ExitCodes.NO_COMMAND)
+        return ExitCodes.NO_COMMAND, 'No command provided. Available: {}.'.format(
+            ', '.join(sorted(COMMANDS)),
+        )
     command_name = argv[0]
     if command_name not in COMMANDS:
-        logger.error('Invalid command: {}. Available: {}.'.format(
+        return ExitCodes.INVALID_COMMAND, 'Invalid command: {}. Available: {}.'.format(
             command_name,
             ', '.join(sorted(COMMANDS)),
-        ))
-        sys.exit(ExitCodes.INVALID_COMMAND)
-    exit_code, msg = COMMANDS[command_name](argv=argv[1:])
-    logger.error(msg)
+        )
+    return COMMANDS[command_name](argv=argv[1:])
+
+
+def entrypoint(argv: List[str] = None) -> NoReturn:
+    if argv is None:
+        argv = sys.argv[1:]
+    exit_code, msg = main(argv)
+    if msg:
+        logger.error(msg)
     sys.exit(exit_code)

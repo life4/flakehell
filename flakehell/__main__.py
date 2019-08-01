@@ -1,4 +1,4 @@
-from ._cli import main
+from ._cli import entrypoint
 
 
-main()
+entrypoint()
