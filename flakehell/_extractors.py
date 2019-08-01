@@ -33,7 +33,7 @@ def get_messages(code, content):
 
 
 def extract_default(name):
-    module = __import__(name)
+    module = import_module(name)
     content = Path(module.__file__).read_text()
     return get_messages(code='', content=content)
 

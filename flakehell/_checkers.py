@@ -1,17 +1,25 @@
 import re
-from typing import List, Dict
+from typing import List, Tuple
 
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
-from ._plugin import get_plugin_name
+from ._plugin import get_plugin_name, get_plugin_rules, check_include
 
 
 REX_NAME = re.compile(r"[-_.]+")
 
 
 class FlakeHellCheckersManager(Manager):
-    def make_checkers(self, paths=None):
+    """
+    Patched flake8.checker.Manager to provide `plugins` support
+    """
+    def make_checkers(self, paths: List[str] = None) -> None:
+        """
+        Reloaded checkers generator to provide one checker per file per rule.
+        Original `make_checkers` provides checker per file with all rules mixed.
+        It makes difficult to filter checks by codes after all.
+        """
         if paths is None:
             paths = self.arguments
         if not paths:
@@ -34,7 +42,9 @@ class FlakeHellCheckersManager(Manager):
                             continue
                         self.checkers.append(checker)
 
-    def _should_create_file_checker(self, filename, argument) -> bool:
+    def _should_create_file_checker(self, filename: str, argument) -> bool:
+        """Filter out excluded files
+        """
         if filename == '-':
             return True
         if fnmatch(filename=filename, patterns=self.options.filename):
@@ -46,7 +56,12 @@ class FlakeHellCheckersManager(Manager):
             return False
         return argument == filename
 
-    def report(self):
+    def report(self) -> Tuple[int, int]:
+        """Reloaded report generation to filter out excluded error codes.
+
+        + Run everything only serial. IDK why, but it doesn't work with parallel run
+        + pass checker into `_handle_results` to get plugin name.
+        """
         self.run_serial()
 
         results_reported = results_found = 0
@@ -62,16 +77,16 @@ class FlakeHellCheckersManager(Manager):
             results_found += len(results)
         return (results_found, results_reported)
 
-    def _handle_results(self, filename, results, check):
+    def _handle_results(self, filename: str, results: list, check) -> int:
         if not results:
             return 0
-        rules = self._get_plugin_rules(
+        rules = get_plugin_rules(
             plugin_name=get_plugin_name(check),
             plugins=self.options.plugins,
         )
         reported_results_count = 0
         for (error_code, line_number, column, text, physical_line) in results:
-            if not self._check_include(code=error_code, rules=rules):
+            if not check_include(code=error_code, rules=rules):
                 continue
             reported_results_count += self.style_guide.handle_error(
                 code=error_code,
@@ -83,41 +98,12 @@ class FlakeHellCheckersManager(Manager):
             )
         return reported_results_count
 
-    @staticmethod
-    def _get_plugin_rules(plugin_name: str, plugins: Dict[str, List[str]]) -> List[str]:
-        plugin_name = REX_NAME.sub('-', plugin_name).lower()
-        # try to find exact match
-        for pattern, rules in plugins.items():
-            if '*' not in pattern and REX_NAME.sub('-', pattern).lower() == plugin_name:
-                return rules
-
-        # try to find match by pattern and select the longest
-        best_match = (0, [])
-        for pattern, rules in plugins.items():
-            if not fnmatch(filename=plugin_name, patterns=[pattern]):
-                continue
-            match = len(pattern)
-            if match > best_match[0]:
-                best_match = match, rules
-        if best_match[0]:
-            return best_match[1]
-
-        return []
-
-    @staticmethod
-    def _check_include(code: str, rules: List[str]) -> bool:
-        include = False
-        for rule in rules:
-            if len(rule) < 2 or rule[0] not in {'-', '+'}:
-                raise ValueError('invalid rule: `{}`'.format(rule))
-        for rule in rules:
-            if fnmatch(code, patterns=[rule[1:]]):
-                include = rule[0] == '+'
-        return include
-
 
 class FlakeHellFileChecker(FileChecker):
-    def __init__(self, filename, check_type, check, options):
+    """
+    A little bit patched FileChecker to handle ane check per checker
+    """
+    def __init__(self, filename: str, check_type: str, check, options):
         self.check_type = check_type
         self.check = check
         checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])

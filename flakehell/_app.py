@@ -9,6 +9,11 @@ from ._checkers import FlakeHellCheckersManager
 
 
 class FlakeHellApplication(Application):
+    """
+    Reloaded flake8 original entrypoint to provide support for some features:
+    + pyproject.toml support
+    + replace CheckersManager to support for `plugins` option
+    """
 
     def get_toml_config(self) -> Dict[str, Any]:
         with Path('pyproject.toml').open('r') as stream:
