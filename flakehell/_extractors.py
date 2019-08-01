@@ -1,5 +1,6 @@
 import ast
 import re
+from importlib import import_module
 from pathlib import Path
 
 
@@ -141,6 +142,21 @@ def extract_flake8_bandit():
             codes[check['id']] = check['message']
     for plugin in MANAGER.plugins:
         codes[plugin.plugin._test_id] = plugin.name.replace('_', ' ')
+    return codes
+
+
+def extract_pylint():
+    import pylint.checkers
+
+    codes = dict()
+    for path in Path(pylint.checkers.__path__[0]).iterdir():
+        module = import_module('pylint.checkers.' + path.stem)
+        for class_name in dir(module):
+            cls = getattr(module, class_name, None)
+            msgs = getattr(cls, 'msgs', None)
+            if not msgs:
+                continue
+            codes.update({code: msg.replace('\n', ' ') for code, (msg, *_) in msgs.items()})
     return codes
 
 
