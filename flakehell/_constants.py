@@ -1,5 +1,8 @@
-from colorama import Fore
+from colorama import Fore, init
 from enum import IntEnum
+
+
+init()
 
 
 NAME = 'flakehell'
