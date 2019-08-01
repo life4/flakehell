@@ -1,3 +1,4 @@
+from colorama import Fore
 from enum import IntEnum
 
 
@@ -17,3 +18,11 @@ class ExitCodes(IntEnum):
     NO_PLUGIN_NAME = 21
     IMPORT_ERROR = 22
     NO_CODES = 23
+
+
+COLORS = dict(
+    W=Fore.YELLOW,
+    E=Fore.RED,
+    WPS=Fore.MAGENTA,
+    default=Fore.GREEN,
+)
