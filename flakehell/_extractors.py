@@ -160,6 +160,16 @@ def extract_pylint():
     return codes
 
 
+def extract_pyflakes():
+    from flake8.plugins.pyflakes import FLAKE8_PYFLAKES_CODES
+    from pyflakes import messages
+
+    codes = dict()
+    for class_name, code in FLAKE8_PYFLAKES_CODES.items():
+        codes[code] = getattr(messages, class_name).message
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 
