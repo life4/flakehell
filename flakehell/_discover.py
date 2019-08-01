@@ -1,5 +1,7 @@
 import re
 from collections import defaultdict
+from typing import Any, Dict, Iterator
+
 from ._plugin import get_plugin_name
 
 
@@ -10,7 +12,7 @@ ALIASES = {
 }
 
 
-def discover(app):
+def get_installed(app) -> Iterator[Dict[str, Any]]:
     plugins_codes = defaultdict(list)
 
     app.initialize([])
