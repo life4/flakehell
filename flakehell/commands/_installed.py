@@ -17,7 +17,7 @@ def installed_command(argv) -> CommandResult:
     template = '{name} | {codes:8} | {rules}'
     print(template.format(
         name=colored('NAME'.ljust(width), 'yellow'),
-        codes=colored('CODES', 'yellow'),
+        codes=colored('CODES   ', 'yellow'),
         rules=colored('RULES', 'yellow'),
     ))
     for plugin in plugins:
@@ -25,10 +25,17 @@ def installed_command(argv) -> CommandResult:
             plugin_name=plugin['name'],
             plugins=app.options.plugins,
         )
+        colored_rules = []
+        for rule in rules:
+            if rule[0] == '+':
+                rule = colored(rule, 'green')
+            elif rule[0] == '-':
+                rule = colored(rule, 'red')
+            colored_rules.append(rule)
         color = 'green' if rules else 'red'
         print(template.format(
             name=colored(plugin['name'].ljust(width), color),
             codes=', '.join(plugin['codes']),
-            rules=', '.join(rules),
+            rules=', '.join(colored_rules),
         ))
     return 0, ''
