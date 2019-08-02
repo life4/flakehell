@@ -1,9 +1,90 @@
 [tool.flakehell]
-format = "colored"
+format = "grouped"
 max_line_length = 120
 # show_source = true
 
 [tool.flakehell.plugins]
-"pyflakes" = ["+*"]
-"flake8-quotes" = ["+*"]
+pyflakes = ["+*"]
+flake8-quotes = ["+*"]
 "wemake-*" = ["+*", "-WPS300", "-WPS436"]
+
+# -- DEPHELL -- #
+
+[tool.dephell.pytest]
+from = {format = "flit", path = "pyproject.toml"}
+envs = ["main", "dev"]
+tests = ["tests"]
+command = "python -m pytest tests/"
+
+# -- FLIT -- #
+
+[tool.flit.metadata]
+module="flakehell"
+author="Gram (@orsinium)"
+author-email="master_fess@mail.ru"
+home-page="https://github.com/orsinium/flakehell"
+requires-python=">=3.5"
+requires=[
+    "entrypoints",
+    "flake8",
+    "pygments",
+    "termcolor",
+    "toml",
+]
+description-file="README.md"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Framework :: Flake8",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[tool.flit.metadata.urls]
+Documentation = "https://flakehell.readthedocs.io/"
+
+[tool.flit.scripts]
+flakehell = "flakehell:entrypoint"
+
+[tool.flit.metadata.requires-extra]
+dev = [
+    "flake8-alfred",
+    "flake8-annotations-complexity",
+    "flake8-bandit",
+    "flake8-broken-line",
+    "flake8-bugbear",
+    "flake8-builtins",
+    "flake8-coding",
+    "flake8-commas",
+    "flake8-comprehensions",
+    "flake8-debugger",
+    "flake8-django",
+    "flake8-docstrings",
+    "flake8-eradicate",
+    "flake8-executable",
+    "flake8-executable",
+    "flake8-isort",
+    "flake8-isort",
+    "flake8-logging-format",
+    "flake8-mutable",
+    "flake8-pep3101",
+    "flake8-pie",
+    "flake8-print",
+    "flake8-quotes",
+    "flake8-rst-docstrings",
+    "flake8-scrapy",
+    "flake8-strict",
+    "flake8-string-format",
+    "flake8-variables-names",
+    "pep8-naming",
+    "pydocstyle",
+
+    "pytest",
+]
