@@ -1,9 +1,7 @@
 import re
 
-from termcolor import colored
-
 from .._constants import ExitCodes
-from .._logic import extract
+from .._logic import color_code, color_description, extract
 from .._types import CommandResult
 
 
@@ -25,8 +23,8 @@ def show_command(argv) -> CommandResult:
         return ExitCodes.NO_CODES, 'no codes found'
     width = max(len(code) for code in codes)
     for code, info in sorted(codes.items()):
-        code = REX_CODE.sub(colored(r'\1', 'blue') + colored(r'\2', 'cyan'), code)
-        info = REX_QUOTES.sub(colored(r'\1', 'yellow'), info)
-        info = REX_PLACEHOLDER.sub(colored(r'\1', 'green'), info)
-        print('{} | {}'.format(code.ljust(width), info))
+        print('{code} | {info}'.format(
+            code=color_code(code.ljust(width)),
+            info=color_description(info),
+        ))
     return 0, ''

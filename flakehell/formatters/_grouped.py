@@ -6,6 +6,7 @@ from flake8.style_guide import Violation
 from termcolor import colored
 
 from ._colored import ColoredFormatter
+from .._logic import color_code, color_description
 
 
 class GroupedFormatter(ColoredFormatter):
@@ -32,11 +33,11 @@ class GroupedFormatter(ColoredFormatter):
         """Called to format each individual :term:`violation`."""
         return '{newline}  {row_col:<8} {code:<5} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
-            code=error.code,
-            text=error.text,
+            code=color_code(error.code),
+            text=color_description(error.text),
             row_col='{row}:{col}'.format(
-                row=colored(error.line_number, 'cyan'),
-                col=colored(error.column_number, 'cyan'),
+                row=colored(str(error.line_number).rjust(4), 'green'),
+                col=colored(str(error.column_number).rjust(4), 'green'),
             )
         )
 

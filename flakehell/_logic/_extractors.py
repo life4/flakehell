@@ -192,6 +192,6 @@ def extract_wemake_python_styleguide():
             checker = getattr(module, checker_name)
             if not hasattr(checker, 'code'):
                 continue
-            code = 'Z' + str(checker.code).zfill(3)
+            code = 'WPS' + str(checker.code).zfill(3)
             codes[code] = checker.error_template
         return codes

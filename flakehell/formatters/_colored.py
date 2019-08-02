@@ -6,7 +6,7 @@ from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
 
-from .._constants import COLORS
+from .._logic import color_code, color_description
 
 REX_TEXT = re.compile('[A-Z]+')
 
@@ -21,22 +21,16 @@ class ColoredFormatter(Default):
         self._formatter = TerminalFormatter()
 
     def format(self, error):
-        code = error.code
-        match = REX_TEXT.match(code)
-        if match:
-            color = COLORS.get(match.group(), 'white')
-            code = colored(code, color)
-
         filename = error.filename
         if filename.startswith('./'):
             filename = filename[2:]
 
         return self.error_format.format(
-            code=code,
-            text=error.text,
+            code=color_code(error.code),
+            text=color_description(error.text),
             path=filename,
-            row=colored(error.line_number, 'cyan'),
-            col=colored(error.column_number, 'cyan'),
+            row=colored(error.line_number, 'green'),
+            col=colored(error.column_number, 'green'),
         )
 
     def show_source(self, error) -> str:
