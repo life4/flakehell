@@ -17,3 +17,37 @@ class ExitCodes(IntEnum):
     NO_PLUGIN_NAME = 21
     IMPORT_ERROR = 22
     NO_CODES = 23
+
+
+KNOWN_PLUGINS = [
+    'flake8-alfred',
+    'flake8-annotations-complexity',
+    'flake8-bandit',
+    'flake8-broken-line',
+    # 'flake8-bugbear',
+    'flake8-builtins',
+    'flake8-coding',
+    'flake8-commas',
+    'flake8-comprehensions',
+    'flake8-debugger',
+    'flake8-django',
+    'flake8-docstrings',
+    'flake8-eradicate',
+    'flake8-executable',
+    'flake8-executable',
+    'flake8-isort',
+    'flake8-isort',
+    # 'flake8-logging-format',
+    # 'flake8-mutable',
+    'flake8-pep3101',
+    'flake8-pie',
+    'flake8-print',
+    'flake8-quotes',
+    'flake8-rst-docstrings',
+    'flake8-scrapy',
+    'flake8-strict',
+    'flake8-string-format',
+    'flake8-variables-names',
+    # 'pep8-naming',
+    'pydocstyle',
+]
