@@ -170,6 +170,17 @@ def extract_pyflakes():
     return codes
 
 
+def extract_flake8_rst_docstrings():
+    from flake8_rst_docstrings import code_mappings_by_level
+
+    codes = dict()
+    for level, codes_mapping in code_mappings_by_level.items():
+        for message, number in codes_mapping.items():
+            code = 'RST{}{:02d}'.format(level, number)
+            codes[code] = message
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 
