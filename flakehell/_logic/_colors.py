@@ -15,11 +15,16 @@ REX_NUMBER = re.compile('( [0-9]+)')
 REX_PLACEHOLDER = re.compile(r'(\{[a-z0-9]+\}|\%[a-z])')
 REX_QUOTES = re.compile(
     r"""
-          ([\"\'\`][\w\s\:\_\-\.]+[\"\'\`])     # quotted text
-        | (__[a-z]+__)                          # magic method
-        | ([a-z\_]+\.py)                        # file name
-        | (\:\s)([\w0-9]+$)                     # word after :
-        | ([A-Z][a-z]+(?:[A-Z][a-z]+)+)         # CamelCase
+        (   # quotted text
+            [\"\'\`]
+            [\w\_\-\.\%\+]
+            [\w\_\-\.\%\+\s\:]*
+            [\"\'\`]
+        )
+        | (__[a-z]+__)                      # magic method
+        | ([a-z\_]+\.py)                    # file name
+        | (\:\s)([\w0-9]+$)                 # word after :
+        | ([A-Z][a-z]+(?:[A-Z][a-z]+)+)     # CamelCase
     """,
     re.X,
 )

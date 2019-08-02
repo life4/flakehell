@@ -5,6 +5,12 @@ from flake8.utils import fnmatch
 
 
 REX_NAME = re.compile(r"[-_.]+")
+ALIASES = {
+    'flake-mutable': 'flake8-mutable',
+    'pyflakes': 'pyflakes',
+    'naming': 'pep8-naming',
+    'logging-format': 'flake8-logging-format',
+}
 
 
 def get_plugin_name(plugin: Dict[str, Any]) -> str:
@@ -21,8 +27,8 @@ def get_plugin_name(plugin: Dict[str, Any]) -> str:
     3. Normalized name that starts with `pep`
     4. `plugin_name`
     """
-    if plugin['plugin_name'] == 'pyflakes':
-        return plugin['plugin_name']
+    if plugin['plugin_name'] in ALIASES:
+        return ALIASES[plugin['plugin_name']]
 
     names = (plugin['plugin_name'], plugin['plugin'].__module__)
     names = [REX_NAME.sub('-', name).lower() for name in names]

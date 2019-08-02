@@ -5,6 +5,10 @@ from pathlib import Path
 
 
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{1,5}$')
+ALIASES = {
+    'flake8_bugbear': 'bugbear',
+    'flake8_logging_format': 'logging_format',
+}
 
 
 class CollectStrings(ast.NodeVisitor):
@@ -40,6 +44,7 @@ def extract_default(name):
 
 def extract(name):
     name = name.replace('-', '_')
+    name = ALIASES.get(name, name)
     function_name = 'extract_' + name
 
     # use ad-hoc extractor if available
@@ -85,13 +90,13 @@ def extract_flake8_debugger():
     return {DEBUGGER_ERROR_CODE: 'trace found'}
 
 
-def extract_flake_mutable():
+def extract_flake8_mutable():
     from mutable_defaults import MutableDefaultChecker
 
     return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
 
 
-def extract_pep8ext_naming():
+def extract_pep8_naming():
     import pep8ext_naming
 
     codes = dict()
