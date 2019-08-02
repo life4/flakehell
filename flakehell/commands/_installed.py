@@ -7,6 +7,8 @@ from .._types import CommandResult
 
 
 def installed_command(argv) -> CommandResult:
+    """Show all installed plugins, their codes prefix, and matched rules from config.
+    """
     app = FlakeHellApplication(program=NAME, version=VERSION)
     plugins = sorted(get_installed(app=app), key=lambda p: p['name'])
     if not plugins:

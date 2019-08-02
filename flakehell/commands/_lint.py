@@ -4,6 +4,8 @@ from .._types import CommandResult
 
 
 def lint_command(argv) -> CommandResult:
+    """Run patched flake8 against the code.
+    """
     app = FlakeHellApplication(program=NAME, version=VERSION)
     try:
         app.run(argv)
