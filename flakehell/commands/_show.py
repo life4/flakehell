@@ -3,8 +3,8 @@ import re
 from termcolor import colored
 
 from .._constants import ExitCodes
+from .._logic import extract
 from .._types import CommandResult
-from .._extractors import extract
 
 
 REX_CODE = re.compile(r'([A-Z]+)([0-9]+)')

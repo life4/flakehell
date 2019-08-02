@@ -8,8 +8,8 @@ from flake8.main.application import Application
 from flake8.plugins.manager import Plugin
 from flake8.options.aggregator import aggregate_options
 from ._checkers import FlakeHellCheckersManager
-from .formatters import FORMATTERS
-from ._constants import NAME
+from ..formatters import FORMATTERS
+from .._constants import NAME
 
 
 class FlakeHellApplication(Application):

@@ -1,7 +1,6 @@
-from .._app import FlakeHellApplication
 from .._constants import NAME, VERSION, ExitCodes
-from .._discover import get_installed
-from .._plugin import get_plugin_rules
+from .._logic import get_installed, get_plugin_rules
+from .._patched import FlakeHellApplication
 from .._types import CommandResult
 
 
