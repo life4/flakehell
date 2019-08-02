@@ -1,8 +1,4 @@
-from colorama import Fore, init
 from enum import IntEnum
-
-
-init()
 
 
 NAME = 'flakehell'
@@ -24,8 +20,8 @@ class ExitCodes(IntEnum):
 
 
 COLORS = dict(
-    W=Fore.YELLOW,
-    E=Fore.RED,
-    WPS=Fore.MAGENTA,
-    default=Fore.GREEN,
+    W='yellow',
+    E='red',
+    WPS='magenta',
+    default='green',
 )

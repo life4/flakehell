@@ -1,6 +1,6 @@
 import re
 
-from colorama import Style, Fore
+from termcolor import colored
 from flake8.formatting.default import Default
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
@@ -24,8 +24,8 @@ class ColoredFormatter(Default):
         code = error.code
         match = REX_TEXT.match(code)
         if match:
-            color = COLORS.get(match.group(), COLORS['default'])
-            code = color + code + Style.RESET_ALL
+            color = COLORS.get(match.group(), 'white')
+            code = colored(code, color)
 
         filename = error.filename
         if filename.startswith('./'):
@@ -35,8 +35,8 @@ class ColoredFormatter(Default):
             code=code,
             text=error.text,
             path=filename,
-            row=Fore.CYAN + str(error.line_number) + Style.RESET_ALL,
-            col=Fore.CYAN + str(error.column_number) + Style.RESET_ALL,
+            row=colored(error.line_number, 'cyan'),
+            col=colored(error.column_number, 'cyan'),
         )
 
     def show_source(self, error) -> str:

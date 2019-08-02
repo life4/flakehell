@@ -1,0 +1,101 @@
+from collections import defaultdict
+from typing import DefaultDict, List
+
+from flake8.statistics import Statistics
+from flake8.style_guide import Violation
+from termcolor import colored
+
+from ._colored import ColoredFormatter
+
+
+class GroupedFormatter(ColoredFormatter):
+    """
+    Copied and modified formatter from wemake-python-styleguide.
+    It's named not `wemake` to avoid conflicts with original formatter.
+    """
+
+    def after_init(self):
+        super().after_init()
+        self._proccessed_filenames: List[str] = []
+        self._error_count = 0
+
+    def handle(self, error: Violation) -> None:  # noqa: WPS110
+        """Processes each :term:`violation` to print it and all related."""
+        if error.filename not in self._proccessed_filenames:
+            self._print_header(error.filename)
+            self._proccessed_filenames.append(error.filename)
+
+        super().handle(error)
+        self._error_count += 1
+
+    def format(self, error: Violation) -> str:  # noqa: A003
+        """Called to format each individual :term:`violation`."""
+        return '{newline}  {row_col:<8} {code:<5} {text}'.format(
+            newline=self.newline if self._should_show_source(error) else '',
+            code=error.code,
+            text=error.text,
+            row_col='{row}:{col}'.format(
+                row=colored(error.line_number, 'cyan'),
+                col=colored(error.column_number, 'cyan'),
+            )
+        )
+
+    def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
+        """Called when ``--statistic`` option is passed."""
+        all_errors = 0
+        for error_code in statistics.error_codes():
+            stats_for_error_code = statistics.statistics_for(error_code)
+            statistic = next(stats_for_error_code)
+
+            count = statistic.count
+            count += sum(stat.count for stat in stats_for_error_code)
+            all_errors += count
+            error_by_file = _count_per_filename(statistics, error_code)
+
+            self._write(
+                '{newline}{error_code}: {message}'.format(
+                    newline=self.newline,
+                    error_code=colored(error_code, 'white', attrs=['bold']),
+                    message=statistic.message,
+                ),
+            )
+            for filename in error_by_file:
+                self._write(
+                    '  {error_count:<5} {filename}'.format(
+                        error_count=error_by_file[filename],
+                        filename=filename,
+                    ),
+                )
+            self._write(colored('Total: {0}'.format(count), 'white', attrs=['underline']))
+
+        self._write(self.newline)
+        self._write(colored(
+            'All errors: {0}'.format(all_errors),
+            'white',
+            attrs=['bold', 'underline'],
+        ))
+
+    # Our own methods:
+
+    def _print_header(self, filename: str) -> None:
+        self._write(
+            '{newline}{filename}'.format(
+                filename=colored(filename, 'white', attrs=['bold', 'underline']),
+                newline=self.newline,
+            ),
+        )
+
+
+# Helpers:
+
+def _count_per_filename(
+    statistics: Statistics,
+    error_code: str,
+) -> DefaultDict[str, int]:
+    filenames: DefaultDict[str, int] = defaultdict(int)
+    stats_for_error_code = statistics.statistics_for(error_code)
+
+    for stat in stats_for_error_code:
+        filenames[stat.filename] += stat.count
+
+    return filenames

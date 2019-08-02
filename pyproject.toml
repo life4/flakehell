@@ -1,5 +1,5 @@
 [tool.flakehell]
-format = "colored"
+format = "grouped"
 max_line_length = 120
 # show_source = true
 
