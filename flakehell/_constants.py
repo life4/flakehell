@@ -31,11 +31,9 @@ KNOWN_PLUGINS = [
     'flake8-comprehensions',
     'flake8-debugger',
     'flake8-django',
-    'flake8-docstrings',
+    # 'flake8-docstrings',  # pydocstyle
     'flake8-eradicate',
     'flake8-executable',
-    'flake8-executable',
-    'flake8-isort',
     'flake8-isort',
     'flake8-logging-format',
     'flake8-mutable',
@@ -45,9 +43,8 @@ KNOWN_PLUGINS = [
     'flake8-quotes',
     'flake8-rst-docstrings',
     'flake8-scrapy',
-    'flake8-strict',
+    # 'flake8-strict',
     'flake8-string-format',
     'flake8-variables-names',
     'pep8-naming',
-    'pydocstyle',
 ]

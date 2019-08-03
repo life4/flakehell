@@ -201,6 +201,44 @@ def extract_flake8_django():
     return codes
 
 
+def extract_flake8_scrapy():
+    from flake8_scrapy import ScrapyStyleIssueFinder
+
+    codes = dict()
+    for finders in ScrapyStyleIssueFinder().finders.values():
+        for finder in finders:
+            codes[finder.msg_code] = finder.msg_info
+    return codes
+
+
+def extract_flake8_pie():
+    import flake8_pie
+
+    codes = dict()
+    for name in dir(flake8_pie):
+        if not name.startswith('PIE'):
+            continue
+        obj = getattr(flake8_pie, name)('', '')
+        code, msg = obj.message.split(': ', maxsplit=1)
+        codes[code] = msg
+    return codes
+
+
+def extract_flake8_executable():
+    import flake8_executable
+
+    codes = dict()
+    for name in dir(flake8_executable):
+        cls = getattr(flake8_executable, name, None)
+        if not isinstance(cls, type):
+            continue
+        if '0' not in cls.__name__:
+            continue
+        obj = cls(line_number=1, offset=1, filename='', shebang='{shebang}')
+        codes[obj.error_code] = obj.message
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 

@@ -24,7 +24,8 @@ REX_QUOTES = re.compile(
         | (__[a-z]+__)                      # magic method
         | ([a-z\_]+\.py)                    # file name
         | (\:\s)([\w0-9]+$)                 # word after :
-        | ([A-Z][a-z]+(?:[A-Z][a-z]+)+)     # CamelCase
+        | ([A-Z][a-z\.]+(?:[A-Z][a-z\.]+)+) # CamelCase
+        | ([a-z_]+\(\))                     # function
     """,
     re.X,
 )
@@ -40,6 +41,6 @@ def color_code(code: str) -> str:
 
 def color_description(text: str) -> str:
     text = REX_NUMBER.sub(colored(r'\1', 'green'), text)
-    text = REX_QUOTES.sub(r'\4' + colored(r'\1\2\3\5\6', 'yellow'), text)
+    text = REX_QUOTES.sub(r'\4' + colored(r'\1\2\3\5\6\7', 'yellow'), text)
     text = REX_PLACEHOLDER.sub(colored(r'\1', 'green'), text)
     return text
