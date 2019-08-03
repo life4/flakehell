@@ -243,6 +243,25 @@ def extract_flake8_executable():
     return codes
 
 
+def extract_flake8_strict():
+    from flake8_strict import ErrorCode
+
+    codes = dict()
+    for code, message in ErrorCode._member_map_.items():
+        codes[code] = message.value
+    return codes
+
+
+def extract_flake8_docstrings():
+    from pydocstyle.violations import ErrorRegistry
+
+    codes = dict()
+    for group in ErrorRegistry.groups:
+        for error in group.errors:
+            codes[error.code] = error.short_desc
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 

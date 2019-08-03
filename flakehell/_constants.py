@@ -31,7 +31,7 @@ KNOWN_PLUGINS = [
     'flake8-comprehensions',
     'flake8-debugger',
     'flake8-django',
-    # 'flake8-docstrings',  # pydocstyle
+    'flake8-docstrings',  # pydocstyle
     'flake8-eradicate',
     'flake8-executable',
     'flake8-isort',
