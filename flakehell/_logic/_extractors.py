@@ -145,9 +145,11 @@ def extract_flake8_bandit():
     codes = dict()
     for blacklist in MANAGER.blacklist.values():
         for check in blacklist:
-            codes[check['id']] = check['message']
+            code = check['id'].replace('B', 'S')
+            codes[code] = check['message']
     for plugin in MANAGER.plugins:
-        codes[plugin.plugin._test_id] = plugin.name.replace('_', ' ')
+        code = plugin.plugin._test_id.replace('B', 'S')
+        codes[code] = plugin.name.replace('_', ' ')
     return codes
 
 
@@ -196,6 +198,8 @@ def extract_flake8_django():
         for class_name in dir(module):
             cls = getattr(module, class_name, None)
             if not hasattr(cls, 'code'):
+                continue
+            if '0' not in cls.__name__:
                 continue
             codes[cls.__name__] = cls.description
     return codes
