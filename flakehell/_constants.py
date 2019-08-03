@@ -47,4 +47,8 @@ KNOWN_PLUGINS = [
     'flake8-string-format',
     'flake8-variables-names',
     'pep8-naming',
+
+    # built-in in flake8
+    'pycodestyle',
+    'pyflakes',
 ]
