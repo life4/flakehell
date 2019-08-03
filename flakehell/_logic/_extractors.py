@@ -20,6 +20,7 @@ class CollectStrings(ast.NodeVisitor):
 
 def get_messages(code, content):
     root = ast.parse(content)
+    CollectStrings._strings = []
     collector = CollectStrings()
     collector.visit(root)
 
@@ -183,6 +184,20 @@ def extract_flake8_rst_docstrings():
         for message, number in codes_mapping.items():
             code = 'RST{}{:02d}'.format(level, number)
             codes[code] = message
+    return codes
+
+
+def extract_flake8_django():
+    import flake8_django.checkers
+
+    codes = dict()
+    for path in Path(flake8_django.checkers.__path__[0]).iterdir():
+        module = import_module('flake8_django.checkers.' + path.stem)
+        for class_name in dir(module):
+            cls = getattr(module, class_name, None)
+            if not hasattr(cls, 'code'):
+                continue
+            codes[cls.__name__] = cls.description
     return codes
 
 
