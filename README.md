@@ -10,7 +10,8 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
 + Syntax highlighting in messages and code snippets.
-
++ `pyproject.toml` support
++ sharable and remote configs.
 
 ![output example](./assets/grouped.png)
 
@@ -27,18 +28,30 @@ First of all, let's create `pyproject.toml` config:
 
 ```toml
 [tool.flakehell]
+# optionally inherit from remote config (or local if you want)
+base = "https://gitlab.com/life4/flakehell/raw/master/pyproject.toml"
+# specify any flake8 options. For example, exclude "example.py":
 exclude = ["example.py"]
+# make output nice
 format = "grouped"
+# 80 chars aren't enough in 21 century
 max_line_length = 90
+# show line of source code in output
 show_source = true
 
+# list of plugins and rules for them
 [tool.flakehell.plugins]
+# include everything in pyflakes except F401
 pyflakes = ["+*", "-F401"]
-flake8-quotes = ["+*"]
+# enable only codes from S100 to S199
+flake8-bandit = ["-*", "+S1**"]
+# enable everything that starts from `flake8-`
+"flake8-*" = ["+*"]
+# explicitly disable plugin
+flake8-docstrings = ["-*"]
 ```
 
 + You can specify any flake8 settings in `[tool.flakehell]`.
-+ `[tool.flakehell.plugins]` contains list of plugins and rules for them.
 
 Show plugins that aren't installed yet:
 

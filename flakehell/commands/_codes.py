@@ -18,7 +18,7 @@ def codes_command(argv) -> CommandResult:
     if argv[0] == '--help':
         print(codes_command.__doc__)
         return 0, ''
-    if argv:
+    if len(argv) > 1:
         return ExitCodes.TOO_MANY_ARGS, 'the command accept only one argument'
 
     try:

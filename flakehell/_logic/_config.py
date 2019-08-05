@@ -15,6 +15,8 @@ def read_config(*paths) -> Dict[str, Any]:
             config.update(_read_local(Path(path)))
             continue
         config.update(_read_remote(path))
+    if 'plugins' not in config:
+        config['plugins'] = dict()
     return config
 
 
@@ -26,11 +28,21 @@ def _read_local(path: Path):
 def _read_remote(url: str):
     http = urllib3.PoolManager()
     response = http.request('GET', url)
-    return response.data.decode()
+    return _parse_config(response.data.decode())
 
 
 def _parse_config(content: str):
     config = toml.loads(content)['tool']['flakehell']
     config = dict(config)
-    config['plugins'] = dict(config['plugins'])
+    if 'plugins' in config:
+        config['plugins'] = dict(config['plugins'])
+
+    if 'base' in config:
+        paths = config['base']
+        if not isinstance(paths, list):
+            paths = [paths]
+        old_config = config
+        config = read_config(*paths)
+        config.update(old_config)
+
     return config
