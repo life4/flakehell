@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 
-import toml
 from entrypoints import EntryPoint
 from flake8.main.application import Application
 from flake8.plugins.manager import Plugin
@@ -12,6 +11,7 @@ from ._checkers import FlakeHellCheckersManager
 from ._style_guide import FlakeHellStyleGuideManager
 from ..formatters import FORMATTERS
 from .._constants import NAME
+from .._logic import read_config
 
 
 class FlakeHellApplication(Application):
@@ -23,11 +23,8 @@ class FlakeHellApplication(Application):
     """
 
     def get_toml_config(self) -> Dict[str, Any]:
-        with Path('pyproject.toml').open('r') as stream:
-            config = toml.load(stream)['tool']['flakehell']
-            config = dict(config)
-            config['plugins'] = dict(config['plugins'])
-            return config
+        paths = [Path('pyproject.toml')]
+        return read_config(*paths)
 
     def parse_configuration_and_cli(self, argv: List[str] = None) -> None:
         self.options, self.args = aggregate_options(

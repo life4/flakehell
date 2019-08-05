@@ -36,6 +36,7 @@ requires=[
     "pygments",
     "termcolor",
     "toml",
+    "urllib3",
 ]
 description-file="README.md"
 classifiers=[
