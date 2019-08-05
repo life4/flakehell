@@ -1,12 +1,13 @@
 [tool.flakehell]
+exclude = ["example.py"]
 format = "grouped"
 max_line_length = 120
-show_source = true
+# show_source = true
 
 [tool.flakehell.plugins]
 pyflakes = ["+*"]
 flake8-quotes = ["+*"]
-"wemake-*" = ["+*", "-WPS300", "-WPS436"]
+# "wemake-*" = ["+*", "-WPS300", "-WPS436"]
 
 # -- DEPHELL -- #
 
