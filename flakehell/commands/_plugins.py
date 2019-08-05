@@ -6,7 +6,7 @@ from .._patched import FlakeHellApplication
 from .._types import CommandResult
 
 
-def installed_command(argv) -> CommandResult:
+def plugins_command(argv) -> CommandResult:
     """Show all installed plugins, their codes prefix, and matched rules from config.
     """
     app = FlakeHellApplication(program=NAME, version=VERSION)

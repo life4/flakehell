@@ -10,7 +10,7 @@ REX_PLACEHOLDER = re.compile(r'(\{[a-z0-9]+\}|\%[a-z])')
 REX_QUOTES = re.compile(r'([\"\'\`][\w\s\:\_\-\.]+[\"\'\`])')
 
 
-def show_command(argv) -> CommandResult:
+def codes_command(argv) -> CommandResult:
     """Show available codes and messages for given plugin.
     """
     if not argv:

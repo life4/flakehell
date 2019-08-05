@@ -31,8 +31,7 @@ class GroupedFormatter(ColoredFormatter):
 
     def format(self, error: Violation) -> str:
         """Called to format each individual :term:`violation`."""
-        line = '{newline}  {row_col:<8} {code} {text}'.format(
-            newline=self.newline if self._should_show_source(error) else '',
+        line = '  {row_col:<8} {code} {text}'.format(
             code=color_code(error.code),
             text=color_description(error.text),
             row_col='{row}:{col}'.format(
