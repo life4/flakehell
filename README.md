@@ -12,6 +12,8 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Syntax highlighting in messages and code snippets.
 
 
+![output example](./assets/grouped.png)
+
 ## Installation
 
 ```
@@ -50,11 +52,15 @@ Show installed plugins, used plugins, specified rules, codes prefixes:
 flakehell plugins
 ```
 
+![plugins command output](./assets/plugins.png)
+
 Show codes and messages for a specific plugin:
 
 ```bash
 flakehell codes pyflakes
 ```
+
+![codes command output](./assets/codes.png)
 
 Run flake8 against the code:
 
@@ -63,3 +69,33 @@ flakehell lint
 ```
 
 This command accepts all the same arguments as Flake8.
+
+## Formatters
+
+Formatters make errors output nice. Available formatters:
+
++ `colored` -- for humans.
++ `grouped` -- also colored, but all messages are explicitly grouped by file.
++ `json` -- no colors, only one json-dict per line for every error.
+
+Also, you can specify `show_source = true` in the config to show line of source code where error occurred with syntax highlighting.
+
+Colored:
+
+![colored](./assets/colored.png)
+
+Colored with source code:
+
+![colored](./assets/colored-source.png)
+
+Grouped:
+
+![grouped](./assets/grouped.png)
+
+Grouped with source code:
+
+![grouped](./assets/grouped-source.png)
+
+JSON:
+
+![json](./assets/json.png)
