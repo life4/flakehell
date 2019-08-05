@@ -21,7 +21,14 @@ def installed_command(argv) -> CommandResult:
         codes=colored('CODES   ', 'yellow'),
         rules=colored('RULES', 'yellow'),
     ))
+    showed = set()
     for plugin in plugins:
+        # Plugins returned by get_installed are unique by namee and type.
+        # We are not showing type, so, let's show one name only once.
+        if plugin['name'] in showed:
+            continue
+        showed.add(plugin['name'])
+
         rules = get_plugin_rules(
             plugin_name=plugin['name'],
             plugins=app.options.plugins,
