@@ -28,7 +28,7 @@ command = "python -m pytest tests/"
 module="flakehell"
 author="Gram (@orsinium)"
 author-email="master_fess@mail.ru"
-home-page="https://github.com/orsinium/flakehell"
+home-page="https://gitlab.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
     "entrypoints",
