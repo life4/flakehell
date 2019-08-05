@@ -18,6 +18,8 @@ class ExitCodes(IntEnum):
     IMPORT_ERROR = 22
     NO_CODES = 23
 
+    TOO_MANY_ARGS = 31
+
 
 KNOWN_PLUGINS = [
     'flake8-alfred',

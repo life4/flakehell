@@ -7,6 +7,12 @@ from .._types import CommandResult
 def missed_command(argv) -> CommandResult:
     """Show patterns from the config that has no matched plugin installed.
     """
+    if argv and argv[0] == '--help':
+        print(missed_command.__doc__)
+        return 0, ''
+    if argv:
+        return ExitCodes.TOO_MANY_ARGS, 'the command does not accept arguments'
+
     app = FlakeHellApplication(program=NAME, version=VERSION)
     installed_plugins = sorted(get_installed(app=app), key=lambda p: p['name'])
     if not installed_plugins:
