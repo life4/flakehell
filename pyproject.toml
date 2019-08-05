@@ -1,7 +1,7 @@
 [tool.flakehell]
 format = "grouped"
 max_line_length = 120
-# show_source = true
+show_source = true
 
 [tool.flakehell.plugins]
 pyflakes = ["+*"]
