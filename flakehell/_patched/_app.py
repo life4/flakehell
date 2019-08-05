@@ -9,6 +9,7 @@ from flake8.plugins.manager import Plugin
 from flake8.options.aggregator import aggregate_options
 
 from ._checkers import FlakeHellCheckersManager
+from ._style_guide import FlakeHellStyleGuideManager
 from ..formatters import FORMATTERS
 from .._constants import NAME
 
@@ -62,3 +63,13 @@ class FlakeHellApplication(Application):
                 local=True,
             )
             self.formatting_plugins.names.append(name)
+
+    def make_guide(self):
+        """Patched StyleGuide creation just to use FlakeHellStyleGuideManager
+        instead of original one.
+        """
+        if self.guide is None:
+            self.guide = FlakeHellStyleGuideManager(self.options, self.formatter)
+
+        if self.running_against_diff:
+            self.guide.add_diff_ranges(self.parsed_diff)

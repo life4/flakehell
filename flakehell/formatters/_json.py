@@ -16,4 +16,5 @@ class JSONFormatter(BaseFormatter):
             column=error.column_number,
 
             context=error.physical_line,
+            plugin=getattr(error, 'plugin', None),
         ))

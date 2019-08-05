@@ -77,11 +77,12 @@ class FlakeHellCheckersManager(Manager):
             results_found += len(results)
         return (results_found, results_reported)
 
-    def _handle_results(self, filename: str, results: list, check) -> int:
+    def _handle_results(self, filename: str, results: list, check: dict) -> int:
         if not results:
             return 0
+        plugin_name = get_plugin_name(check)
         rules = get_plugin_rules(
-            plugin_name=get_plugin_name(check),
+            plugin_name=plugin_name,
             plugins=self.options.plugins,
         )
         reported_results_count = 0
@@ -95,6 +96,7 @@ class FlakeHellCheckersManager(Manager):
                 column_number=column,
                 text=text,
                 physical_line=physical_line,
+                plugin=plugin_name,
             )
         return reported_results_count
 

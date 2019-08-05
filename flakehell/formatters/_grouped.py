@@ -29,9 +29,9 @@ class GroupedFormatter(ColoredFormatter):
         super().handle(error)
         self._error_count += 1
 
-    def format(self, error: Violation) -> str:  # noqa: A003
+    def format(self, error: Violation) -> str:
         """Called to format each individual :term:`violation`."""
-        return '{newline}  {row_col:<8} {code:<5} {text}'.format(
+        line = '{newline}  {row_col:<8} {code} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
             code=color_code(error.code),
             text=color_description(error.text),
@@ -40,6 +40,10 @@ class GroupedFormatter(ColoredFormatter):
                 col=colored(str(error.column_number).rjust(4), 'green'),
             )
         )
+        plugin = getattr(error, 'plugin', None)
+        if plugin:
+            line += colored(' [{}]'.format(plugin), 'grey')
+        return line
 
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
         """Called when ``--statistic`` option is passed."""

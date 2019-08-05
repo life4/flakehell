@@ -82,6 +82,7 @@ dev = [
     "flake8-string-format",
     "flake8-variables-names",
     "pep8-naming",
+    "wemake-python-styleguide",
 
     "pytest",
 ]

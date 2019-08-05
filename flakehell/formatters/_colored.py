@@ -25,13 +25,17 @@ class ColoredFormatter(Default):
         if filename.startswith('./'):
             filename = filename[2:]
 
-        return self.error_format.format(
+        line = self.error_format.format(
             code=color_code(error.code),
             text=color_description(error.text),
             path=filename,
             row=colored(error.line_number, 'green'),
             col=colored(error.column_number, 'green'),
         )
+        plugin = getattr(error, 'plugin', None)
+        if plugin:
+            line += colored(' [{}]'.format(plugin), 'grey')
+        return line
 
     def show_source(self, error) -> str:
         """Called when ``--show-source`` option is provided."""
