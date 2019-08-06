@@ -112,3 +112,31 @@ Grouped with source code:
 JSON:
 
 ![json](./assets/json.png)
+
+
+## Integrating into huge codebase
+
+First of all, let's create baseline.
+
+Config:
+
+```toml
+[tool.flakehell]
+format = "baseline"
+```
+
+Run:
+
+```bash
+python3 -m flakehell lint > baseline.txt
+```
+
+Then restore your default format and specify path to the baseline file:
+
+```toml
+[tool.flakehell]
+baseline = "baseline.txt"
+format = "grouped"
+```
+
+Now, `flakehell lint` command will ignore all your current errors. It will report only about new errors, all errors in a new code, or if old line of code was modified.

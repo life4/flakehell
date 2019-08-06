@@ -4,7 +4,7 @@ from typing import List, Tuple
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
-from .._logic import get_plugin_name, get_plugin_rules, check_include
+from .._logic import get_plugin_name, get_plugin_rules, check_include, make_baseline
 
 
 REX_NAME = re.compile(r"[-_.]+")
@@ -14,6 +14,12 @@ class FlakeHellCheckersManager(Manager):
     """
     Patched flake8.checker.Manager to provide `plugins` support
     """
+    def __init__(self, baseline, **kwargs):
+        self.baseline = set()
+        if baseline:
+            self.baseline = {line.strip() for line in open(baseline)}
+        super().__init__(**kwargs)
+
     def make_checkers(self, paths: List[str] = None) -> None:
         """
         Reloaded checkers generator to provide one checker per file per rule.
@@ -87,8 +93,19 @@ class FlakeHellCheckersManager(Manager):
         )
         reported_results_count = 0
         for (error_code, line_number, column, text, physical_line) in results:
+            if self.baseline:
+                digest = make_baseline(
+                    path=filename,
+                    context=physical_line,
+                    code=error_code,
+                    line=line_number,
+                )
+                if digest in self.baseline:
+                    continue
+
             if not check_include(code=error_code, rules=rules):
                 continue
+
             reported_results_count += self.style_guide.handle_error(
                 code=error_code,
                 filename=filename,

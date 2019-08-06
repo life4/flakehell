@@ -37,6 +37,7 @@ class FlakeHellApplication(Application):
 
     def make_file_checker_manager(self):
         self.file_checker_manager = FlakeHellCheckersManager(
+            baseline=getattr(self.options, 'baseline', None),
             style_guide=self.guide,
             arguments=self.args,
             checker_plugins=self.check_plugins,
