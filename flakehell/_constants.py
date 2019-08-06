@@ -22,6 +22,7 @@ class ExitCodes(IntEnum):
 
 
 KNOWN_PLUGINS = [
+    'dlint',
     'flake8-alfred',
     'flake8-annotations-complexity',
     'flake8-bandit',

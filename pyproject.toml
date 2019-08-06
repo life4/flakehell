@@ -1,6 +1,5 @@
 [tool.flakehell]
 exclude = ["example.py"]
-baseline = "baseline.txt"
 format = "grouped"
 max_line_length = 120
 # show_source = true
@@ -63,6 +62,7 @@ flakehell = "flakehell:entrypoint"
 
 [tool.flit.metadata.requires-extra]
 dev = [
+    "dlint",
     "flake8-alfred",
     "flake8-annotations-complexity",
     "flake8-bandit",

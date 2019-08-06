@@ -262,6 +262,16 @@ def extract_flake8_docstrings():
     return codes
 
 
+def extract_dlint():
+    from dlint.linters import ALL
+
+    codes = dict()
+    for linter in ALL:
+        code, msg = linter._error_tmpl.split(' ', maxsplit=1)
+        codes[code] = msg
+    return codes
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
 
