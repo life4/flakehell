@@ -2,22 +2,23 @@
 
 It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
++ Sharable and remote configs.
++ Legacy-friendly: ability to get report only about new errors.
 + Use only specified plugins, not everything installed.
 + Manage codes per plugin.
 + Enable and disable plugins and codes by wildcard.
 + Make output beautiful.
++ `pyproject.toml` support.
 + Show codes for installed plugins.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
 + Syntax highlighting in messages and code snippets.
-+ `pyproject.toml` support
-+ sharable and remote configs.
 
 ![output example](./assets/grouped.png)
 
 ## Installation
 
-```
+```bash
 python3 -m pip install --user flakehell
 ```
 
@@ -114,29 +115,19 @@ JSON:
 ![json](./assets/json.png)
 
 
-## Integrating into huge codebase
+## Integrating into a huge codebase
 
 First of all, let's create baseline.
 
-Config:
-
-```toml
-[tool.flakehell]
-format = "baseline"
-```
-
-Run:
-
 ```bash
-python3 -m flakehell lint > baseline.txt
+flakehell baseline > baseline.txt
 ```
 
-Then restore your default format and specify path to the baseline file:
+Then specify path to the baseline file:
 
 ```toml
 [tool.flakehell]
 baseline = "baseline.txt"
-format = "grouped"
 ```
 
 Now, `flakehell lint` command will ignore all your current errors. It will report only about new errors, all errors in a new code, or if old line of code was modified.
