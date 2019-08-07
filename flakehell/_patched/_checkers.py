@@ -34,6 +34,15 @@ class FlakeHellCheckersManager(Manager):
         self.checkers = []
         for check_type, checks in self.checks.to_dictionary().items():
             for check in checks:
+                # do not run plugins without rules specified
+                plugin_name = get_plugin_name(check)
+                rules = get_plugin_rules(
+                    plugin_name=plugin_name,
+                    plugins=self.options.plugins,
+                )
+                if not rules:
+                    continue
+
                 for argument in paths:
                     for filename in filenames_from(argument, self.is_path_excluded):
                         checker = FlakeHellFileChecker(
