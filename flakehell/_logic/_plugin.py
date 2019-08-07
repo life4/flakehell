@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 from flake8.utils import fnmatch
 
 
-REX_NAME = re.compile(r"[-_.]+")
+REX_NAME = re.compile(r'[-_.]+')
 ALIASES = {
     'flake-mutable': 'flake8-mutable',
     'pyflakes': 'pyflakes',

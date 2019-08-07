@@ -20,10 +20,11 @@ class FlakeHellStyleGuideManager(StyleGuideManager):
 
     @lru_cache(maxsize=None)
     def style_guide_for(self, filename):
-        """Find the StyleGuide for the filename in particular."""
+        """Patched styleguide finder to give priority to flakehell's stileguides
+        """
         guides = sorted(
             (g for g in self.style_guides if g.applies_to(filename)),
-            key=lambda g: len(g.filename or ""),
+            key=lambda g: len(g.filename or ''),
             reverse=True,
         )
         for guide in guides:

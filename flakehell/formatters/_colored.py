@@ -12,7 +12,7 @@ REX_TEXT = re.compile('[A-Z]+')
 
 
 class ColoredFormatter(Default):
-    error_format = "{path}:{row}:{col}: {code} {text}"
+    error_format = '{path}:{row}:{col}: {code} {text}'
 
     def after_init(self):
         if self.options.format.lower() not in ('default', 'colored'):
