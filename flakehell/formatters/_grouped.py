@@ -82,6 +82,8 @@ class GroupedFormatter(ColoredFormatter):
     # Our own methods:
 
     def _print_header(self, filename: str) -> None:
+        if filename.startswith('./'):
+            filename = filename[2:]
         self._write(
             '{newline}{filename}'.format(
                 filename=colored(filename, 'white', attrs=['bold', 'underline']),
