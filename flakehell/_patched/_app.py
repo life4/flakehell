@@ -22,8 +22,10 @@ class FlakeHellApplication(Application):
     """
 
     def get_toml_config(self) -> Dict[str, Any]:
-        paths = [Path('pyproject.toml')]
-        return read_config(*paths)
+        path = Path('pyproject.toml')
+        if not path.exists():
+            return dict()
+        return read_config(path)
 
     def parse_configuration_and_cli(self, argv: List[str] = None) -> None:
         config, _ = self.option_manager.parse_args([])

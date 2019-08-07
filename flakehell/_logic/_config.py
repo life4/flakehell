@@ -15,8 +15,6 @@ def read_config(*paths) -> Dict[str, Any]:
             config.update(_read_local(Path(path)))
             continue
         config.update(_read_remote(path))
-    if 'plugins' not in config:
-        config['plugins'] = dict()
     return config
 
 
@@ -32,7 +30,7 @@ def _read_remote(url: str):
 
 
 def _parse_config(content: str):
-    config = toml.loads(content)['tool']['flakehell']
+    config = toml.loads(content).get('tool', {}).get('flakehell', {})
     config = dict(config)
     if 'plugins' in config:
         config['plugins'] = dict(config['plugins'])
