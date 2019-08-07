@@ -1,3 +1,4 @@
+import optparse
 from pathlib import Path
 from typing import Dict, Any, List
 
@@ -27,12 +28,14 @@ class FlakeHellApplication(Application):
         return read_config(*paths)
 
     def parse_configuration_and_cli(self, argv: List[str] = None) -> None:
+        config, _ = self.option_manager.parse_args([])
+        config.__dict__.update(self.get_toml_config())
         self.options, self.args = aggregate_options(
             manager=self.option_manager,
             config_finder=self.config_finder,
             arglist=argv,
+            values=config,
         )
-        self.options.__dict__.update(self.get_toml_config())
         super().parse_configuration_and_cli(argv=argv)
 
     def make_file_checker_manager(self):
