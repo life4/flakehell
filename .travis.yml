@@ -5,6 +5,11 @@
 language: python
 dist: xenial
 
+# do not run Travis for PR's twice (as for push and as for PR)
+branches:
+  only:
+    - master
+
 before_install:
   # show a little bit more information about environment
   - sudo apt-get install -y tree
@@ -35,3 +40,11 @@ matrix:
     - name: lint
       python: "3.7"
       env: ENV=main
+
+    # https://github.com/igorshubovych/markdownlint-cli
+    - name: markdown lint
+      language: generic
+      install:
+        - npm install -g markdownlint-cli
+      script:
+        - bash -c "markdownlint --config markdownlint.json **/*.md"
