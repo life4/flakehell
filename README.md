@@ -22,7 +22,6 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 python3 -m pip install --user flakehell
 ```
 
-
 ## Usage
 
 First of all, let's create `pyproject.toml` config:
@@ -51,8 +50,6 @@ flake8-bandit = ["-*", "+S1**"]
 # explicitly disable plugin
 flake8-docstrings = ["-*"]
 ```
-
-+ You can specify any flake8 settings in `[tool.flakehell]`.
 
 Show plugins that aren't installed yet:
 
@@ -91,6 +88,7 @@ Formatters make errors output nice. Available formatters:
 + `colored` -- for humans.
 + `grouped` -- also colored, but all messages are explicitly grouped by file.
 + `json` -- no colors, only one json-dict per line for every error.
++ `default` -- classic Flake8 formatter. Booooring.
 
 Also, you can specify `show_source = true` in the config to show line of source code where error occurred with syntax highlighting.
 
