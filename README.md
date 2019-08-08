@@ -8,7 +8,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Manage codes per plugin.
 + Enable and disable plugins and codes by wildcard.
 + Make output beautiful.
-+ `pyproject.toml` support.
++ [pyproject.toml](https://www.python.org/dev/peps/pep-0518/) support.
 + Show codes for installed plugins.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
@@ -82,50 +82,4 @@ flakehell lint
 
 This command accepts all the same arguments as Flake8.
 
-## Formatters
-
-Formatters make errors output nice. Available formatters:
-
-+ `colored` -- for humans.
-+ `grouped` -- also colored, but all messages are explicitly grouped by file.
-+ `json` -- no colors, only one json-dict per line for every error.
-+ `default` -- classic Flake8 formatter. Booooring.
-
-Also, you can specify `show_source = true` in the config to show line of source code where error occurred with syntax highlighting.
-
-Colored:
-
-![colored](./assets/colored.png)
-
-Colored with source code:
-
-![colored](./assets/colored-source.png)
-
-Grouped:
-
-![grouped](./assets/grouped.png)
-
-Grouped with source code:
-
-![grouped](./assets/grouped-source.png)
-
-JSON:
-
-![json](./assets/json.png)
-
-## Integrating into a huge codebase
-
-First of all, let's create baseline.
-
-```bash
-flakehell baseline > baseline.txt
-```
-
-Then specify path to the baseline file:
-
-```toml
-[tool.flakehell]
-baseline = "baseline.txt"
-```
-
-Now, `flakehell lint` command will ignore all your current errors. It will report only about new errors, all errors in a new code, or if old line of code was modified.
+Read [flakehell.readthedocs.io](https://flakehell.readthedocs.io/) for more information.
