@@ -1,4 +1,4 @@
-# **missed**: show missed plugins
+# **missed**: rules without matching plugins
 
 Show keys from `[tool.flakehell.plugins]` that has no matched installed plugins. Exitcode of this command is equal to the number of missed plugins. For example:
 

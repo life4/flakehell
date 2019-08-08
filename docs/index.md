@@ -30,6 +30,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     :maxdepth: 1
     :caption: Commands
 
-    lint
-    missed
+    commands/lint
+    commands/plugins
+    commands/missed
 ```
