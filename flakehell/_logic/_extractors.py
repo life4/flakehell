@@ -273,10 +273,11 @@ def extract_dlint():
 
 
 def extract_wemake_python_styleguide():
-    from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
+    from wemake_python_styleguide import violations
 
     codes = dict()
-    for module in (best_practices, complexity, consistency, naming):
+    for path in Path(violations.__path__[0]).iterdir():
+        module = import_module('wemake_python_styleguide.violations.' + path.stem)
         for checker_name in dir(module):
             if not checker_name.endswith('Violation'):
                 continue
@@ -285,4 +286,4 @@ def extract_wemake_python_styleguide():
                 continue
             code = 'WPS' + str(checker.code).zfill(3)
             codes[code] = checker.error_template
-        return codes
+    return codes
