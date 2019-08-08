@@ -45,8 +45,8 @@ html_theme = 'alabaster'
 html_theme_path = [alabaster.get_path()]
 html_static_path = [str(Path(__file__).parent.parent / 'assets')]
 html_theme_options = {
-    'logo': 'logo.png',
-    'logo_name': 'false',
+    # 'logo': 'logo.png',
+    # 'logo_name': 'false',
     'description': 'Flake8 wrapper to make it nice, legacy-friendly, configurable.',
 
     'sidebar_width': '240px',

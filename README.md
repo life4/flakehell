@@ -8,7 +8,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Manage codes per plugin.
 + Enable and disable plugins and codes by wildcard.
 + Make output beautiful.
-+ `pyproject.toml` support.
++ [pyproject.toml](https://www.python.org/dev/peps/pep-0518/) support.
 + Show codes for installed plugins.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
