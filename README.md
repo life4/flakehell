@@ -29,7 +29,7 @@ First of all, let's create `pyproject.toml` config:
 ```toml
 [tool.flakehell]
 # optionally inherit from remote config (or local if you want)
-base = "https://gitlab.com/life4/flakehell/raw/master/pyproject.toml"
+base = "https://raw.githubusercontent.com/life4/flakehell/master/pyproject.toml"
 # specify any flake8 options. For example, exclude "example.py":
 exclude = ["example.py"]
 # make output nice

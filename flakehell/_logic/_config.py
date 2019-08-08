@@ -9,12 +9,12 @@ def read_config(*paths) -> Dict[str, Any]:
     config = dict()
     for path in paths:
         if isinstance(path, Path):
-            config.update(_read_local(path))
-            continue
-        if Path(path).exists():
-            config.update(_read_local(Path(path)))
-            continue
-        config.update(_read_remote(path))
+            new_config = _read_local(path)
+        elif Path(path).exists():
+            new_config = _read_local(Path(path))
+        else:
+            new_config = _read_remote(path)
+        config = _merge_configs(config, new_config)
     return config
 
 
@@ -29,6 +29,18 @@ def _read_remote(url: str):
     return _parse_config(response.data.decode())
 
 
+def _merge_configs(*configs):
+    config = dict()
+    for subconfig in configs:
+        config.update(subconfig)
+
+    config['plugins'] = dict()
+    for subconfig in configs:
+        config['plugins'].update(subconfig.get('plugins', {}))
+
+    return config
+
+
 def _parse_config(content: str):
     config = toml.loads(content).get('tool', {}).get('flakehell', {})
     config = dict(config)
@@ -39,8 +51,6 @@ def _parse_config(content: str):
         paths = config['base']
         if not isinstance(paths, list):
             paths = [paths]
-        old_config = config
-        config = read_config(*paths)
-        config.update(old_config)
+        config = _merge_configs(read_config(*paths), config)
 
     return config
