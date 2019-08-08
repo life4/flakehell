@@ -31,4 +31,5 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     :caption: Commands
 
     lint
+    missed
 ```
