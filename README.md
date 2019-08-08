@@ -82,30 +82,4 @@ flakehell lint
 
 This command accepts all the same arguments as Flake8.
 
-## Formatters
-
-Formatters make errors output nice. Available formatters:
-
-+ `colored` -- for humans.
-+ `grouped` -- also colored, but all messages are explicitly grouped by file.
-+ `json` -- no colors, only one json-dict per line for every error.
-+ `default` -- classic Flake8 formatter. Booooring.
-
-## Integrating into a huge codebase
-
-First of all, let's create baseline.
-
-```bash
-flakehell baseline > baseline.txt
-```
-
-Then specify path to the baseline file:
-
-```toml
-[tool.flakehell]
-baseline = "baseline.txt"
-```
-
-Now, `flakehell lint` command will ignore all your current errors. It will report only about new errors, all errors in a new code, or if old line of code was modified.
-
 Read [flakehell.readthedocs.io](https://flakehell.readthedocs.io/) for more information.
