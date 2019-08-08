@@ -112,7 +112,6 @@ JSON:
 
 ![json](./assets/json.png)
 
-
 ## Integrating into a huge codebase
 
 First of all, let's create baseline.
