@@ -55,7 +55,7 @@ html_theme_options = {
 
     # 'color': '#2c3e50',
     'github_banner': 'true',
-    'github_user': 'flakehell',
+    'github_user': 'life4',
     'github_repo': 'flakehell',
     'github_type': 'star',
 
