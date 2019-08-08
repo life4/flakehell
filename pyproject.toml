@@ -1,5 +1,5 @@
 [tool.flakehell]
-exclude = ["example.py", "setup.py"]
+# exclude = ["example.py", "setup.py"]
 max_line_length = 120
 # show_source = true
 
@@ -8,7 +8,7 @@ pycodestyle = ["+*"]
 pyflakes = ["+*"]
 flake8-commas = ["+*"]
 flake8-quotes = ["+*"]
-# "wemake-*" = ["+*", "-WPS300", "-WPS436"]
+# pylint = ["+*"]
 
 # -- DEPHELL -- #
 
@@ -62,6 +62,15 @@ Documentation = "https://flakehell.readthedocs.io/"
 [tool.flit.scripts]
 flakehell = "flakehell:entrypoint"
 
+[tool.flit.entrypoints."flake8.extension"]
+pylint = "flakehell.plugins:PyLintChecker"
+
+[tool.flit.entrypoints."flake8.report"]
+baseline = "flakehell.formatters:BaseLineFormatter"
+colored = "flakehell.formatters:ColoredFormatter"
+grouped = "flakehell.formatters:GroupedFormatter"
+json = "flakehell.formatters:JSONFormatter"
+
 [tool.flit.metadata.requires-extra]
 dev = [
     "dlint",
@@ -92,6 +101,7 @@ dev = [
     "flake8-string-format",
     "flake8-variables-names",
     "pep8-naming",
+    "pylint",
     "wemake-python-styleguide",
 
     "pytest",

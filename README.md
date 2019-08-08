@@ -44,7 +44,7 @@ show_source = true
 # include everything in pyflakes except F401
 pyflakes = ["+*", "-F401"]
 # enable only codes from S100 to S199
-flake8-bandit = ["-*", "+S1**"]
+flake8-bandit = ["-*", "+S1??"]
 # enable everything that starts from `flake8-`
 "flake8-*" = ["+*"]
 # explicitly disable plugin

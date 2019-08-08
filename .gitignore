@@ -3,3 +3,4 @@ __pycache__/
 dist/
 README.rst
 setup.py
+pip-wheel-metadata/
