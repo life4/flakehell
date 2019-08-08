@@ -12,6 +12,7 @@ ALIASES = {
     'flake-mutable': ('M511', ),
     'flake8-bandit': ('S', ),
     'pycodestyle': ('W', 'E'),
+    'pylint': ('C', 'E', 'F', 'I', 'R', 'W'),
 }
 
 

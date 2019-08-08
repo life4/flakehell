@@ -85,6 +85,7 @@ class FlakeHellCheckersManager(Manager):
         + use checker.filename as path instead of checker.display_name
         + pass checker into `_handle_results` to get plugin name.
         """
+        self.run_serial()
         results_reported = results_found = 0
         for checker in self.checkers:
             results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))

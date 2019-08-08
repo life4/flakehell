@@ -155,8 +155,14 @@ def extract_flake8_bandit():
 
 def extract_pylint():
     import pylint.checkers
+    from pylint.lint import MSGS
 
     codes = dict()
+    for code, (msg, alias, *_) in MSGS.items():
+        if msg in ('%s', '%s: %s'):
+            msg = alias.replace('-', ' ')
+        codes[code] = msg.replace('\n', ' ')
+
     for path in Path(pylint.checkers.__path__[0]).iterdir():
         module = import_module('pylint.checkers.' + path.stem)
         for class_name in dir(module):
@@ -164,7 +170,10 @@ def extract_pylint():
             msgs = getattr(cls, 'msgs', None)
             if not msgs:
                 continue
-            codes.update({code: msg.replace('\n', ' ') for code, (msg, *_) in msgs.items()})
+            for code, (msg, alias, *_) in msgs.items():
+                if msg in ('%s', '%s: %s'):
+                    msg = alias.replace('-', ' ')
+                codes[code] = msg.replace('\n', ' ')
     return codes
 
 
@@ -273,10 +282,11 @@ def extract_dlint():
 
 
 def extract_wemake_python_styleguide():
-    from wemake_python_styleguide.violations import best_practices, complexity, consistency, naming
+    from wemake_python_styleguide import violations
 
     codes = dict()
-    for module in (best_practices, complexity, consistency, naming):
+    for path in Path(violations.__path__[0]).iterdir():
+        module = import_module('wemake_python_styleguide.violations.' + path.stem)
         for checker_name in dir(module):
             if not checker_name.endswith('Violation'):
                 continue
@@ -285,4 +295,4 @@ def extract_wemake_python_styleguide():
                 continue
             code = 'WPS' + str(checker.code).zfill(3)
             codes[code] = checker.error_template
-        return codes
+    return codes

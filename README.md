@@ -13,6 +13,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
 + Syntax highlighting in messages and code snippets.
++ [PyLint](https://github.com/PyCQA/pylint) integration.
 
 ![output example](./assets/grouped.png)
 
@@ -44,7 +45,7 @@ show_source = true
 # include everything in pyflakes except F401
 pyflakes = ["+*", "-F401"]
 # enable only codes from S100 to S199
-flake8-bandit = ["-*", "+S1**"]
+flake8-bandit = ["-*", "+S1??"]
 # enable everything that starts from `flake8-`
 "flake8-*" = ["+*"]
 # explicitly disable plugin
