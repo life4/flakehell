@@ -5,6 +5,17 @@ NAME = 'flakehell'
 VERSION = '0.1.0'
 
 
+# our own modern defaults
+DEFAULTS = dict(
+    format='colored',
+    max_line_length=90,
+    plugins={
+        'pyflakes': ['+*'],
+        'pycodestyle': ['+*'],
+    },
+)
+
+
 class ExitCodes(IntEnum):
     # CLI entrypoint
     NO_COMMAND = 1

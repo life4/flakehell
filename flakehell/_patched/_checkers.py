@@ -1,13 +1,9 @@
-import re
 from typing import List, Tuple
 
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
 from .._logic import get_plugin_name, get_plugin_rules, check_include, make_baseline
-
-
-REX_NAME = re.compile(r"[-_.]+")
 
 
 class FlakeHellCheckersManager(Manager):
@@ -32,21 +28,42 @@ class FlakeHellCheckersManager(Manager):
             paths = ['.']
 
         self.checkers = []
-        for check_type, checks in self.checks.to_dictionary().items():
-            for check in checks:
-                for argument in paths:
-                    for filename in filenames_from(argument, self.is_path_excluded):
-                        checker = FlakeHellFileChecker(
+        for argument in paths:
+            for filename in filenames_from(argument, self.is_path_excluded):
+                for check_type, checks in self.checks.to_dictionary().items():
+                    for check in checks:
+                        checker = self._make_checker(
+                            argument=argument,
                             filename=filename,
                             check_type=check_type,
                             check=check,
-                            options=self.options,
                         )
-                        # if checker.should_process:
-                        #     continue
-                        if not self._should_create_file_checker(filename=filename, argument=argument):
-                            continue
-                        self.checkers.append(checker)
+                        if checker is not None:
+                            self.checkers.append(checker)
+
+    def _make_checker(self, argument, filename, check_type, check):
+        # do not run plugins without rules specified
+        plugin_name = get_plugin_name(check)
+        rules = get_plugin_rules(
+            plugin_name=plugin_name,
+            plugins=self.options.plugins,
+        )
+        if not rules:
+            return None
+
+        if not self._should_create_file_checker(filename=filename, argument=argument):
+            return None
+
+        checker = FlakeHellFileChecker(
+            filename=filename,
+            check_type=check_type,
+            check=check,
+            options=self.options,
+        )
+        # TODO: IDK why it doesn't work, sorry
+        # if checker.should_process:
+        #     return None
+        return checker
 
     def _should_create_file_checker(self, filename: str, argument) -> bool:
         """Filter out excluded files
@@ -65,18 +82,15 @@ class FlakeHellCheckersManager(Manager):
     def report(self) -> Tuple[int, int]:
         """Reloaded report generation to filter out excluded error codes.
 
-        + Run everything only serial. IDK why, but it doesn't work with parallel run
+        + use checker.filename as path instead of checker.display_name
         + pass checker into `_handle_results` to get plugin name.
         """
-        self.run_serial()
-
         results_reported = results_found = 0
         for checker in self.checkers:
             results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
-            filename = checker.display_name
-            with self.style_guide.processing_file(filename):
+            with self.style_guide.processing_file(checker.filename):
                 results_reported += self._handle_results(
-                    filename=filename,
+                    filename=checker.filename,
                     results=results,
                     check=checker.check,
                 )
@@ -128,3 +142,18 @@ class FlakeHellFileChecker(FileChecker):
         checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])
         checks[check_type] = [check]
         super().__init__(filename=filename, checks=checks, options=options)
+
+        # display_name used in run_parallel for grouping results.
+        # Flake8 groups by filename, we need to group also by plugin name
+        self.display_name = (get_plugin_name(check), filename)
+
+    def __repr__(self):
+        return '{name}({plugin}, {filename})'.format(
+            name=type(self).__name__,
+            plugin=self.check['plugin_name'],
+            filename=self.filename,
+        )
+
+    def run_checks(self):
+        super().run_checks()
+        return self.display_name, self.results, self.statistics

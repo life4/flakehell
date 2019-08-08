@@ -37,7 +37,7 @@ class GroupedFormatter(ColoredFormatter):
             row_col='{row}:{col}'.format(
                 row=colored(str(error.line_number).rjust(4), 'green'),
                 col=colored(str(error.column_number).rjust(4), 'green'),
-            )
+            ),
         )
         plugin = getattr(error, 'plugin', None)
         if plugin:
@@ -82,6 +82,8 @@ class GroupedFormatter(ColoredFormatter):
     # Our own methods:
 
     def _print_header(self, filename: str) -> None:
+        if filename.startswith('./'):
+            filename = filename[2:]
         self._write(
             '{newline}{filename}'.format(
                 filename=colored(filename, 'white', attrs=['bold', 'underline']),

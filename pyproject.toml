@@ -1,11 +1,12 @@
 [tool.flakehell]
-exclude = ["example.py"]
-format = "grouped"
+exclude = ["example.py", "setup.py"]
 max_line_length = 120
 # show_source = true
 
 [tool.flakehell.plugins]
+pycodestyle = ["+*"]
 pyflakes = ["+*"]
+flake8-commas = ["+*"]
 flake8-quotes = ["+*"]
 # "wemake-*" = ["+*", "-WPS300", "-WPS436"]
 
@@ -15,6 +16,7 @@ flake8-quotes = ["+*"]
 from = {format = "flit", path = "pyproject.toml"}
 to = {format = "setuppy", path = "setup.py"}
 envs = ["main", "dev"]
+command = "python -m flakehell lint"
 
 [tool.dephell.pytest]
 from = {format = "flit", path = "pyproject.toml"}

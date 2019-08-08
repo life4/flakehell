@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Dict, Any, List
 
-
 from entrypoints import EntryPoint
 from flake8.main.application import Application
 from flake8.plugins.manager import Plugin
@@ -10,7 +9,7 @@ from flake8.options.aggregator import aggregate_options
 from ._checkers import FlakeHellCheckersManager
 from ._style_guide import FlakeHellStyleGuideManager
 from ..formatters import FORMATTERS
-from .._constants import NAME
+from .._constants import NAME, DEFAULTS
 from .._logic import read_config
 
 
@@ -23,16 +22,21 @@ class FlakeHellApplication(Application):
     """
 
     def get_toml_config(self) -> Dict[str, Any]:
-        paths = [Path('pyproject.toml')]
-        return read_config(*paths)
+        path = Path('pyproject.toml')
+        if not path.exists():
+            return dict()
+        return read_config(path)
 
     def parse_configuration_and_cli(self, argv: List[str] = None) -> None:
+        config, _ = self.option_manager.parse_args([])
+        config.__dict__.update(DEFAULTS)
+        config.__dict__.update(self.get_toml_config())
         self.options, self.args = aggregate_options(
             manager=self.option_manager,
             config_finder=self.config_finder,
             arglist=argv,
+            values=config,
         )
-        self.options.__dict__.update(self.get_toml_config())
         super().parse_configuration_and_cli(argv=argv)
 
     def make_file_checker_manager(self):
