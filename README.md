@@ -13,6 +13,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Show all messages and codes for a plugin.
 + Check that all required plugins are installed.
 + Syntax highlighting in messages and code snippets.
++ [PyLint](https://github.com/PyCQA/pylint) integration.
 
 ![output example](./assets/grouped.png)
 
