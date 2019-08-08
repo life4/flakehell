@@ -91,7 +91,6 @@ Formatters make errors output nice. Available formatters:
 + `json` -- no colors, only one json-dict per line for every error.
 + `default` -- classic Flake8 formatter. Booooring.
 
-
 ## Integrating into a huge codebase
 
 First of all, let's create baseline.

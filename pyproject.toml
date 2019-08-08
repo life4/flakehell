@@ -41,6 +41,7 @@ requires=[
     "entrypoints",
     "flake8",
     "pygments",
+    "pylint",
     "termcolor",
     "toml",
     "urllib3",
