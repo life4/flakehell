@@ -4,3 +4,4 @@ dist/
 README.rst
 setup.py
 pip-wheel-metadata/
+docs/build/

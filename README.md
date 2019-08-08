@@ -91,27 +91,6 @@ Formatters make errors output nice. Available formatters:
 + `json` -- no colors, only one json-dict per line for every error.
 + `default` -- classic Flake8 formatter. Booooring.
 
-Also, you can specify `show_source = true` in the config to show line of source code where error occurred with syntax highlighting.
-
-Colored:
-
-![colored](./assets/colored.png)
-
-Colored with source code:
-
-![colored](./assets/colored-source.png)
-
-Grouped:
-
-![grouped](./assets/grouped.png)
-
-Grouped with source code:
-
-![grouped](./assets/grouped-source.png)
-
-JSON:
-
-![json](./assets/json.png)
 
 ## Integrating into a huge codebase
 
@@ -129,3 +108,5 @@ baseline = "baseline.txt"
 ```
 
 Now, `flakehell lint` command will ignore all your current errors. It will report only about new errors, all errors in a new code, or if old line of code was modified.
+
+Read [flakehell.readthedocs.io](https://flakehell.readthedocs.io/) for more information.

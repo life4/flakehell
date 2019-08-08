@@ -24,6 +24,11 @@ envs = ["main", "dev"]
 tests = ["tests"]
 command = "python -m pytest tests/"
 
+[tool.dephell.docs]
+from = {format = "flit", path = "pyproject.toml"}
+envs = ["docs"]
+command = "sphinx-build -W docs docs/build"
+
 # -- FLIT -- #
 
 [tool.flit.metadata]
@@ -72,6 +77,12 @@ grouped = "flakehell.formatters:GroupedFormatter"
 json = "flakehell.formatters:JSONFormatter"
 
 [tool.flit.metadata.requires-extra]
+docs = [
+    "alabaster",
+    "pygments-github-lexers",
+    "recommonmark",
+    "sphinx",
+]
 dev = [
     "dlint",
     "flake8-alfred",
