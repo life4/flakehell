@@ -37,7 +37,7 @@ class GroupedFormatter(ColoredFormatter):
             row_col='{row}:{col}'.format(
                 row=colored(str(error.line_number).rjust(4), 'green'),
                 col=colored(str(error.column_number).rjust(4), 'green'),
-            )
+            ),
         )
         plugin = getattr(error, 'plugin', None)
         if plugin:

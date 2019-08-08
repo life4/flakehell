@@ -1,10 +1,12 @@
 [tool.flakehell]
-exclude = ["example.py"]
+exclude = ["example.py", "setup.py"]
 max_line_length = 120
 # show_source = true
 
 [tool.flakehell.plugins]
+pycodestyle = ["+*"]
 pyflakes = ["+*"]
+flake8-commas = ["+*"]
 flake8-quotes = ["+*"]
 # "wemake-*" = ["+*", "-WPS300", "-WPS436"]
 

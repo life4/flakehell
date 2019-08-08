@@ -13,7 +13,7 @@ class FlakeHellStyleGuideManager(StyleGuideManager):
         """
         super().__init__(options, formatter, decider)
         self.default_style_guide = FlakeHellStyleGuide(
-            options, formatter, self.stats, decider=decider
+            options, formatter, self.stats, decider=decider,
         )
         self.style_guides = [self.default_style_guide]
         self.style_guides.extend(self.populate_style_guides_with(options))
