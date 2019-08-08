@@ -155,8 +155,14 @@ def extract_flake8_bandit():
 
 def extract_pylint():
     import pylint.checkers
+    from pylint.lint import MSGS
 
     codes = dict()
+    for code, (msg, alias, *_) in MSGS.items():
+        if msg in ('%s', '%s: %s'):
+            msg = alias.replace('-', ' ')
+        codes[code] = msg.replace('\n', ' ')
+
     for path in Path(pylint.checkers.__path__[0]).iterdir():
         module = import_module('pylint.checkers.' + path.stem)
         for class_name in dir(module):
@@ -164,7 +170,10 @@ def extract_pylint():
             msgs = getattr(cls, 'msgs', None)
             if not msgs:
                 continue
-            codes.update({code: msg.replace('\n', ' ') for code, (msg, *_) in msgs.items()})
+            for code, (msg, alias, *_) in msgs.items():
+                if msg in ('%s', '%s: %s'):
+                    msg = alias.replace('-', ' ')
+                codes[code] = msg.replace('\n', ' ')
     return codes
 
 
