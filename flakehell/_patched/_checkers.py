@@ -156,5 +156,6 @@ class FlakeHellFileChecker(FileChecker):
         )
 
     def run_checks(self):
-        super().run_checks()
+        if self.processor:
+            super().run_checks()
         return self.display_name, self.results, self.statistics
