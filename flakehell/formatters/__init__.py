@@ -2,6 +2,7 @@ from ._baseline import BaseLineFormatter
 from ._colored import ColoredFormatter
 from ._grouped import GroupedFormatter
 from ._json import JSONFormatter
+from ._stat import StatFormatter
 
 
 FORMATTERS = dict(
@@ -9,4 +10,5 @@ FORMATTERS = dict(
     colored=ColoredFormatter,
     grouped=GroupedFormatter,
     json=JSONFormatter,
+    stat=StatFormatter,
 )

@@ -76,6 +76,7 @@ baseline = "flakehell.formatters:BaseLineFormatter"
 colored = "flakehell.formatters:ColoredFormatter"
 grouped = "flakehell.formatters:GroupedFormatter"
 json = "flakehell.formatters:JSONFormatter"
+stat = "flakehell.formatters:StatFormatter"
 
 [tool.flit.metadata.requires-extra]
 docs = [
