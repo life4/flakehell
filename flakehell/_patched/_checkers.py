@@ -48,7 +48,7 @@ class FlakeHellCheckersManager(Manager):
             plugin_name=plugin_name,
             plugins=self.options.plugins,
         )
-        if not rules:
+        if not rules or rules == ['-*']:
             return None
 
         if not self._should_create_file_checker(filename=filename, argument=argument):
@@ -85,7 +85,7 @@ class FlakeHellCheckersManager(Manager):
         + use checker.filename as path instead of checker.display_name
         + pass checker into `_handle_results` to get plugin name.
         """
-        self.run_serial()
+        # self.run_serial()
         results_reported = results_found = 0
         for checker in self.checkers:
             results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
