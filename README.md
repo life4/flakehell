@@ -83,3 +83,5 @@ flakehell lint
 This command accepts all the same arguments as Flake8.
 
 Read [flakehell.readthedocs.io](https://flakehell.readthedocs.io/) for more information.
+
+![](./assets/flaky.png)
