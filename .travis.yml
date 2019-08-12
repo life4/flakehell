@@ -46,3 +46,6 @@ matrix:
         - npm install -g markdownlint-cli
       script:
         - bash -c "markdownlint --config markdownlint.json **/*.md"
+
+    - python: "3.7"
+      env: ENV=docs
