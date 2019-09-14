@@ -32,9 +32,22 @@ def main(argv: List[str] = None) -> CommandResult:
 
 
 def entrypoint(argv: List[str] = None) -> NoReturn:
+    """Default entrypoint for CLI (flakehell).
+    """
     if argv is None:
         argv = sys.argv[1:]
     exit_code, msg = main(argv)
+    if msg:
+        print(colored(msg, 'red'))
+    sys.exit(exit_code)
+
+
+def flake8_entrypoint(argv: List[str] = None) -> NoReturn:
+    """Entrypoint with the same behavior as flake8 (flake8helled)
+    """
+    if argv is None:
+        argv = sys.argv[1:]
+    exit_code, msg = main(['lint'] + argv)
     if msg:
         print(colored(msg, 'red'))
     sys.exit(exit_code)
