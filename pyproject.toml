@@ -8,7 +8,7 @@ pycodestyle = ["+*"]
 pyflakes = ["+*"]
 flake8-commas = ["+*"]
 flake8-quotes = ["+*"]
-pylint = ["+F*", "+E*", "-E0611", "-E1101"]
+pylint = ["+F*", "+E*", "-E0611", "-E1101", "-E0401"]
 
 # -- DEPHELL -- #
 
@@ -39,7 +39,7 @@ home-page="https://gitlab.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
     "entrypoints",
-    "flake8",
+    "flake8>=3.7.5",
     "pygments",
     "pylint",
     "termcolor",
@@ -67,6 +67,7 @@ Documentation = "https://flakehell.readthedocs.io/"
 
 [tool.flit.scripts]
 flakehell = "flakehell:entrypoint"
+flake8helled = "flakehell:flake8_entrypoint"
 
 [tool.flit.entrypoints."flake8.extension"]
 pylint = "flakehell.plugins:PyLintChecker"
