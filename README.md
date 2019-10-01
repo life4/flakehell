@@ -1,5 +1,10 @@
 # ![FlakeHell](./assets/logo.png)
 
+[![PyPI version](https://badge.fury.io/py/flakehell.svg)](https://badge.fury.io/py/flakehell)
+[![Build Status](https://travis-ci.org/life4/flakehell.svg?branch=master)](https://travis-ci.org/life4/flakehell)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://readthedocs.org/projects/flakehell/badge/?version=latest)](https://flakehell.readthedocs.io/)
+
 It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
 + Sharable and remote configs.
