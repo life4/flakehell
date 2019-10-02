@@ -1,14 +1,17 @@
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 
 from flake8.main.application import Application
 from flake8.options.aggregator import aggregate_options
+from flake8.options.config import get_local_plugins
 
 from ._checkers import FlakeHellCheckersManager
 from ._style_guide import FlakeHellStyleGuideManager
 from .._constants import DEFAULTS
 from .._logic import read_config
+from ._plugins import FlakeHellCheckers
 
 
 class FlakeHellApplication(Application):
@@ -70,6 +73,20 @@ class FlakeHellApplication(Application):
             arguments=self.args,
             checker_plugins=self.check_plugins,
         )
+
+    def find_plugins(self) -> None:
+        if self.local_plugins is None:
+            self.local_plugins = get_local_plugins(
+                self.config_finder,
+                self.prelim_opts.config,
+                self.prelim_opts.isolated,
+            )
+
+        sys.path.extend(self.local_plugins.paths)
+
+        if self.check_plugins is None:
+            self.check_plugins = FlakeHellCheckers(self.local_plugins.extension)
+        super().find_plugins()
 
     def make_guide(self) -> None:
         """Patched StyleGuide creation just to use FlakeHellStyleGuideManager

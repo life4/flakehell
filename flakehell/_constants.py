@@ -57,7 +57,7 @@ KNOWN_PLUGINS = [
     'flake8-quotes',
     'flake8-rst-docstrings',
     'flake8-scrapy',
-    # 'flake8-strict',
+    'flake8-strict',
     'flake8-string-format',
     'flake8-variables-names',
     'mccabe',
