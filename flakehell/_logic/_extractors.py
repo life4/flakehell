@@ -14,7 +14,7 @@ ALIASES = {
 class CollectStrings(ast.NodeVisitor):
     _strings = []
 
-    def visit_Str(self, node):
+    def visit_Str(self, node):  # noqa: N802
         self._strings.append(node.s)
 
 
@@ -279,6 +279,13 @@ def extract_dlint():
         code, msg = linter._error_tmpl.split(' ', maxsplit=1)
         codes[code] = msg
     return codes
+
+
+def extract_mccabe():
+    from mccabe import McCabeChecker
+
+    code, message = McCabeChecker._error_tmpl.split(' ', maxsplit=1)
+    return {code: message}
 
 
 def extract_wemake_python_styleguide():

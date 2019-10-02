@@ -60,6 +60,7 @@ KNOWN_PLUGINS = [
     # 'flake8-strict',
     'flake8-string-format',
     'flake8-variables-names',
+    'mccabe',
     'pep8-naming',
 
     # built-in in flake8
