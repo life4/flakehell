@@ -45,7 +45,7 @@ def code_command(argv) -> CommandResult:
     if not messages:
         return ExitCodes.NO_CODES, 'no messages found'
 
-    width = max(len(p['name']) for p in plugins)
+    width = max(len(m['plugin']) for m in messages)
     template = '{plugin} | {message}'
     print(template.format(
         plugin=colored('PLUGIN'.ljust(width), 'yellow'),
