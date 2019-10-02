@@ -7,7 +7,7 @@
 
 It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
-+ Sharable and remote configs.
++ Shareable and remote configs.
 + Legacy-friendly: ability to get report only about new errors.
 + Use only specified plugins, not everything installed.
 + Manage codes per plugin.
@@ -19,6 +19,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + Check that all required plugins are installed.
 + Syntax highlighting in messages and code snippets.
 + [PyLint](https://github.com/PyCQA/pylint) integration.
++ Allow codes intersection for different plugins.
 
 ![output example](./assets/grouped.png)
 

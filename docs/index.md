@@ -35,5 +35,6 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     commands/baseline
     commands/plugins
     commands/codes
+    commands/code
     commands/missed
 ```

@@ -1,6 +1,7 @@
 from types import MappingProxyType
 
 from ._baseline import baseline_command
+from ._code import code_command
 from ._codes import codes_command
 from ._lint import lint_command
 from ._missed import missed_command
@@ -11,6 +12,7 @@ __all__ = [
     'COMMANDS',
 
     'baseline_command',
+    'code_command',
     'codes_command',
     'lint_command',
     'missed_command',
@@ -20,6 +22,7 @@ __all__ = [
 
 COMMANDS = MappingProxyType(dict(
     baseline=baseline_command,
+    code=code_command,
     codes=codes_command,
     lint=lint_command,
     missed=missed_command,
