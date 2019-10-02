@@ -23,7 +23,7 @@ def plugins_command(argv) -> CommandResult:
     ))
     showed = set()
     for plugin in plugins:
-        # Plugins returned by get_installed are unique by namee and type.
+        # Plugins returned by get_installed are unique by name and type.
         # We are not showing type, so, let's show one name only once.
         if plugin['name'] in showed:
             continue
