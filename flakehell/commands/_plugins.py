@@ -14,11 +14,14 @@ def plugins_command(argv) -> CommandResult:
     if not plugins:
         return ExitCodes.NO_PLUGINS_INSTALLED, 'no plugins installed'
 
-    width = max(len(p['name']) for p in plugins)
-    template = '{name} | {codes:8} | {rules}'
+    name_width = max(len(p['name']) for p in plugins)
+    version_width = min(8, max(len(p['version']) for p in plugins))
+    codes_width = min(6, max(len('  '.join(p['codes'])) for p in plugins))
+    template = '{name} | {version} | {codes} | {rules}'
     print(template.format(
-        name=colored('NAME'.ljust(width), 'yellow'),
-        codes=colored('CODES   ', 'yellow'),
+        name=colored('NAME'.ljust(name_width), 'yellow'),
+        version=colored('VERION'.ljust(version_width), 'yellow'),
+        codes=colored('CODES'.ljust(codes_width), 'yellow'),
         rules=colored('RULES', 'yellow'),
     ))
     showed = set()
@@ -42,8 +45,9 @@ def plugins_command(argv) -> CommandResult:
             colored_rules.append(rule)
         color = 'green' if rules else 'red'
         print(template.format(
-            name=colored(plugin['name'].ljust(width), color),
-            codes=', '.join(plugin['codes']),
+            name=colored(plugin['name'].ljust(name_width), color),
+            version=plugin['version'].ljust(version_width),
+            codes=', '.join(plugin['codes']).ljust(codes_width),
             rules=', '.join(colored_rules),
         ))
     return 0, ''
