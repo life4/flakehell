@@ -145,8 +145,8 @@ class FlakeHellFileChecker(FileChecker):
         super().__init__(filename=filename, checks=checks, options=options)
 
         # display_name used in run_parallel for grouping results.
-        # Flake8 groups by filename, we need to group also by plugin name
-        self.display_name = (get_plugin_name(check), filename)
+        # Flake8 groups by filename, we need to group also by the check
+        self.display_name = (get_plugin_name(check), check['name'], filename)
 
     def __repr__(self):
         return '{name}({plugin}, {filename})'.format(
