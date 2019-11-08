@@ -87,7 +87,16 @@ class FlakeHellCheckersManager(Manager):
         """
         # self.run_serial()
         results_reported = results_found = 0
+        showed = set()
         for checker in self.checkers:
+            if not checker.results:
+                continue
+
+            # IDK why we have duplicates but let's fight it
+            if checker.display_name in showed:
+                continue
+            showed.add(checker.display_name)
+
             results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
             with self.style_guide.processing_file(checker.filename):
                 results_reported += self._handle_results(
@@ -99,8 +108,6 @@ class FlakeHellCheckersManager(Manager):
         return (results_found, results_reported)
 
     def _handle_results(self, filename: str, results: list, check: dict) -> int:
-        if not results:
-            return 0
         plugin_name = get_plugin_name(check)
         rules = get_plugin_rules(
             plugin_name=plugin_name,
