@@ -53,12 +53,16 @@ class FlakeHellCheckersManager(Manager):
             plugins=self.options.plugins,
         )
         if not rules or rules == ['-*']:
-            logger.info('no rules for plugin', extra=dict(plugin=plugin_name))
+            logger.debug('no rules for plugin', extra=dict(plugin=plugin_name))
             return None
 
         if not self._should_create_file_checker(filename=filename, argument=argument):
             return None
 
+        logger.debug('make checker', extra=dict(
+            plugin=plugin_name,
+            file=filename,
+        ))
         checker = FlakeHellFileChecker(
             filename=filename,
             check_type=check_type,
@@ -113,6 +117,11 @@ class FlakeHellCheckersManager(Manager):
         )
         reported_results_count = 0
         for (error_code, line_number, column, text, physical_line) in results:
+            logger.debug('processing result', extra=dict(
+                plugin=plugin_name,
+                code=error_code,
+                file=filename,
+            ))
             if self.baseline:
                 digest = make_baseline(
                     path=filename,
