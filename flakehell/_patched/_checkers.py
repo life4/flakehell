@@ -1,9 +1,13 @@
+from logging import getLogger
 from typing import List, Tuple
 
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
 from .._logic import get_plugin_name, get_plugin_rules, check_include, make_baseline
+
+
+logger = getLogger('flakehell')
 
 
 class FlakeHellCheckersManager(Manager):
@@ -49,6 +53,7 @@ class FlakeHellCheckersManager(Manager):
             plugins=self.options.plugins,
         )
         if not rules or rules == ['-*']:
+            logger.info('no rules for plugin', extra=dict(plugin=plugin_name))
             return None
 
         if not self._should_create_file_checker(filename=filename, argument=argument):

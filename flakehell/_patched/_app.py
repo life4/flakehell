@@ -11,6 +11,7 @@ from ._checkers import FlakeHellCheckersManager
 from ._style_guide import FlakeHellStyleGuideManager
 from .._constants import DEFAULTS
 from .._logic import read_config
+from .._logging import configure_logging
 from ._plugins import FlakeHellCheckers
 
 
@@ -31,6 +32,10 @@ class FlakeHellApplication(Application):
             if path.exists():
                 return read_config(path)
         return dict()
+
+    def make_config_finder(self):
+        configure_logging()
+        return super().make_config_finder()
 
     @staticmethod
     def extract_toml_config_path(argv: List[str] = None) -> Tuple[Optional[Path], Optional[List[str]]]:
