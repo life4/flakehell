@@ -35,7 +35,7 @@ command = "sphinx-build -W docs docs/build"
 module="flakehell"
 author="Gram (@orsinium)"
 author-email="master_fess@mail.ru"
-home-page="https://gitlab.com/life4/flakehell"
+home-page="https://github.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
     "entrypoints",
