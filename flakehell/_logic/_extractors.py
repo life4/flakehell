@@ -288,6 +288,19 @@ def extract_mccabe():
     return {code: message}
 
 
+def extract_flake8_mock():
+    from flake8_mock import MOCK_ERROR_CODE, ERROR_MESSAGE
+
+    message = ERROR_MESSAGE.split(' ', maxsplit=1)[1]
+    return {MOCK_ERROR_CODE: message}
+
+
+def extract_flake8_pytest():
+    from flake8_pytest import PYTEST_ERROR_CODE, PYTEST_ERROR_MESSAGE
+
+    return {PYTEST_ERROR_CODE: PYTEST_ERROR_MESSAGE}
+
+
 def extract_wemake_python_styleguide():
     from wemake_python_styleguide import violations
 

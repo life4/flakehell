@@ -8,9 +8,11 @@ from ._plugin import get_plugin_name
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{0,5}$')
 
 ALIASES = {
-    'logging-format': ('G', ),
     'flake-mutable': ('M511', ),
     'flake8-bandit': ('S', ),
+    'flake8-mock': ('M001', ),
+    'flake8-pytest': ('T003', ),
+    'logging-format': ('G', ),
     'pycodestyle': ('W', 'E'),
     'pylint': ('C', 'E', 'F', 'I', 'R', 'W'),
 }
