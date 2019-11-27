@@ -1,6 +1,7 @@
 import json
 from hashlib import md5
 from pathlib import Path
+from time import time
 
 from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
@@ -9,7 +10,17 @@ from ._plugin import get_plugin_name, get_plugin_rules
 
 
 CACHE_PATH = Path.home() / '.cache' / 'flakehell'
-CACHE_PATH.mkdir(parents=True, exist_ok=True)
+THRESHOLD = 3600  # 1 hour
+
+
+def prepare_cache(path=CACHE_PATH):
+    if not path.exists():
+        path.mkdir(parents=True)
+        return
+    for fpath in path.iterdir():
+        if time() - fpath.stat().st_atime <= THRESHOLD:
+            continue
+        fpath.unlink()
 
 
 class Snapshot:

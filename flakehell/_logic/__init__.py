@@ -4,7 +4,7 @@ from ._config import read_config
 from ._discover import get_installed
 from ._extractors import extract
 from ._plugin import get_plugin_name, get_plugin_rules, check_include
-from ._snapshot import Snapshot
+from ._snapshot import Snapshot, prepare_cache
 
 
 __all__ = [
@@ -14,5 +14,5 @@ __all__ = [
     'get_installed',
     'extract',
     'get_plugin_name', 'get_plugin_rules', 'check_include',
-    'Snapshot',
+    'Snapshot', 'prepare_cache',
 ]

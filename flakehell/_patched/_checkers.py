@@ -4,7 +4,8 @@ from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
 from .._logic import (
-    get_plugin_name, get_plugin_rules, check_include, make_baseline, Snapshot,
+    get_plugin_name, get_plugin_rules, check_include, make_baseline,
+    Snapshot, prepare_cache,
 )
 
 
@@ -28,6 +29,7 @@ class FlakeHellCheckersManager(Manager):
             paths = self.arguments
         if not paths:
             paths = ['.']
+        prepare_cache()
 
         self.checkers = []
         self.snapshots = []
