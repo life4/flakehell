@@ -1,9 +1,11 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
-from .._logic import get_plugin_name, get_plugin_rules, check_include, make_baseline
+from .._logic import (
+    get_plugin_name, get_plugin_rules, check_include, make_baseline, Snapshot,
+)
 
 
 class FlakeHellCheckersManager(Manager):
@@ -28,6 +30,7 @@ class FlakeHellCheckersManager(Manager):
             paths = ['.']
 
         self.checkers = []
+        self.snapshots = []
         for argument in paths:
             for filename in filenames_from(argument, self.is_path_excluded):
                 for check_type, checks in self.checks.to_dictionary().items():
@@ -38,10 +41,21 @@ class FlakeHellCheckersManager(Manager):
                             check_type=check_type,
                             check=check,
                         )
-                        if checker is not None:
-                            self.checkers.append(checker)
+                        if checker is None:
+                            continue
 
-    def _make_checker(self, argument, filename, check_type, check):
+                        checker.snapshot = Snapshot.create(
+                            checker=checker,
+                            options=self.options,
+                        )
+                        if checker.snapshot.exists():
+                            self.snapshots.append(checker)
+                            continue
+
+                        self.checkers.append(checker)
+
+    def _make_checker(self, argument, filename, check_type,
+                      check) -> Optional['FlakeHellFileChecker']:
         # do not run plugins without rules specified
         plugin_name = get_plugin_name(check)
         rules = get_plugin_rules(
@@ -88,8 +102,8 @@ class FlakeHellCheckersManager(Manager):
         # self.run_serial()
         results_reported = results_found = 0
         showed = set()
-        for checker in self.checkers:
-            if not checker.results:
+        for checker in self.checkers + self.snapshots:
+            if not checker.results and not checker.snapshot.exists():
                 continue
 
             # IDK why we have duplicates but let's fight it
@@ -97,7 +111,12 @@ class FlakeHellCheckersManager(Manager):
                 continue
             showed.add(checker.display_name)
 
-            results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
+            if checker.snapshot.exists():
+                results = checker.snapshot.get_results()
+            else:
+                results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
+                checker.snapshot.dump(results)
+
             with self.style_guide.processing_file(checker.filename):
                 results_reported += self._handle_results(
                     filename=checker.filename,
@@ -144,6 +163,8 @@ class FlakeHellFileChecker(FileChecker):
     """
     A little bit patched FileChecker to handle ane check per checker
     """
+    snapshot = None
+
     def __init__(self, filename: str, check_type: str, check, options):
         self.check_type = check_type
         self.check = check
