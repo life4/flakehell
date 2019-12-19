@@ -4,5 +4,5 @@
 from ._cli import entrypoint, flake8_entrypoint
 
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 __all__ = ['entrypoint', 'flake8_entrypoint']
