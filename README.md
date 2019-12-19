@@ -9,6 +9,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
 + Shareable and remote configs.
 + Legacy-friendly: ability to get report only about new errors.
++ Caching for much better performance.
 + Use only specified plugins, not everything installed.
 + Manage codes per plugin.
 + Enable and disable plugins and codes by wildcard.
