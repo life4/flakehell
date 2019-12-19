@@ -10,7 +10,7 @@ from ._plugin import get_plugin_name, get_plugin_rules
 
 
 CACHE_PATH = Path.home() / '.cache' / 'flakehell'
-THRESHOLD = 3600  # 1 hour
+THRESHOLD = 3600 * 24  # 1 day
 
 
 def prepare_cache(path=CACHE_PATH):
@@ -25,10 +25,12 @@ def prepare_cache(path=CACHE_PATH):
 
 class Snapshot:
     _exists = None
+    _digest = None
+    _results = None
 
-    def __init__(self, digest):
-        self.digest = digest
-        self.path = CACHE_PATH / (self.digest + '.json')
+    def __init__(self, *, cache_path: Path, file_path: Path):
+        self.cache_path = cache_path
+        self.file_path = file_path
 
     @classmethod
     def create(cls, checker: FileChecker, options: OptionManager):
@@ -36,11 +38,6 @@ class Snapshot:
         # plugin info
         for chunk in checker.display_name[:-1]:
             hasher.update(chunk.encode())
-        # file path
-        path = Path(checker.filename).resolve()
-        hasher.update(str(path).encode())
-        # file content
-        hasher.update(path.read_bytes())
 
         # plugins config
         plugin_name = get_plugin_name(checker.check)
@@ -50,18 +47,61 @@ class Snapshot:
         )
         hasher.update('|'.join(rules).encode())
 
-        return cls(digest=hasher.hexdigest())
+        # file path
+        file_path = Path(checker.filename).resolve()
+        hasher.update(str(file_path).encode())
+
+        return cls(
+            cache_path=CACHE_PATH / (hasher.hexdigest() + '.json'),
+            file_path=file_path,
+        )
 
     def exists(self) -> bool:
-        if self._exists is None:
-            self._exists = self.path.exists()
+        """Returns True if cache file exists and is actual.
+        """
+        if self._exists is not None:
+            return self._exists
+
+        if not self.cache_path.exists():
+            self._exists = False
+            return self._exists
+
+        # check that file content wasn't changed since the snapshot
+        cache = json.loads(self.cache_path.read_text())
+        self._exists = self.digest == cache['digest']
+        # if cache is valid results will be eventually requested.
+        # let's save it for later use to avoid reading the cache twice
+        if self._exists:
+            self._results = cache['results']
         return self._exists
 
+    @property
+    def digest(self):
+        """Get hex digest for the current content of the file
+        """
+        # we cache it because it requested twice: from `exists` and from `dumps`
+        if self._digest is None:
+            hasher = md5()
+            hasher.update(self.file_path.read_bytes())
+            self._digest = hasher.hexdigest()
+        return self._digest
+
     def dump(self, results) -> None:
-        self.path.write_text(self.dumps(results=results))
+        self.cache_path.write_text(self.dumps(results=results))
 
     def dumps(self, results) -> str:
-        return json.dumps(results)
+        return json.dumps(dict(
+            results=results,
+            digest=self.digest,
+        ))
 
-    def get_results(self):
-        return json.loads(self.path.read_text())
+    @property
+    def results(self):
+        """returns cached checks results for the given file
+        """
+        # results could be cached from `.exists()`.
+        # however, we don't want to cache the results on requets
+        # because they are always requested only once
+        if self._results is not None:
+            return self._results
+        return json.loads(self.cache_path.read_text())['results']

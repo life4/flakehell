@@ -31,7 +31,10 @@ class FlakeHellCheckersManager(Manager):
             paths = ['.']
         prepare_cache()
 
+        # `checkers` is list of checks to run (and then cache)
+        # check is a combination of plugin and file.
         self.checkers = []
+        # `snapshots` is the list of checks that have cache and should not be run
         self.snapshots = []
         for argument in paths:
             for filename in filenames_from(argument, self.is_path_excluded):
@@ -114,7 +117,7 @@ class FlakeHellCheckersManager(Manager):
             showed.add(checker.display_name)
 
             if checker.snapshot.exists():
-                results = checker.snapshot.get_results()
+                results = checker.snapshot.results
             else:
                 results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
                 checker.snapshot.dump(results)
