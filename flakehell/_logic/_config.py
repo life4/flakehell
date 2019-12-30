@@ -34,9 +34,10 @@ def _merge_configs(*configs):
     for subconfig in configs:
         config.update(subconfig)
 
-    config['plugins'] = dict()
-    for subconfig in configs:
-        config['plugins'].update(subconfig.get('plugins', {}))
+    for section in ('plugins', 'exceptions'):
+        config[section] = dict()
+        for subconfig in configs:
+            config[section].update(subconfig.get(section, {}))
 
     return config
 
@@ -44,8 +45,10 @@ def _merge_configs(*configs):
 def _parse_config(content: str):
     config = toml.loads(content).get('tool', {}).get('flakehell', {})
     config = dict(config)
-    if 'plugins' in config:
-        config['plugins'] = dict(config['plugins'])
+
+    for section in ('plugins', 'exceptions'):
+        if section in config:
+            config[section] = dict(config[section])
 
     if 'base' in config:
         paths = config['base']

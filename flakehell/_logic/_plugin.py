@@ -1,5 +1,6 @@
 import re
-from typing import Dict, Any, List
+from pathlib import Path
+from typing import Dict, Any, List, Union
 
 from flake8.utils import fnmatch
 
@@ -94,3 +95,25 @@ def check_include(code: str, rules: List[str]) -> bool:
         if fnmatch(code, patterns=[rule[1:]]):
             include = rule[0] == '+'
     return include
+
+
+def get_exceptions(path: Union[str, Path], exceptions: Dict[str, List[str]],
+                   root: Path = None) -> Dict[str, List[str]]:
+    if isinstance(path, str):
+        path = Path(path)
+    if root is None:
+        root = Path()
+    path.resolve()
+    path = path.relative_to(root)
+    path = path.as_posix()
+
+    exceptions = sorted(
+        exceptions.items(),
+        key=lambda item: len(item[0]),
+        reverse=True,
+    )
+    for path_rule, rules in exceptions:
+        if path.startswith(path_rule):
+            return rules
+
+    return []
