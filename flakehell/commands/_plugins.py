@@ -20,7 +20,7 @@ def plugins_command(argv) -> CommandResult:
     template = '{name} | {version} | {codes} | {rules}'
     print(template.format(
         name=colored('NAME'.ljust(name_width), 'yellow'),
-        version=colored('VERION'.ljust(version_width), 'yellow'),
+        version=colored('VERSION'.ljust(version_width), 'yellow'),
         codes=colored('CODES'.ljust(codes_width), 'yellow'),
         rules=colored('RULES', 'yellow'),
     ))
