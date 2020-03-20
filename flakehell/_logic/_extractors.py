@@ -133,7 +133,10 @@ def extract_flake8_string_format():
 
 
 def extract_flake8_broken_line():
-    from flake8_broken_line import N400
+    try:
+        from flake8_broken_line import N400
+    except ImportError:
+        from flake8_broken_line import _N400 as N400
 
     code, message = N400.split(': ')
     return {code: message}
