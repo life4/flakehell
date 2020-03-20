@@ -1,8 +1,9 @@
 from enum import IntEnum
 
+from ._version import __version__
 
 NAME = 'flakehell'
-VERSION = '0.1.0'
+VERSION = __version__
 
 
 # our own modern defaults
