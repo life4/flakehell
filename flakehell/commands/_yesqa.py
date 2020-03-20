@@ -17,7 +17,7 @@ def get_paths(paths):
 
 
 def yesqa_command(argv) -> CommandResult:
-    """Show all installed plugins, their codes prefix, and matched rules from config.
+    """Remove bare and unused noqa comments.
     """
     if not argv:
         return ExitCodes.NOT_ENOUGH_ARGS, 'no file path provided'
