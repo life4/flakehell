@@ -22,17 +22,18 @@ before_install:
 install:
   - dephell venv create --env=$ENV --python="/opt/python/$TRAVIS_PYTHON_VERSION/bin/python"
   - dephell deps install --env=$ENV
+  - dephell project register
 script:
   - dephell venv run --env=$ENV
 
 matrix:
   include:
 
-    - python: "3.7"
-      env: ENV=pytest
     - python: "3.6.7"
       env: ENV=pytest
     - python: "3.7"
+      env: ENV=pytest
+    - python: "3.8"
       env: ENV=pytest
 
     - name: lint
