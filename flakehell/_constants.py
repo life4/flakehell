@@ -31,6 +31,7 @@ class ExitCodes(IntEnum):
     NO_CODES = 23
 
     TOO_MANY_ARGS = 31
+    NOT_ENOUGH_ARGS = 32
 
 
 KNOWN_PLUGINS = [

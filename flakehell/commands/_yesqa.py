@@ -1,5 +1,5 @@
 from pathlib import Path
-# from .._constants import ExitCodes
+from .._constants import ExitCodes
 from .._logic import YesQA
 from .._types import CommandResult
 
@@ -19,6 +19,12 @@ def get_paths(paths):
 def yesqa_command(argv) -> CommandResult:
     """Show all installed plugins, their codes prefix, and matched rules from config.
     """
+    if not argv:
+        return ExitCodes.NOT_ENOUGH_ARGS, 'no file path provided'
+    if argv[0] == '--help':
+        print(yesqa_command.__doc__)
+        return 0, ''
+
     paths = get_paths(Path(fname) for fname in argv)
     fixer = YesQA()
     for path in paths:

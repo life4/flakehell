@@ -37,4 +37,5 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     commands/codes
     commands/code
     commands/missed
+    commands/yesqa
 ```
