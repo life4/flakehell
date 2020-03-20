@@ -14,7 +14,7 @@ ALIASES = {
 class CollectStrings(ast.NodeVisitor):
     _strings = []
 
-    def visit_Str(self, node):  # noqa: N802
+    def visit_Str(self, node):
         self._strings.append(node.s)
 
 
