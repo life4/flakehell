@@ -1,7 +1,8 @@
 import json
 from hashlib import md5
 from pathlib import Path
-from time import time
+from time import time, strftime, localtime
+from secrets import token_hex
 
 from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
@@ -81,9 +82,12 @@ class Snapshot:
         """
         # we cache it because it requested twice: from `exists` and from `dumps`
         if self._digest is None:
-            hasher = md5()
-            hasher.update(self.file_path.read_bytes())
-            self._digest = hasher.hexdigest()
+            if self.file_path.exists():
+                self._digest = self.file_content_digest()
+            else:
+                # Cannot read file_path, likely because it's '-' for stdin
+                # Invent a random digest instead
+                self._digest = self.random_digest()
         return self._digest
 
     def dump(self, results) -> None:
@@ -105,3 +109,13 @@ class Snapshot:
         if self._results is not None:
             return self._results
         return json.loads(self.cache_path.read_text())['results']
+
+    @staticmethod
+    def random_digest():
+        return strftime('%Y%m%d%H%M%S', localtime()) + token_hex(16)
+
+    def file_content_digest(self):
+        hasher = md5()
+        hasher.update(self.file_path.read_bytes())
+        return hasher.hexdigest()
+
