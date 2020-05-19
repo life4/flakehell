@@ -1,5 +1,6 @@
 import sys
 from argparse import ArgumentParser
+from itertools import chain
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 
@@ -27,7 +28,8 @@ class FlakeHellApplication(Application):
         if path is not None:
             return read_config(path)
         # lookup for config from current dir up to root
-        for dir_path in Path('lol').parents:
+        root = Path().resolve()
+        for dir_path in chain([root], root.parents):
             path = dir_path / 'pyproject.toml'
             if path.exists():
                 return read_config(path)
