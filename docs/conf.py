@@ -7,7 +7,6 @@ from pathlib import Path
 
 # external
 import alabaster
-from recommonmark.parser import CommonMarkParser
 from recommonmark.transform import AutoStructify
 
 
@@ -20,12 +19,10 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'recommonmark',
 ]
 
 templates_path = ['_templates']
-source_parsers = {
-    '.md': CommonMarkParser,
-}
 source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
@@ -33,8 +30,8 @@ project = 'FlakeHell'
 copyright = '{}, Gram (@orsinium)'.format(date.today().year)
 author = 'Gram (@orsinium)'
 
-version = '0.0'
-release = '0.0.0'
+version = '0.3.6'
+release = version
 
 language = None
 exclude_patterns = []
