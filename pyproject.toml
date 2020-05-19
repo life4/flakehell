@@ -102,6 +102,7 @@ dev = [
     "flake8-docstrings",
     "flake8-eradicate",
     "flake8-executable",
+    "flake8-future-import",
     "flake8-isort",
     "flake8-logging-format",
     "flake8-mock",

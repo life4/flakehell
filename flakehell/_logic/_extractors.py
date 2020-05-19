@@ -2,6 +2,7 @@ import ast
 import re
 from importlib import import_module
 from pathlib import Path
+from typing import Dict
 
 
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{1,5}$')
@@ -18,7 +19,7 @@ class CollectStrings(ast.NodeVisitor):
         self._strings.append(node.s)
 
 
-def get_messages(code, content):
+def get_messages(code: str, content: str) -> Dict[str, str]:
     root = ast.parse(content)
     CollectStrings._strings = []
     collector = CollectStrings()
@@ -37,13 +38,13 @@ def get_messages(code, content):
     return messages
 
 
-def extract_default(name):
+def extract_default(name) -> Dict[str, str]:
     module = import_module(name)
     content = Path(module.__file__).read_text()
     return get_messages(code='', content=content)
 
 
-def extract(name):
+def extract(name) -> Dict[str, str]:
     name = name.replace('-', '_')
     name = ALIASES.get(name, name)
     function_name = 'extract_' + name
@@ -59,45 +60,45 @@ def extract(name):
 # AD-HOC EXTRACTORS
 
 
-def extract_flake8_commas():
+def extract_flake8_commas() -> Dict[str, str]:
     from flake8_commas._base import ERRORS
 
     return dict(ERRORS.values())
 
 
-def extract_flake8_quotes():
+def extract_flake8_quotes() -> Dict[str, str]:
     import flake8_quotes
 
     content = Path(flake8_quotes.__file__).read_text()
     return get_messages(code='Q0', content=content)
 
 
-def extract_flake8_variables_names():
+def extract_flake8_variables_names() -> Dict[str, str]:
     from flake8_variables_names import checker
 
     content = Path(checker.__file__).read_text()
     return get_messages(code='VNE', content=content)
 
 
-def extract_logging_format():
+def extract_logging_format() -> Dict[str, str]:
     from logging_format import violations
 
     content = Path(violations.__file__).read_text()
     return get_messages(code='G', content=content)
 
 
-def extract_flake8_debugger():
+def extract_flake8_debugger() -> Dict[str, str]:
     from flake8_debugger import DEBUGGER_ERROR_CODE
     return {DEBUGGER_ERROR_CODE: 'trace found'}
 
 
-def extract_flake8_mutable():
+def extract_flake8_mutable() -> Dict[str, str]:
     from mutable_defaults import MutableDefaultChecker
 
     return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
 
 
-def extract_pep8_naming():
+def extract_pep8_naming() -> Dict[str, str]:
     import pep8ext_naming
 
     codes = dict()
@@ -111,28 +112,41 @@ def extract_pep8_naming():
     return codes
 
 
-def extract_flake8_alfred():
+def extract_flake8_alfred() -> Dict[str, str]:
     return {'B1': 'banned symbol'}
 
 
-def extract_flake8_eradicate():
+def extract_flake8_eradicate() -> Dict[str, str]:
     return {'E800': 'Found commented out code: {0}'}
 
 
-def extract_flake8_annotations_complexity():
+def extract_flake8_annotations_complexity() -> Dict[str, str]:
     from flake8_annotations_complexity.checker import AnnotationsComplexityChecker
 
     code, message = AnnotationsComplexityChecker._error_message_template.split(' ', maxsplit=1)
     return {code: message}
 
 
-def extract_flake8_string_format():
+def extract_flake8_future_import() -> Dict[str, str]:
+    from flake8_future_import import ALL_FEATURES
+    codes = dict()
+    tmpl = 'FI{}'
+    for feature in ALL_FEATURES:
+        code = tmpl.format(10 + feature.index)
+        codes[code] = '__future__ import "{}" missing'.format(feature.name)
+        code = tmpl.format(50 + feature.index)
+        codes[code] = '__future__ import "{}" present'.format(feature.name)
+    codes[tmpl.format(90)] = '__future__ import does not exist'
+    return codes
+
+
+def extract_flake8_string_format() -> Dict[str, str]:
     from flake8_string_format import StringFormatChecker
 
     return {'P{}'.format(c): m for c, m in StringFormatChecker.ERRORS.items()}
 
 
-def extract_flake8_broken_line():
+def extract_flake8_broken_line() -> Dict[str, str]:
     try:
         from flake8_broken_line import N400
     except ImportError:
@@ -142,7 +156,7 @@ def extract_flake8_broken_line():
     return {code: message}
 
 
-def extract_flake8_bandit():
+def extract_flake8_bandit() -> Dict[str, str]:
     from bandit.core.extension_loader import MANAGER
 
     codes = dict()
@@ -156,7 +170,7 @@ def extract_flake8_bandit():
     return codes
 
 
-def extract_pylint():
+def extract_pylint() -> Dict[str, str]:
     import pylint.checkers
     from pylint.lint import MSGS
 
@@ -180,7 +194,7 @@ def extract_pylint():
     return codes
 
 
-def extract_pyflakes():
+def extract_pyflakes() -> Dict[str, str]:
     from flake8.plugins.pyflakes import FLAKE8_PYFLAKES_CODES
     from pyflakes import messages
 
@@ -190,7 +204,7 @@ def extract_pyflakes():
     return codes
 
 
-def extract_flake8_rst_docstrings():
+def extract_flake8_rst_docstrings() -> Dict[str, str]:
     from flake8_rst_docstrings import code_mappings_by_level
 
     codes = dict()
@@ -201,7 +215,7 @@ def extract_flake8_rst_docstrings():
     return codes
 
 
-def extract_flake8_django():
+def extract_flake8_django() -> Dict[str, str]:
     import flake8_django.checkers
 
     codes = dict()
@@ -217,7 +231,7 @@ def extract_flake8_django():
     return codes
 
 
-def extract_flake8_scrapy():
+def extract_flake8_scrapy() -> Dict[str, str]:
     from flake8_scrapy import ScrapyStyleIssueFinder
 
     codes = dict()
@@ -227,7 +241,7 @@ def extract_flake8_scrapy():
     return codes
 
 
-def extract_flake8_pie():
+def extract_flake8_pie() -> Dict[str, str]:
     import flake8_pie
 
     codes = dict()
@@ -240,7 +254,7 @@ def extract_flake8_pie():
     return codes
 
 
-def extract_flake8_executable():
+def extract_flake8_executable() -> Dict[str, str]:
     import flake8_executable
 
     codes = dict()
@@ -255,7 +269,7 @@ def extract_flake8_executable():
     return codes
 
 
-def extract_flake8_strict():
+def extract_flake8_strict() -> Dict[str, str]:
     from flake8_strict import ErrorCode
 
     codes = dict()
@@ -264,7 +278,7 @@ def extract_flake8_strict():
     return codes
 
 
-def extract_flake8_docstrings():
+def extract_flake8_docstrings() -> Dict[str, str]:
     from pydocstyle.violations import ErrorRegistry
 
     codes = dict()
@@ -274,7 +288,7 @@ def extract_flake8_docstrings():
     return codes
 
 
-def extract_dlint():
+def extract_dlint() -> Dict[str, str]:
     from dlint.linters import ALL
 
     codes = dict()
@@ -284,27 +298,27 @@ def extract_dlint():
     return codes
 
 
-def extract_mccabe():
+def extract_mccabe() -> Dict[str, str]:
     from mccabe import McCabeChecker
 
     code, message = McCabeChecker._error_tmpl.split(' ', maxsplit=1)
     return {code: message}
 
 
-def extract_flake8_mock():
+def extract_flake8_mock() -> Dict[str, str]:
     from flake8_mock import MOCK_ERROR_CODE, ERROR_MESSAGE
 
     message = ERROR_MESSAGE.split(' ', maxsplit=1)[1]
     return {MOCK_ERROR_CODE: message}
 
 
-def extract_flake8_pytest():
+def extract_flake8_pytest() -> Dict[str, str]:
     from flake8_pytest import PYTEST_ERROR_CODE, PYTEST_ERROR_MESSAGE
 
     return {PYTEST_ERROR_CODE: PYTEST_ERROR_MESSAGE}
 
 
-def extract_wemake_python_styleguide():
+def extract_wemake_python_styleguide() -> Dict[str, str]:
     from wemake_python_styleguide import violations
 
     codes = dict()
