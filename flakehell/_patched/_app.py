@@ -37,6 +37,13 @@ class FlakeHellApplication(Application):
     def extract_toml_config_path(argv: List[str] = None) -> Tuple[Optional[Path], Optional[List[str]]]:
         if not argv:
             return None, argv
+
+        if '--help' in argv:
+            argv = argv.copy()
+            argv.remove('--help')
+            if not argv:
+                return None, ['--help']
+
         parser = ArgumentParser()
         parser.add_argument('--config')
         known, unknown = parser.parse_known_args(argv)
