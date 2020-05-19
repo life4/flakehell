@@ -6,6 +6,8 @@ from typing import Dict, Any, List, Optional, Tuple
 from flake8.main.application import Application
 from flake8.options.aggregator import aggregate_options
 from flake8.options.config import get_local_plugins
+from flake8.plugins.manager import ReportFormatters
+from flake8.utils import parse_unified_diff
 
 from ._checkers import FlakeHellCheckersManager
 from ._style_guide import FlakeHellStyleGuideManager
@@ -43,7 +45,7 @@ class FlakeHellApplication(Application):
             return Path(known.config).expanduser(), unknown
         return None, argv
 
-    def parse_configuration_and_cli(self, argv: List[str] = None) -> None:
+    def parse_configuration_and_cli(self, config_finder, argv: List[str] = None) -> None:
         # if passed `--config` with path to TOML-config, we should extract it
         # before passing into flake8 mechanisms
         config_path, argv = self.extract_toml_config_path(argv=argv)
@@ -60,11 +62,25 @@ class FlakeHellApplication(Application):
         # parse CLI options and legacy flake8 configs
         self.options, self.args = aggregate_options(
             manager=self.option_manager,
-            config_finder=self.config_finder,
-            arglist=argv,
-            values=config,
+            config_finder=config_finder,
+            argv=argv,
         )
-        super().parse_configuration_and_cli(argv=argv)
+
+        # All this goes from the original `parse_configuration_and_cli`.
+        # We can't call `super` anymore because all `Application` methods
+        # redefine everything.
+        self.running_against_diff = self.options.diff
+        if self.running_against_diff:
+            self.parsed_diff = parse_unified_diff()
+            if not self.parsed_diff:
+                self.exit()
+        self.options._running_from_vcs = False
+        self.check_plugins.provide_options(
+            self.option_manager, self.options, self.args
+        )
+        self.formatting_plugins.provide_options(
+            self.option_manager, self.options, self.args
+        )
 
     def make_file_checker_manager(self) -> None:
         self.file_checker_manager = FlakeHellCheckersManager(
@@ -74,19 +90,13 @@ class FlakeHellApplication(Application):
             checker_plugins=self.check_plugins,
         )
 
-    def find_plugins(self) -> None:
-        if self.local_plugins is None:
-            self.local_plugins = get_local_plugins(
-                self.config_finder,
-                self.prelim_opts.config,
-                self.prelim_opts.isolated,
-            )
-
-        sys.path.extend(self.local_plugins.paths)
-
-        if self.check_plugins is None:
-            self.check_plugins = FlakeHellCheckers(self.local_plugins.extension)
-        super().find_plugins()
+    def find_plugins(self, config_finder) -> None:
+        local_plugins = get_local_plugins(config_finder)
+        sys.path.extend(local_plugins.paths)
+        self.check_plugins = FlakeHellCheckers(local_plugins.extension)  # this line is changed
+        self.formatting_plugins = ReportFormatters(local_plugins.report)
+        self.check_plugins.load_plugins()
+        self.formatting_plugins.load_plugins()
 
     def make_guide(self) -> None:
         """Patched StyleGuide creation just to use FlakeHellStyleGuideManager

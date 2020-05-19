@@ -39,7 +39,7 @@ home-page="https://github.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
     "entrypoints",
-    "flake8>=3.7.5",
+    "flake8>=3.8.0",
     "pygments",
     "pylint",
     "termcolor",
