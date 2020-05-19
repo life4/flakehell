@@ -10,7 +10,7 @@ def read_config(*paths) -> Dict[str, Any]:
     for path in paths:
         if isinstance(path, Path):
             new_config = _read_local(path)
-        elif path.startswith('https://', 'http://'):
+        elif path.startswith(('https://', 'http://')):
             new_config = _read_remote(path)
         elif Path(path).exists():
             new_config = _read_local(Path(path))
