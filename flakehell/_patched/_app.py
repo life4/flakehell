@@ -4,8 +4,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 
 from flake8.main.application import Application
-from flake8.options.aggregator import aggregate_options
-from flake8.options.config import get_local_plugins
+from flake8.options.config import get_local_plugins, MergedConfigParser
 from flake8.plugins.manager import ReportFormatters
 from flake8.utils import parse_unified_diff
 
@@ -59,11 +58,24 @@ class FlakeHellApplication(Application):
         # If config isn't specified, flakehell will lookup for it
         config.__dict__.update(self.get_toml_config(config_path))
 
-        # parse CLI options and legacy flake8 configs
-        self.options, self.args = aggregate_options(
-            manager=self.option_manager,
+        # Parse CLI options and legacy flake8 configs.
+        # Based on `aggregate_options`.
+        config_parser = MergedConfigParser(
+            option_manager=self.option_manager,
             config_finder=config_finder,
-            argv=argv,
+        )
+        parsed_config = config_parser.parse()
+        config.extended_default_select = self.option_manager.extended_default_select.copy()
+        for config_name, value in parsed_config.items():
+            dest_name = config_name
+            # If the config name is somehow different from the destination name,
+            # fetch the destination name from our Option
+            if not hasattr(config, config_name):
+                dest_name = config_parser.config_options[config_name].dest
+            setattr(config, dest_name, value)
+        self.options, self.args = self.option_manager.parse_args(
+            args=argv,
+            values=config,
         )
 
         # All this goes from the original `parse_configuration_and_cli`.
@@ -76,10 +88,14 @@ class FlakeHellApplication(Application):
                 self.exit()
         self.options._running_from_vcs = False
         self.check_plugins.provide_options(
-            self.option_manager, self.options, self.args
+            optmanager=self.option_manager,
+            options=self.options,
+            extra_args=self.args,
         )
         self.formatting_plugins.provide_options(
-            self.option_manager, self.options, self.args
+            optmanager=self.option_manager,
+            options=self.options,
+            extra_args=self.args,
         )
 
     def make_file_checker_manager(self) -> None:

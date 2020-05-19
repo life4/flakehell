@@ -119,7 +119,7 @@ dev = [
     "mccabe",
     "pep8-naming",
     "pylint",
-    "typing-extensions", # required by WPS but doesn't installed by DepHell
+    "typing-extensions", # required by WPS but isn't installed by DepHell
     "wemake-python-styleguide",
 
     "pytest",
