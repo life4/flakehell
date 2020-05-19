@@ -16,6 +16,7 @@ pylint = ["+F*", "+E*", "-E0611", "-E1101", "-E0401"]
 from = {format = "flit", path = "pyproject.toml"}
 to = {format = "setuppy", path = "setup.py"}
 envs = ["main", "dev"]
+tag = "v."
 command = "python -m flakehell lint"
 
 [tool.dephell.pytest]
@@ -39,7 +40,7 @@ home-page="https://github.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
     "entrypoints",
-    "flake8>=3.7.5",
+    "flake8>=3.8.0",
     "pygments",
     "pylint",
     "termcolor",
@@ -102,6 +103,7 @@ dev = [
     "flake8-docstrings",
     "flake8-eradicate",
     "flake8-executable",
+    "flake8-future-import",
     "flake8-isort",
     "flake8-logging-format",
     "flake8-mock",
@@ -119,6 +121,7 @@ dev = [
     "mccabe",
     "pep8-naming",
     "pylint",
+    "typing-extensions", # required by WPS but isn't installed by DepHell
     "wemake-python-styleguide",
 
     "pytest",
