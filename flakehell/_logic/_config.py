@@ -20,18 +20,18 @@ def read_config(*paths) -> Dict[str, Any]:
     return config
 
 
-def _read_local(path: Path):
+def _read_local(path: Path) -> Dict[str, Any]:
     with path.open('r') as stream:
         return _parse_config(stream.read())
 
 
-def _read_remote(url: str):
+def _read_remote(url: str) -> Dict[str, Any]:
     http = urllib3.PoolManager()
     response = http.request('GET', url)
     return _parse_config(response.data.decode())
 
 
-def _merge_configs(*configs):
+def _merge_configs(*configs) -> Dict[str, Any]:
     config = dict()
     for subconfig in configs:
         config.update(subconfig)
@@ -44,7 +44,7 @@ def _merge_configs(*configs):
     return config
 
 
-def _parse_config(content: str):
+def _parse_config(content: str) -> Dict[str, Any]:
     config = toml.loads(content).get('tool', {}).get('flakehell', {})
     config = dict(config)
 

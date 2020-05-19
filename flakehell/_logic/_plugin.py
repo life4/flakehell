@@ -12,6 +12,7 @@ ALIASES = {
     'naming': 'pep8-naming',
     'logging-format': 'flake8-logging-format',
 }
+PluginsType = Dict[str, List[str]]
 
 
 def get_plugin_name(plugin: Dict[str, Any]) -> str:
@@ -42,7 +43,7 @@ def get_plugin_name(plugin: Dict[str, Any]) -> str:
     return names[0]
 
 
-def get_plugin_rules(plugin_name: str, plugins: Dict[str, List[str]]) -> List[str]:
+def get_plugin_rules(plugin_name: str, plugins: PluginsType) -> List[str]:
     """Get rules for plugin from `plugins` in the config
 
     Plugin name can be specified as a glob expression.
@@ -97,8 +98,9 @@ def check_include(code: str, rules: List[str]) -> bool:
     return include
 
 
-def get_exceptions(path: Union[str, Path], exceptions: Dict[str, List[str]],
-                   root: Path = None) -> Dict[str, List[str]]:
+def get_exceptions(
+    path: Union[str, Path], exceptions: Dict[str, PluginsType], root: Path = None,
+) -> PluginsType:
     if isinstance(path, str):
         path = Path(path)
     if root is None:
@@ -112,8 +114,8 @@ def get_exceptions(path: Union[str, Path], exceptions: Dict[str, List[str]],
         key=lambda item: len(item[0]),
         reverse=True,
     )
-    for path_rule, rules in exceptions:
+    for path_rule, rules in exceptions.items():
         if path.startswith(path_rule):
             return rules
 
-    return []
+    return dict()
