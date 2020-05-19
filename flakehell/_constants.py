@@ -64,6 +64,7 @@ KNOWN_PLUGINS = [
     'flake8-variables-names',
     'mccabe',
     'pep8-naming',
+    'pylint',
 
     # built-in in flake8
     'pycodestyle',

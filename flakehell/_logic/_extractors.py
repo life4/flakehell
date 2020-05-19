@@ -172,7 +172,10 @@ def extract_flake8_bandit() -> Dict[str, str]:
 
 def extract_pylint() -> Dict[str, str]:
     import pylint.checkers
-    from pylint.lint import MSGS
+    try:
+        from pylint.lint import MSGS
+    except ImportError:
+        from pylint.lint.pylinter import MSGS
 
     codes = dict()
     for code, (msg, alias, *_) in MSGS.items():
