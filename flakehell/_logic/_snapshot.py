@@ -118,4 +118,3 @@ class Snapshot:
         hasher = md5()
         hasher.update(self.file_path.read_bytes())
         return hasher.hexdigest()
-
