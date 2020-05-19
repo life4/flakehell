@@ -11,6 +11,7 @@ ALIASES = {
     'flake-mutable': ('M511', ),
     'flake8-bandit': ('S', ),
     'flake8-django': ('DJ', ),  # they say `DJ0` prefix but codes have `DJ10`
+    'flake8-future-import': ('FI', ),
     'flake8-mock': ('M001', ),
     'flake8-pytest': ('T003', ),
     'logging-format': ('G', ),

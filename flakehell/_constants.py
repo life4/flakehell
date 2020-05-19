@@ -49,6 +49,7 @@ KNOWN_PLUGINS = [
     'flake8-docstrings',  # pydocstyle
     'flake8-eradicate',
     'flake8-executable',
+    'flake8-future-import',
     'flake8-isort',
     'flake8-logging-format',
     'flake8-mutable',
