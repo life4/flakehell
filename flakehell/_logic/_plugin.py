@@ -104,17 +104,14 @@ def get_exceptions(
     if isinstance(path, str):
         path = Path(path)
     if root is None:
-        root = Path()
-    path.resolve()
-    path = path.relative_to(root)
-    path = path.as_posix()
-
+        root = Path().resolve()
+    path = path.resolve().relative_to(root).as_posix()
     exceptions = sorted(
         exceptions.items(),
         key=lambda item: len(item[0]),
         reverse=True,
     )
-    for path_rule, rules in exceptions.items():
+    for path_rule, rules in exceptions:
         if path.startswith(path_rule):
             return rules
 
