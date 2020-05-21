@@ -8,12 +8,23 @@ VERSION = __version__
 
 # our own modern defaults
 DEFAULTS = dict(
+    baseline=None,
     format='colored',
     max_line_length=90,
     plugins={
         'pyflakes': ['+*'],
         'pycodestyle': ['+*'],
     },
+    exceptions={},
+
+    # disabled by flakehell but required by flake8
+    extend_exclude=[],
+    ignore=[],
+    extend_ignore=[],
+    select=[],
+    enable_extensions=[],
+    per_file_ignores=[],
+    statistics=False,
 )
 
 
@@ -50,6 +61,7 @@ KNOWN_PLUGINS = [
     'flake8-docstrings',  # pydocstyle
     'flake8-eradicate',
     'flake8-executable',
+    'flake8-future-import',
     'flake8-isort',
     'flake8-logging-format',
     'flake8-mutable',
@@ -64,6 +76,7 @@ KNOWN_PLUGINS = [
     'flake8-variables-names',
     'mccabe',
     'pep8-naming',
+    'pylint',
 
     # built-in in flake8
     'pycodestyle',

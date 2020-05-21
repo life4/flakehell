@@ -10,6 +10,8 @@ def read_config(*paths) -> Dict[str, Any]:
     for path in paths:
         if isinstance(path, Path):
             new_config = _read_local(path)
+        elif path.startswith(('https://', 'http://')):
+            new_config = _read_remote(path)
         elif Path(path).exists():
             new_config = _read_local(Path(path))
         else:
@@ -18,34 +20,37 @@ def read_config(*paths) -> Dict[str, Any]:
     return config
 
 
-def _read_local(path: Path):
+def _read_local(path: Path) -> Dict[str, Any]:
     with path.open('r') as stream:
         return _parse_config(stream.read())
 
 
-def _read_remote(url: str):
+def _read_remote(url: str) -> Dict[str, Any]:
     http = urllib3.PoolManager()
     response = http.request('GET', url)
     return _parse_config(response.data.decode())
 
 
-def _merge_configs(*configs):
+def _merge_configs(*configs) -> Dict[str, Any]:
     config = dict()
     for subconfig in configs:
         config.update(subconfig)
 
-    config['plugins'] = dict()
-    for subconfig in configs:
-        config['plugins'].update(subconfig.get('plugins', {}))
+    for section in ('plugins', 'exceptions'):
+        config[section] = dict()
+        for subconfig in configs:
+            config[section].update(subconfig.get(section, {}))
 
     return config
 
 
-def _parse_config(content: str):
+def _parse_config(content: str) -> Dict[str, Any]:
     config = toml.loads(content).get('tool', {}).get('flakehell', {})
     config = dict(config)
-    if 'plugins' in config:
-        config['plugins'] = dict(config['plugins'])
+
+    for section in ('plugins', 'exceptions'):
+        if section in config:
+            config[section] = dict(config[section])
 
     if 'base' in config:
         paths = config['base']

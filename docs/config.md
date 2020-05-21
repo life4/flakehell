@@ -16,6 +16,23 @@ Key can be exact plugin name or wildcard template. For example `"flake8-commas"`
 
 Value is a list of templates for error codes for this plugin. First symbol in every template must be `+` (include) or `-` (exclude). The latest matched pattern wins. For example, `["+*", "-F*", "-E30?", "-E401"]` means "Include everything except all checks that starts with `F`, check from `E301` to `E310`, and `E401`".
 
+## Exceptions
+
+Use `exceptions` section to specify special rules for particular paths:
+
+```toml
+[tool.flakehell.plugins]
+pycodestyle = ["+*"]
+pyflakes = ["+*"]
+
+[tool.flakehell.exceptions."tests/"]
+pycodestyle = ["-F401"]     # disable a check
+pyflakes = ["-*"]           # disable a plugin
+
+[tool.flakehell.exceptions."tests/test_example.py"]
+pyflakes = ["+*"]           # enable a plugin
+```
+
 ## Base
 
 Option `base` allows to specify base config from which you want to inherit this one. It can be path to local config or remote URL. You can specify one path or list of paths as well. For example:
@@ -34,9 +51,23 @@ Most of default parameters are the same as in Flake8. However, some of them are 
 ```toml
 # make output beautiful
 format='colored'
-# 80 chars aren't enough in 21 century
+# 80 chars limit isn't enough in 21 century
 max_line_length=90
 ```
+
+## Ignored options
+
+FlakeHell doesn't support some flake8 option by design. Flake8 has a long history and over-complicated logic to enable and disable some checks. We make it simple.
+
+| unsupported option    | alternative                   |
+| --------------------- | ----------------------------- |
+| `--extend-exclude`    | use just `exclude`, modify it right in the config if you need. |
+| `--per-file-ignores`  | use `exceptions`              |
+| `--statistics`        | use `--format=stat` instead   |
+| `--ignore`            | use `plugins`                 |
+| `--extend-ignore`     | use `plugins`                 |
+| `--select`            | use `plugins`                 |
+| `--enable-extensions` | use `plugins`                 |
 
 ## Example
 
@@ -63,6 +94,15 @@ flake8-bandit = ["-*", "+S1??"]
 "flake8-*" = ["+*"]
 # explicitly disable plugin
 flake8-docstrings = ["-*"]
+
+# disable some checks for tests
+[tool.flakehell.exceptions."tests/"]
+pycodestyle = ["-F401"]     # disable a check
+pyflakes = ["-*"]           # disable a plugin
+
+# do not disable `pyflakes` for one file in tests
+[tool.flakehell.exceptions."tests/test_example.py"]
+pyflakes = ["+*"]           # enable a plugin
 ```
 
 See [Flake8 documentation](http://flake8.pycqa.org/en/latest/user/configuration.html) to read more about Flake8-specific configuration.

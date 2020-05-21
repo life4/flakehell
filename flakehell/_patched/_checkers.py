@@ -1,11 +1,11 @@
-from typing import List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional
 
 from flake8.checker import Manager, FileChecker
 from flake8.utils import fnmatch, filenames_from
 
 from .._logic import (
     get_plugin_name, get_plugin_rules, check_include, make_baseline,
-    Snapshot, prepare_cache,
+    Snapshot, prepare_cache, get_exceptions,
 )
 
 
@@ -16,7 +16,8 @@ class FlakeHellCheckersManager(Manager):
     def __init__(self, baseline, **kwargs):
         self.baseline = set()
         if baseline:
-            self.baseline = {line.strip() for line in open(baseline)}
+            with open(baseline) as stream:
+                self.baseline = {line.strip() for line in stream}
         super().__init__(**kwargs)
 
     def make_checkers(self, paths: List[str] = None) -> None:
@@ -62,12 +63,8 @@ class FlakeHellCheckersManager(Manager):
     def _make_checker(self, argument, filename, check_type,
                       check) -> Optional['FlakeHellFileChecker']:
         # do not run plugins without rules specified
-        plugin_name = get_plugin_name(check)
-        rules = get_plugin_rules(
-            plugin_name=plugin_name,
-            plugins=self.options.plugins,
-        )
-        if not rules or rules == ['-*']:
+        rules = self._get_rules(check=check, filename=filename)
+        if not rules or set(rules) == {'-*'}:
             return None
 
         if not self._should_create_file_checker(filename=filename, argument=argument):
@@ -83,6 +80,24 @@ class FlakeHellCheckersManager(Manager):
         # if checker.should_process:
         #     return None
         return checker
+
+    def _get_rules(self, check: Dict[str, Any], filename: str):
+        plugin_name = get_plugin_name(check)
+        rules = get_plugin_rules(
+            plugin_name=plugin_name,
+            plugins=self.options.plugins,
+        )
+        exceptions = get_exceptions(
+            path=filename,
+            exceptions=self.options.exceptions,
+        )
+        if exceptions:
+            rules = rules.copy()
+            rules += get_plugin_rules(
+                plugin_name=plugin_name,
+                plugins=exceptions,
+            )
+        return rules
 
     def _should_create_file_checker(self, filename: str, argument) -> bool:
         """Filter out excluded files
@@ -133,10 +148,7 @@ class FlakeHellCheckersManager(Manager):
 
     def _handle_results(self, filename: str, results: list, check: dict) -> int:
         plugin_name = get_plugin_name(check)
-        rules = get_plugin_rules(
-            plugin_name=plugin_name,
-            plugins=self.options.plugins,
-        )
+        rules = self._get_rules(check=check, filename=filename)
         reported_results_count = 0
         for (error_code, line_number, column, text, physical_line) in results:
             if self.baseline:
