@@ -70,9 +70,18 @@ def test_lint_help(capsys):
     assert result == (0, '')
     captured = capsys.readouterr()
     assert captured.err == ''
+
+    # flake8 options
     assert '-h, --help' in captured.out
     assert '--builtins' in captured.out
     assert '--isort-show-traceback' in captured.out
+
+    # ignored flake8 options
+    assert '--per-file-ignores' not in captured.out
+    assert '--enable-extensions' not in captured.out
+
+    # flakehell options
+    assert '--baseline' in captured.out
 
 
 def test_exclude(capsys, tmp_path: Path):
@@ -105,7 +114,7 @@ def test_baseline(capsys, tmp_path: Path):
     code_path.write_text('a\nb\n')
     with chdir(tmp_path):
         result = main(['baseline', str(code_path)])
-    assert result == (1, '')
+    assert result == (0, '')
     captured = capsys.readouterr()
     assert captured.err == ''
     hashes = captured.out.strip().split()

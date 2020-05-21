@@ -15,7 +15,7 @@ def baseline_command(argv) -> CommandResult:
         show_source=False,
     ))
     try:
-        app.run(['--baseline', ''] + argv)
+        app.run(['--baseline', '', '--exit-zero'] + argv)
         app.exit()
     except SystemExit as exc:
         return int(exc.code), ''

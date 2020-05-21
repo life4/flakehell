@@ -16,6 +16,20 @@ from .._logic import read_config
 from ._plugins import FlakeHellCheckers
 
 
+# Options that are related to the flake8 codes management logic.
+# We use our own codes management via `plugins` and `exceptions`.
+UNSUPPORTED = frozenset({
+    '--extend-exclude',     # use only `exclude` in the config
+    '--per-file-ignores',   # use `exceptions`
+    '--statistics',         # use `--format=stat` instead
+
+    '--ignore',             # use `plugins`
+    '--extend-ignore',      # use `plugins`
+    '--select',             # use `plugins`
+    '--enable-extensions',  # use `plugins`
+})
+
+
 class FlakeHellApplication(Application):
     """
     Reloaded flake8 original entrypoint to provide support for some features:
@@ -68,6 +82,15 @@ class FlakeHellApplication(Application):
         return None, argv
 
     def parse_configuration_and_cli(self, config_finder, argv: List[str]) -> None:
+        parser = self.option_manager.parser
+        for action in parser._actions.copy():
+            if not action.option_strings:
+                continue
+            name = action.option_strings[-1]
+            if name not in UNSUPPORTED:
+                continue
+            parser._handle_conflict_resolve(None, [(name, action)])
+
         # if passed `--config` with path to TOML-config, we should extract it
         # before passing into flake8 mechanisms
         config_path, argv = self.extract_toml_config_path(argv=argv)
