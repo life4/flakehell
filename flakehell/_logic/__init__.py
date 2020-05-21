@@ -5,6 +5,7 @@ from ._discover import get_installed
 from ._extractors import extract
 from ._plugin import get_plugin_name, get_plugin_rules, check_include, get_exceptions
 from ._snapshot import Snapshot, prepare_cache
+from ._yesqa import YesQA
 
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     'extract',
     'get_plugin_name', 'get_plugin_rules', 'check_include', 'get_exceptions',
     'Snapshot', 'prepare_cache',
+    'YesQA',
 ]

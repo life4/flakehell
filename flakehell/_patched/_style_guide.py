@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from flake8.style_guide import StyleGuideManager, StyleGuide, Decision
+from flake8.style_guide import StyleGuideManager, StyleGuide
 
 from ._violation import FlakeHellViolation
 
@@ -67,7 +67,10 @@ class FlakeHellStyleGuide(StyleGuide):
         plugin: str,
         physical_line: str = None,
     ):
-        """This function copied as is, but Violation replaced by FlakeHellViolation
+        """
+        This function copied as is, but:
+        1. Violation is replaced by FlakeHellViolation
+        2. `error_is_selected` dropped. If we get here, the error IS selected.
         """
         disable_noqa = self.options.disable_noqa
         if not column_number:
@@ -81,16 +84,9 @@ class FlakeHellStyleGuide(StyleGuide):
             physical_line=physical_line,
             plugin=plugin,
         )
-        error_is_selected = (
-            self.should_report_error(error.code) is Decision.Selected
-        )
         is_not_inline_ignored = error.is_inline_ignored(disable_noqa) is False
         is_included_in_diff = error.is_in(self._parsed_diff)
-        if (
-            error_is_selected
-            and is_not_inline_ignored
-            and is_included_in_diff
-        ):
+        if is_not_inline_ignored and is_included_in_diff:
             self.formatter.handle(error)
             self.stats.record(error)
             return 1

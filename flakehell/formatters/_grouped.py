@@ -20,7 +20,7 @@ class GroupedFormatter(ColoredFormatter):
         self._proccessed_filenames: List[str] = []
         self._error_count = 0
 
-    def handle(self, error: Violation) -> None:  # noqa: WPS110
+    def handle(self, error: Violation) -> None:
         """Processes each :term:`violation` to print it and all related."""
         if error.filename not in self._proccessed_filenames:
             self._print_header(error.filename)
@@ -44,7 +44,7 @@ class GroupedFormatter(ColoredFormatter):
             line += colored(' [{}]'.format(plugin), 'grey')
         return line
 
-    def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
+    def show_statistics(self, statistics: Statistics) -> None:
         """Called when ``--statistic`` option is passed."""
         all_errors = 0
         for error_code in statistics.error_codes():
