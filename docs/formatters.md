@@ -3,6 +3,7 @@
 Formatters make errors output nice. Available formatters:
 
 + `colored` -- for humans.
++ `gitlab` -- Gitlab CI [Code Quality artifact](https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html).
 + `grouped` -- also colored, but all messages are explicitly grouped by file.
 + `json` -- no colors, only one json-dict per line for every error.
 + `stat` -- show errors count for every code, grouped by plugins.
@@ -65,3 +66,25 @@ format = "json"
 ```
 
 ![output of json formatter](../assets/json.png)
+
+## Gitlab
+
+Output [Code Quality](https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html) artifact compatible with Gitlab CI.
+
+```toml
+[tool.flakehell]
+format = "gitlab"
+```
+
+An example of Gitlab CI job (`.gitlab-ci.yml`):
+
+```yaml
+flakehell:
+  image: python:3.7
+  script:
+    - pip3 install flakehell
+    - flakehell lint --format=gitlab --output-file flakehell.json
+  artifacts:
+    reports:
+      codequality: flakehell.json
+```
