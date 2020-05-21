@@ -65,6 +65,15 @@ def test_help(flag, capsys):
         assert name in captured.out
 
 
+def test_version(capsys):
+    result = main(['--version'])
+    assert result == (0, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert 'FlakeHell' in captured.out
+    assert 'Flake8' in captured.out
+
+
 def test_lint_help(capsys):
     result = main(['lint', '--help'])
     assert result == (0, '')

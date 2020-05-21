@@ -15,8 +15,8 @@ def plugins_command(argv) -> CommandResult:
         return ExitCodes.NO_PLUGINS_INSTALLED, 'no plugins installed'
 
     name_width = max(len(p['name']) for p in plugins)
-    version_width = min(8, max(len(p['version']) for p in plugins))
-    codes_width = min(6, max(len('  '.join(p['codes'])) for p in plugins))
+    version_width = max(8, max(len(p['version']) for p in plugins))
+    codes_width = max(6, max(len('  '.join(p['codes'])) for p in plugins))
     template = '{name} | {version} | {codes} | {rules}'
     print(template.format(
         name=colored('NAME'.ljust(name_width), 'yellow'),
