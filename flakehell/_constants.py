@@ -8,9 +8,13 @@ VERSION = __version__
 
 # our own modern defaults
 DEFAULTS = dict(
-    baseline=None,
+    # redefined defaults
     format='colored',
     max_line_length=90,
+
+    # flakehell options
+    baseline=None,
+    safe=False,
     plugins={
         'pyflakes': ['+*'],
         'pycodestyle': ['+*'],
