@@ -7,7 +7,7 @@ from ..formatters import BaseLineFormatter
 
 
 def baseline_command(argv) -> CommandResult:
-    """Run patched flake8 against the code.
+    """Generate baseline that can be used later to ignore errors.
     """
     app = FlakeHellApplication(program=NAME, version=VERSION)
     app.formatter = BaseLineFormatter(SimpleNamespace(
@@ -15,7 +15,7 @@ def baseline_command(argv) -> CommandResult:
         show_source=False,
     ))
     try:
-        app.run(argv)
+        app.run(['--baseline', '', '--exit-zero'] + argv)
         app.exit()
     except SystemExit as exc:
-        return exc.code, ''
+        return int(exc.code), ''

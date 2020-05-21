@@ -16,7 +16,8 @@ class FlakeHellCheckersManager(Manager):
     def __init__(self, baseline, **kwargs):
         self.baseline = set()
         if baseline:
-            self.baseline = {line.strip() for line in open(baseline)}
+            with open(baseline) as stream:
+                self.baseline = {line.strip() for line in stream}
         super().__init__(**kwargs)
 
     def make_checkers(self, paths: List[str] = None) -> None:

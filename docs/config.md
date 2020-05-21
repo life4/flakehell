@@ -51,9 +51,23 @@ Most of default parameters are the same as in Flake8. However, some of them are 
 ```toml
 # make output beautiful
 format='colored'
-# 80 chars aren't enough in 21 century
+# 80 chars limit isn't enough in 21 century
 max_line_length=90
 ```
+
+## Ignored options
+
+FlakeHell doesn't support some flake8 option by design. Flake8 has a long history and over-complicated logic to enable and disable some checks. We make it simple.
+
+| unsupported option    | alternative                   |
+| --------------------- | ----------------------------- |
+| `--extend-exclude`    | use just `exclude`, modify it right in the config if you need. |
+| `--per-file-ignores`  | use `exceptions`              |
+| `--statistics`        | use `--format=stat` instead   |
+| `--ignore`            | use `plugins`                 |
+| `--extend-ignore`     | use `plugins`                 |
+| `--select`            | use `plugins`                 |
+| `--enable-extensions` | use `plugins`                 |
 
 ## Example
 

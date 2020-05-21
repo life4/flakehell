@@ -70,9 +70,18 @@ def test_lint_help(capsys):
     assert result == (0, '')
     captured = capsys.readouterr()
     assert captured.err == ''
+
+    # flake8 options
     assert '-h, --help' in captured.out
     assert '--builtins' in captured.out
     assert '--isort-show-traceback' in captured.out
+
+    # ignored flake8 options
+    assert '--per-file-ignores' not in captured.out
+    assert '--enable-extensions' not in captured.out
+
+    # flakehell options
+    assert '--baseline' in captured.out
 
 
 def test_exclude(capsys, tmp_path: Path):
@@ -98,3 +107,29 @@ def test_exclude(capsys, tmp_path: Path):
     ./tests/test_example.py:2:1: F821 undefined name 'a'
     """
     assert captured.out.strip() == dedent(exp).strip()
+
+
+def test_baseline(capsys, tmp_path: Path):
+    code_path = tmp_path / 'example.py'
+    code_path.write_text('a\nb\n')
+    with chdir(tmp_path):
+        result = main(['baseline', str(code_path)])
+    assert result == (0, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    hashes = captured.out.strip().split()
+    assert len(hashes) == 2
+
+    line_path = tmp_path / 'baseline.txt'
+    line_path.write_text(hashes[0])
+    with chdir(tmp_path):
+        result = main([
+            'lint',
+            '--baseline', str(line_path),
+            '--format', 'default',
+            str(code_path),
+        ])
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert captured.out.strip() == "{}:2:1: F821 undefined name 'b'".format(str(code_path))

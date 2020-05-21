@@ -53,6 +53,8 @@ def get_plugin_rules(plugin_name: str, plugins: PluginsType) -> List[str]:
     2. Try to find globs that match and select the longest one (nginx-style)
     3. Return empty list if nothing is found.
     """
+    if not plugins:
+        return []
     plugin_name = REX_NAME.sub('-', plugin_name).lower()
     # try to find exact match
     for pattern, rules in plugins.items():
@@ -101,6 +103,8 @@ def check_include(code: str, rules: List[str]) -> bool:
 def get_exceptions(
     path: Union[str, Path], exceptions: Dict[str, PluginsType], root: Path = None,
 ) -> PluginsType:
+    if not exceptions:
+        return dict()
     if isinstance(path, str):
         path = Path(path)
     if root is None:

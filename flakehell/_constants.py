@@ -8,12 +8,23 @@ VERSION = __version__
 
 # our own modern defaults
 DEFAULTS = dict(
+    baseline=None,
     format='colored',
     max_line_length=90,
     plugins={
         'pyflakes': ['+*'],
         'pycodestyle': ['+*'],
     },
+    exceptions={},
+
+    # disabled by flakehell but required by flake8
+    extend_exclude=[],
+    ignore=[],
+    extend_ignore=[],
+    select=[],
+    enable_extensions=[],
+    per_file_ignores=[],
+    statistics=False,
 )
 
 

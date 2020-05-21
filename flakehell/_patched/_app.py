@@ -16,6 +16,20 @@ from .._logic import read_config
 from ._plugins import FlakeHellCheckers
 
 
+# Options that are related to the flake8 codes management logic.
+# We use our own codes management via `plugins` and `exceptions`.
+UNSUPPORTED = frozenset({
+    '--extend-exclude',     # use only `exclude` in the config
+    '--per-file-ignores',   # use `exceptions`
+    '--statistics',         # use `--format=stat` instead
+
+    '--ignore',             # use `plugins`
+    '--extend-ignore',      # use `plugins`
+    '--select',             # use `plugins`
+    '--enable-extensions',  # use `plugins`
+})
+
+
 class FlakeHellApplication(Application):
     """
     Reloaded flake8 original entrypoint to provide support for some features:
@@ -23,6 +37,20 @@ class FlakeHellApplication(Application):
     + replace CheckersManager to support for `plugins` option
     + register custom formatters
     """
+
+    @property
+    def option_manager(self):
+        """We overload this property only to specify setter.
+        """
+        return self._option_manager
+
+    @option_manager.setter
+    def option_manager(self, manager):
+        """Hook to add flakehell options into flake8 options parser.
+        """
+        group = manager.parser.add_argument_group('FlakeHell')
+        group.add_argument('--baseline', help='path to baseline')
+        self._option_manager = manager
 
     def get_toml_config(self, path: Path = None) -> Dict[str, Any]:
         if path is not None:
@@ -36,7 +64,7 @@ class FlakeHellApplication(Application):
         return dict()
 
     @staticmethod
-    def extract_toml_config_path(argv: List[str] = None) -> Tuple[Optional[Path], Optional[List[str]]]:
+    def extract_toml_config_path(argv: List[str]) -> Tuple[Optional[Path], List[str]]:
         if not argv:
             return None, argv
 
@@ -53,7 +81,16 @@ class FlakeHellApplication(Application):
             return Path(known.config).expanduser(), unknown
         return None, argv
 
-    def parse_configuration_and_cli(self, config_finder, argv: List[str] = None) -> None:
+    def parse_configuration_and_cli(self, config_finder, argv: List[str]) -> None:
+        parser = self.option_manager.parser
+        for action in parser._actions.copy():
+            if not action.option_strings:
+                continue
+            name = action.option_strings[-1]
+            if name not in UNSUPPORTED:
+                continue
+            parser._handle_conflict_resolve(None, [(name, action)])
+
         # if passed `--config` with path to TOML-config, we should extract it
         # before passing into flake8 mechanisms
         config_path, argv = self.extract_toml_config_path(argv=argv)
@@ -109,7 +146,7 @@ class FlakeHellApplication(Application):
 
     def make_file_checker_manager(self) -> None:
         self.file_checker_manager = FlakeHellCheckersManager(
-            baseline=getattr(self.options, 'baseline', None),
+            baseline=self.options.baseline,
             style_guide=self.guide,
             arguments=self.args,
             checker_plugins=self.check_plugins,
@@ -122,6 +159,10 @@ class FlakeHellApplication(Application):
         self.formatting_plugins = ReportFormatters(local_plugins.report)
         self.check_plugins.load_plugins()
         self.formatting_plugins.load_plugins()
+
+    def make_formatter(self, *args, **kwargs) -> None:
+        if self.formatter is None:
+            super().make_formatter(*args, **kwargs)
 
     def make_guide(self) -> None:
         """Patched StyleGuide creation just to use FlakeHellStyleGuideManager
