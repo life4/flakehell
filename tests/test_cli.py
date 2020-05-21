@@ -98,3 +98,18 @@ def test_exclude(capsys, tmp_path: Path):
     ./tests/test_example.py:2:1: F821 undefined name 'a'
     """
     assert captured.out.strip() == dedent(exp).strip()
+
+
+def test_baseline(capsys, tmp_path: Path):
+    code_path = tmp_path / 'example.py'
+    code_path.write_text('a\nb')
+    with chdir(tmp_path):
+        result = main(['baseline', str(code_path)])
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    hashes = captured.out.strip().split()
+    assert len(hashes) == 3
+
+    line_path = tmp_path / 'baseline.txt'
+    line_path.write_text(''.join(hashes[:2]))

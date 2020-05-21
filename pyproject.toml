@@ -1,5 +1,5 @@
 [tool.flakehell]
-exclude = ["example.py", "setup.py"]
+# exclude = ["example.py", "setup.py"]
 max_line_length = 120
 # show_source = true
 

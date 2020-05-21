@@ -14,6 +14,7 @@ DEFAULTS = dict(
         'pyflakes': ['+*'],
         'pycodestyle': ['+*'],
     },
+    exceptions={},
 )
 
 

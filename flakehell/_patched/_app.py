@@ -123,6 +123,10 @@ class FlakeHellApplication(Application):
         self.check_plugins.load_plugins()
         self.formatting_plugins.load_plugins()
 
+    def make_formatter(self, *args, **kwargs) -> None:
+        if self.formatter is None:
+            super().make_formatter(*args, **kwargs)
+
     def make_guide(self) -> None:
         """Patched StyleGuide creation just to use FlakeHellStyleGuideManager
         instead of original one.

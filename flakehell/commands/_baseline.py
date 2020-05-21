@@ -18,4 +18,4 @@ def baseline_command(argv) -> CommandResult:
         app.run(argv)
         app.exit()
     except SystemExit as exc:
-        return exc.code, ''
+        return int(exc.code), ''
