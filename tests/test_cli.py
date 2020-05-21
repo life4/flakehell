@@ -102,14 +102,25 @@ def test_exclude(capsys, tmp_path: Path):
 
 def test_baseline(capsys, tmp_path: Path):
     code_path = tmp_path / 'example.py'
-    code_path.write_text('a\nb')
+    code_path.write_text('a\nb\n')
     with chdir(tmp_path):
         result = main(['baseline', str(code_path)])
     assert result == (1, '')
     captured = capsys.readouterr()
     assert captured.err == ''
     hashes = captured.out.strip().split()
-    assert len(hashes) == 3
+    assert len(hashes) == 2
 
     line_path = tmp_path / 'baseline.txt'
-    line_path.write_text(''.join(hashes[:2]))
+    line_path.write_text(hashes[0])
+    with chdir(tmp_path):
+        result = main([
+            'lint',
+            '--baseline', str(line_path),
+            '--format', 'default',
+            str(code_path),
+        ])
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert captured.out.strip() == "{}:2:1: F821 undefined name 'b'".format(str(code_path))

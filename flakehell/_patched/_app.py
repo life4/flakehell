@@ -24,6 +24,20 @@ class FlakeHellApplication(Application):
     + register custom formatters
     """
 
+    @property
+    def option_manager(self):
+        """We overload this property only to specify setter.
+        """
+        return self._option_manager
+
+    @option_manager.setter
+    def option_manager(self, manager):
+        """Hook to add flakehell options into flake8 options parser.
+        """
+        group = manager.parser.add_argument_group('FlakeHell')
+        group.add_argument('--baseline', help='path to baseline')
+        self._option_manager = manager
+
     def get_toml_config(self, path: Path = None) -> Dict[str, Any]:
         if path is not None:
             return read_config(path)
@@ -36,7 +50,7 @@ class FlakeHellApplication(Application):
         return dict()
 
     @staticmethod
-    def extract_toml_config_path(argv: List[str] = None) -> Tuple[Optional[Path], Optional[List[str]]]:
+    def extract_toml_config_path(argv: List[str]) -> Tuple[Optional[Path], List[str]]:
         if not argv:
             return None, argv
 
@@ -53,7 +67,7 @@ class FlakeHellApplication(Application):
             return Path(known.config).expanduser(), unknown
         return None, argv
 
-    def parse_configuration_and_cli(self, config_finder, argv: List[str] = None) -> None:
+    def parse_configuration_and_cli(self, config_finder, argv: List[str]) -> None:
         # if passed `--config` with path to TOML-config, we should extract it
         # before passing into flake8 mechanisms
         config_path, argv = self.extract_toml_config_path(argv=argv)
@@ -109,7 +123,7 @@ class FlakeHellApplication(Application):
 
     def make_file_checker_manager(self) -> None:
         self.file_checker_manager = FlakeHellCheckersManager(
-            baseline=getattr(self.options, 'baseline', None),
+            baseline=self.options.baseline,
             style_guide=self.guide,
             arguments=self.args,
             checker_plugins=self.check_plugins,
