@@ -54,19 +54,16 @@ class YesQA:
         line = line[:match.start()] + new_comment + line[match.end():]
         return line.rstrip()
 
-    def remove_comments(self, content: str) -> str:
-        lines = []
-        for line in content.split('\n'):
-            lines.append(self.remove_noqa(line))
-        return '\n'.join(lines)
-
-    def get_errors(self, path: Path) -> Dict[int, Set[str]]:
+    def get_errors(self, path: Path, noqa: bool) -> Dict[int, Set[str]]:
         from .._patched import FlakeHellApplication
 
         app = FlakeHellApplication(program=NAME, version=VERSION)
         output = StringIO()
+        cmd = ['--format', 'json', str(path)]
+        if not noqa:
+            cmd.append('--disable-noqa')
         with redirect_stdout(output):
-            app.run(['--format', 'json', str(path)])
+            app.run(cmd)
         output.seek(0)
 
         result = defaultdict(set)
@@ -87,14 +84,8 @@ class YesQA:
         return '\n'.join(result)
 
     def get_modified_file(self, path: Path, original: str) -> str:
-        cleaned = self.remove_comments(content=original)
-        if original == cleaned:
-            return original
-
-        old_errors = self.get_errors(path=path)
-        path.write_text(cleaned)
-        all_errors = self.get_errors(path=path)
-        path.write_text(original)
+        old_errors = self.get_errors(path=path, noqa=True)
+        all_errors = self.get_errors(path=path, noqa=False)
         new_errors = dict()
         for line_number, codes in all_errors.items():
             new_codes = codes - old_errors.get(line_number, set())
@@ -105,11 +96,7 @@ class YesQA:
 
     def __call__(self, path: Path) -> bool:
         original = path.read_text(encoding='utf-8')
-        try:
-            modified = self.get_modified_file(path=path, original=original)
-        except Exception:
-            path.write_text(original)
-            raise
+        modified = self.get_modified_file(path=path, original=original)
         if modified == original:
             return False
         path.write_text(modified)
