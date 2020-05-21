@@ -130,3 +130,17 @@ def test_baseline(capsys, tmp_path: Path):
     captured = capsys.readouterr()
     assert captured.err == ''
     assert captured.out.strip() == "{}:2:1: F821 undefined name 'b'".format(str(code_path))
+
+
+def test_ignore_file_by_top_level_noqa(capsys, tmp_path: Path):
+    (tmp_path / 'example1.py').write_text('import sys\n')
+    (tmp_path / 'example2.py').write_text('# flake8: noqa\nimport sys\n')
+    with chdir(tmp_path):
+        result = main(['lint', '--format', 'default'])
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    exp = """
+    ./example1.py:1:1: F401 'sys' imported but unused
+    """
+    assert captured.out.strip() == dedent(exp).strip()

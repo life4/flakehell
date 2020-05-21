@@ -76,9 +76,9 @@ class FlakeHellCheckersManager(Manager):
             check=check,
             options=self.options,
         )
-        # TODO: IDK why it doesn't work, sorry
-        # if checker.should_process:
-        #     return None
+        # check top-level `flake8: noqa`
+        if not checker.should_process:
+            return None
         return checker
 
     def _get_rules(self, check: Dict[str, Any], filename: str):
