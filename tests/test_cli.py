@@ -1,24 +1,12 @@
 import subprocess
-import os
 import sys
-from contextlib import contextmanager
 from pathlib import Path
 from textwrap import dedent
 
 import pytest
 from flakehell._cli import main
 
-
-@contextmanager
-def chdir(path):
-    """Context manager for changing dir and restoring previous workdir after exit.
-    """
-    curdir = os.getcwd()
-    os.chdir(str(path))
-    try:
-        yield
-    finally:
-        os.chdir(curdir)
+from .utils import chdir
 
 
 def test_flake8helled_file():

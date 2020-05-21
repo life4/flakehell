@@ -3,12 +3,14 @@ from pathlib import Path
 import pytest
 
 from flakehell._logic import YesQA
+from ..utils import chdir
 
 
 def get_modified(content: str, path: Path) -> str:
     path = path / 'tmp.py'
-    path.touch()
-    return YesQA().get_modified_file(path=path, original=content)
+    path.write_text(content)
+    with chdir(path.parent):
+        return YesQA().get_modified_file(path=path, original=content)
 
 
 @pytest.mark.parametrize('content', [
