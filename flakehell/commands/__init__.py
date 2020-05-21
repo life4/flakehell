@@ -33,4 +33,4 @@ COMMANDS = MappingProxyType({
     'plugins': plugins_command,
     'yesqa': yesqa_command,
     '--version': version_command,
-))
+})
