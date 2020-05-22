@@ -1,6 +1,8 @@
 # built-in
 import subprocess
 import sys
+from io import BytesIO
+from unittest.mock import patch, Mock
 from pathlib import Path
 from textwrap import dedent
 
@@ -86,7 +88,7 @@ def test_lint_help(capsys):
     assert '--baseline' in captured.out
 
 
-def test_exclude(capsys, tmp_path: Path):
+def test_exceptions(capsys, tmp_path: Path):
     text = """
     [tool.flakehell.plugins]
     pyflakes = ["+*"]
@@ -109,6 +111,35 @@ def test_exclude(capsys, tmp_path: Path):
     ./tests/test_example.py:2:1: F821 undefined name 'a'
     """
     assert captured.out.strip() == dedent(exp).strip()
+
+
+@patch('sys.stdin.buffer', BytesIO(b'import sys\na\n'))
+@patch('sys.stdin', Mock())
+def test_exceptions_stdin(capsys, tmp_path: Path):
+    # write config
+    text = """
+    [tool.flakehell.plugins]
+    pyflakes = ["+*"]
+
+    [tool.flakehell.exceptions."example.py"]
+    pyflakes = ["-F401"]
+    """
+    (tmp_path / 'pyproject.toml').write_text(dedent(text))
+
+    # make fake `stdin` with source file content
+    # code_path = tmp_path / 'example.py'
+    # code_path.write_text('import sys\na')
+
+    # call the command with passing matching `--stdin-display-name`
+    cmd = ['lint', '--format', 'default', '--stdin-display-name', 'example.py', '--', '-']
+    with chdir(tmp_path):
+        # with code_path.open('r') as stream:
+        result = main(cmd)
+
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert captured.out.strip() == "example.py:2:1: F821 undefined name 'a'"
 
 
 def test_baseline(capsys, tmp_path: Path):
