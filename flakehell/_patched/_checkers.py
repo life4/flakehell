@@ -141,7 +141,7 @@ class FlakeHellCheckersManager(Manager):
 
             filename = checker.filename
             if filename is None or filename == '-':
-                filename = self.options.stdin_display_name or "stdin"
+                filename = self.options.stdin_display_name or 'stdin'
             with self.style_guide.processing_file(filename):
                 results_reported += self._handle_results(
                     filename=filename,
