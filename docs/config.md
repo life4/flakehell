@@ -25,13 +25,20 @@ Use `exceptions` section to specify special rules for particular paths:
 pycodestyle = ["+*"]
 pyflakes = ["+*"]
 
+# match by prefix
 [tool.flakehell.exceptions."tests/"]
 pycodestyle = ["-F401"]     # disable a check
 pyflakes = ["-*"]           # disable a plugin
 
 [tool.flakehell.exceptions."tests/test_example.py"]
 pyflakes = ["+*"]           # enable a plugin
+
+# match by glob
+[tool.flakehell.exceptions."**/test_*.py"]
+pyflakes = ["-*"]
 ```
+
+path can be either a path prefix (from the project root) or a [glob pattern](https://docs.python.org/3/library/fnmatch.html).
 
 ## Base
 

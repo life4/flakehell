@@ -121,8 +121,19 @@ def get_exceptions(
         key=lambda item: len(item[0]),
         reverse=True,
     )
+
+    # prefix
     for path_rule, rules in exceptions:
+        if '*' in path_rule:
+            continue
         if path.startswith(path_rule):
+            return rules
+
+    # glob
+    for path_rule, rules in exceptions:
+        if '*' not in path_rule:
+            continue
+        if fnmatch(filename=path, patterns=[path_rule]):
             return rules
 
     return dict()
