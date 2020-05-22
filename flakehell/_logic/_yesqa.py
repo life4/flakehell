@@ -1,3 +1,4 @@
+# built-in
 import json
 import re
 from collections import defaultdict
@@ -6,14 +7,12 @@ from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Set
 
-# import tokenize_rt
-
+# app
 from .._constants import NAME, VERSION
 
 
 CODE = '[a-z]+[0-9]+'
 SEP = r'[,\s]+'
-# Tokens = List[tokenize_rt.Token]
 
 
 class YesQA:

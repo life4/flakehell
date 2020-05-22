@@ -1,11 +1,13 @@
-from typing import Any, Dict, List, Tuple, Optional
+# built-in
+from typing import Any, Dict, List, Optional, Tuple
 
-from flake8.checker import Manager, FileChecker
-from flake8.utils import fnmatch, filenames_from
+# external
+from flake8.checker import FileChecker, Manager
+from flake8.utils import filenames_from, fnmatch
 
+# app
 from .._logic import (
-    get_plugin_name, get_plugin_rules, check_include, make_baseline,
-    Snapshot, prepare_cache, get_exceptions,
+    Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
 )
 
 

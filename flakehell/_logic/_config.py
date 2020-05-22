@@ -1,8 +1,10 @@
+# built-in
 from pathlib import Path
 from typing import Any, Dict
 
-import urllib3
+# external
 import toml
+import urllib3
 
 
 def read_config(*paths) -> Dict[str, Any]:

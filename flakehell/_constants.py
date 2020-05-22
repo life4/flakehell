@@ -1,6 +1,9 @@
+# built-in
 from enum import IntEnum
 
+# app
 from ._version import __version__
+
 
 NAME = 'flakehell'
 VERSION = __version__

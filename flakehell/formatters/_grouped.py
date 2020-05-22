@@ -1,12 +1,15 @@
+# built-in
 from collections import defaultdict
 from typing import DefaultDict, List
 
+# external
 from flake8.statistics import Statistics
 from flake8.style_guide import Violation
 from termcolor import colored
 
-from ._colored import ColoredFormatter
+# app
 from .._logic import color_code, color_description
+from ._colored import ColoredFormatter
 
 
 class GroupedFormatter(ColoredFormatter):

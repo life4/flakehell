@@ -1,5 +1,7 @@
+# built-in
 import re
 
+# external
 from termcolor import colored
 
 

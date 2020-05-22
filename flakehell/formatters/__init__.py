@@ -1,3 +1,4 @@
+# app
 from ._baseline import BaseLineFormatter
 from ._colored import ColoredFormatter
 from ._gitlab import GitlabFormatter

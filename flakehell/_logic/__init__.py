@@ -1,9 +1,10 @@
+# app
 from ._baseline import make_baseline
 from ._colors import color_code, color_description
 from ._config import read_config
 from ._discover import get_installed
 from ._extractors import extract
-from ._plugin import get_plugin_name, get_plugin_rules, check_include, get_exceptions
+from ._plugin import check_include, get_exceptions, get_plugin_name, get_plugin_rules
 from ._snapshot import Snapshot, prepare_cache
 from ._yesqa import YesQA
 

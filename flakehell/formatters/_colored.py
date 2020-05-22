@@ -1,12 +1,16 @@
+# built-in
 import re
 
-from termcolor import colored
+# external
 from flake8.formatting.default import Default
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
+from termcolor import colored
 
+# app
 from .._logic import color_code, color_description
+
 
 REX_TEXT = re.compile('[A-Z]+')
 

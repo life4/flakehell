@@ -1,11 +1,14 @@
+# built-in
 import sys
 from typing import List, NoReturn
 
+# external
 from termcolor import colored
 
+# app
 from ._constants import ExitCodes
-from .commands import COMMANDS
 from ._types import CommandResult
+from .commands import COMMANDS
 
 
 def show_commands():
