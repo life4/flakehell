@@ -11,13 +11,8 @@ from typing import Dict, List, Set
 from .._constants import NAME, VERSION
 
 
-# import tokenize_rt
-
-
-
 CODE = '[a-z]+[0-9]+'
 SEP = r'[,\s]+'
-# Tokens = List[tokenize_rt.Token]
 
 
 class YesQA:
