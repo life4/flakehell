@@ -1,7 +1,7 @@
 # built-in
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 
 # external
 from flake8.utils import fnmatch
@@ -64,7 +64,7 @@ def get_plugin_rules(plugin_name: str, plugins: PluginsType) -> List[str]:
             return rules
 
     # try to find match by pattern and select the longest
-    best_match = (0, [])
+    best_match = (0, [])  # type: Tuple[int, List[str]]
     for pattern, rules in plugins.items():
         if not fnmatch(filename=plugin_name, patterns=[pattern]):
             continue

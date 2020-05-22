@@ -21,3 +21,4 @@ def baseline_command(argv) -> CommandResult:
         app.exit()
     except SystemExit as exc:
         return int(exc.code), ''
+    raise RuntimeError('unreachable')

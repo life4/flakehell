@@ -8,7 +8,7 @@ import urllib3
 
 
 def read_config(*paths) -> Dict[str, Any]:
-    config = dict()
+    config = dict()  # type: Dict[str, Any]
     for path in paths:
         if isinstance(path, Path):
             new_config = _read_local(path)

@@ -1,7 +1,7 @@
 # built-in
 import re
 from collections import defaultdict
-from typing import Any, Dict, Iterator
+from typing import Any, Dict, Iterator, Iterable
 
 # app
 from ._plugin import get_plugin_name
@@ -27,6 +27,7 @@ def get_installed(app) -> Iterator[Dict[str, Any]]:
     versions = dict()
 
     app.initialize([])
+    codes: Iterable[str]
 
     for check_type in ('ast_plugins', 'logical_line_plugins', 'physical_line_plugins'):
         for plugin in getattr(app.check_plugins, check_type):
@@ -34,7 +35,7 @@ def get_installed(app) -> Iterator[Dict[str, Any]]:
             versions[key[-1]] = plugin.version
 
             # if codes for plugin specified explicitly in ALIASES, use it
-            codes = ALIASES.get(plugin.plugin_name)
+            codes = ALIASES.get(plugin.plugin_name, [])
             if codes:
                 plugins_codes[key] = list(codes)
                 continue

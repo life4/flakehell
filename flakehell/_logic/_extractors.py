@@ -3,7 +3,7 @@ import ast
 import re
 from importlib import import_module
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
 
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{1,5}$')
@@ -14,7 +14,7 @@ ALIASES = {
 
 
 class CollectStrings(ast.NodeVisitor):
-    _strings = []
+    _strings: List[str]
 
     def visit_Str(self, node):
         self._strings.append(node.s)
