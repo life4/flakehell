@@ -185,13 +185,16 @@ class FlakeHellFileChecker(FileChecker):
     """
     A little bit patched FileChecker to handle ane check per checker
     """
-    snapshot = None
+    snapshot: Snapshot
 
     def __init__(self, filename: str, check_type: str, check, options):
         self.check_type = check_type
         self.check = check
+
+        checks: Dict[str, list]
         checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])
         checks[check_type] = [check]
+
         super().__init__(filename=filename, checks=checks, options=options)
 
         # display_name used in run_parallel for grouping results.

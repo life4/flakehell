@@ -40,6 +40,7 @@ class FlakeHellApplication(Application):
     + replace CheckersManager to support for `plugins` option
     + register custom formatters
     """
+    guide: FlakeHellStyleGuideManager
 
     @property
     def option_manager(self):

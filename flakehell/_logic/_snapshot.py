@@ -37,7 +37,7 @@ class Snapshot:
         self.file_path = file_path
 
     @classmethod
-    def create(cls, checker: FileChecker, options: OptionManager):
+    def create(cls, checker: FileChecker, options: OptionManager) -> 'Snapshot':
         hasher = md5()
         # plugin info
         for chunk in checker.display_name[:-1]:
@@ -77,7 +77,7 @@ class Snapshot:
         # let's save it for later use to avoid reading the cache twice
         if self._exists:
             self._results = cache['results']
-        return self._exists
+        return self._exists  # type: ignore
 
     @property
     def digest(self):
