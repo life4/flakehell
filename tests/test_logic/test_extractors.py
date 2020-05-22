@@ -1,8 +1,8 @@
 import pytest
 
+from flakehell._constants import KNOWN_PLUGINS
 from flakehell._logic import extract, get_installed
 from flakehell._patched import FlakeHellApplication
-from flakehell._constants import KNOWN_PLUGINS
 
 
 @pytest.mark.parametrize('plugin_name', KNOWN_PLUGINS)

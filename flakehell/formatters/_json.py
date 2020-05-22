@@ -1,4 +1,5 @@
 import json
+
 from flake8.formatting.base import BaseFormatter
 
 

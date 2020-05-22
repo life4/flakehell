@@ -1,4 +1,5 @@
 from flake8.formatting.base import BaseFormatter
+
 from .._logic import make_baseline
 
 

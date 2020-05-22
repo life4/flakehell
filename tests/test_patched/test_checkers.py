@@ -1,4 +1,5 @@
 from unittest import mock
+
 from flakehell._patched._checkers import FlakeHellFileChecker
 
 

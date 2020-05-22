@@ -1,9 +1,8 @@
 import re
 from pathlib import Path
-from typing import Dict, Any, List, Union
+from typing import Any, Dict, List, Union
 
 from flake8.utils import fnmatch
-
 
 REX_NAME = re.compile(r'[-_.]+')
 ALIASES = {

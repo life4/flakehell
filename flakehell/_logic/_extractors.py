@@ -4,7 +4,6 @@ from importlib import import_module
 from pathlib import Path
 from typing import Dict
 
-
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{1,5}$')
 ALIASES = {
     'flake8_bugbear': 'bugbear',

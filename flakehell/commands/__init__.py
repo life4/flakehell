@@ -9,7 +9,6 @@ from ._plugins import plugins_command
 from ._version import version_command
 from ._yesqa import yesqa_command
 
-
 __all__ = [
     'COMMANDS',
 

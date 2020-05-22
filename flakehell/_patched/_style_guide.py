@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from flake8.style_guide import StyleGuideManager, StyleGuide
+from flake8.style_guide import StyleGuide, StyleGuideManager
 
 from ._violation import FlakeHellViolation
 

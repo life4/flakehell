@@ -2,7 +2,6 @@ import re
 
 from termcolor import colored
 
-
 COLORS = dict(
     W='yellow',
     E='red',

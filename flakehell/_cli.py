@@ -4,8 +4,8 @@ from typing import List, NoReturn
 from termcolor import colored
 
 from ._constants import ExitCodes
-from .commands import COMMANDS
 from ._types import CommandResult
+from .commands import COMMANDS
 
 
 def show_commands():

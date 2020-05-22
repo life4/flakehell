@@ -1,8 +1,8 @@
+from flake8 import __version__ as flake8_version
 from termcolor import colored
 
 from .._types import CommandResult
 from .._version import __version__ as flakehell_version
-from flake8 import __version__ as flake8_version
 
 
 def version_command(argv) -> CommandResult:

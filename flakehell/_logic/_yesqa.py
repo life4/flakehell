@@ -6,9 +6,10 @@ from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Set
 
+from .._constants import NAME, VERSION
+
 # import tokenize_rt
 
-from .._constants import NAME, VERSION
 
 
 CODE = '[a-z]+[0-9]+'

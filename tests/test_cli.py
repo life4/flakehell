@@ -4,6 +4,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+
 from flakehell._cli import main
 
 from .utils import chdir

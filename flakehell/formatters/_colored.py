@@ -1,10 +1,10 @@
 import re
 
-from termcolor import colored
 from flake8.formatting.default import Default
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
+from termcolor import colored
 
 from .._logic import color_code, color_description
 

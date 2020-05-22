@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from flakehell._logic import YesQA
+
 from ..utils import chdir
 
 

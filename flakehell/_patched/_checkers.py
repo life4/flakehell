@@ -1,12 +1,10 @@
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
-from flake8.checker import Manager, FileChecker
-from flake8.utils import fnmatch, filenames_from
+from flake8.checker import FileChecker, Manager
+from flake8.utils import filenames_from, fnmatch
 
-from .._logic import (
-    get_plugin_name, get_plugin_rules, check_include, make_baseline,
-    Snapshot, prepare_cache, get_exceptions,
-)
+from .._logic import (Snapshot, check_include, get_exceptions, get_plugin_name,
+                      get_plugin_rules, make_baseline, prepare_cache)
 
 
 class FlakeHellCheckersManager(Manager):

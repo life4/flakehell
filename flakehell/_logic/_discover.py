@@ -4,7 +4,6 @@ from typing import Any, Dict, Iterator
 
 from ._plugin import get_plugin_name
 
-
 REX_CODE = re.compile(r'^[A-Z]{1,5}[0-9]{0,5}$')
 
 ALIASES = {

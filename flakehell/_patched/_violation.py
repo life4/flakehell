@@ -2,7 +2,6 @@ from collections import namedtuple
 
 from flake8.style_guide import Violation
 
-
 # the same as in flake8, but with some additional fields
 _Violation = namedtuple(
     'Violation',

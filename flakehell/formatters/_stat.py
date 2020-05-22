@@ -3,8 +3,8 @@ from collections import defaultdict
 from flake8.style_guide import Violation
 from termcolor import colored
 
-from ._colored import ColoredFormatter
 from .._logic import color_code, color_description
+from ._colored import ColoredFormatter
 
 
 class StatFormatter(ColoredFormatter):
