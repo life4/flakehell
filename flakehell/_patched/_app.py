@@ -50,6 +50,7 @@ class FlakeHellApplication(Application):
         """
         group = manager.parser.add_argument_group('FlakeHell')
         group.add_argument('--baseline', help='path to baseline')
+        group.add_argument('--safe', action='store_true', help='suppress exceptions from plugins')
         self._option_manager = manager
 
     def get_toml_config(self, path: Path = None) -> Dict[str, Any]:

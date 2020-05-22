@@ -6,7 +6,7 @@ Config resolving order (every next step overwrites previous one):
 
 1. Flake8 legacy configs: `setup.cfg`, `tox.ini`, `.flake8`. Everything you've specified for Flake8 will work for FlakeHell. However, it's strongly recommend to migrate on FlakeHell's own config format, because in Flake8's config you can't specify `plugins`.
 1. Modern and beautiful FlakeHell's config in [pyproject.toml](https://www.python.org/dev/peps/pep-0518/). Here you can configure everything for FlakeHell. Use it.
-1. CLI flags.
+1. CLI options.
 
 ## Plugins
 
@@ -54,6 +54,13 @@ format='colored'
 # 80 chars limit isn't enough in 21 century
 max_line_length=90
 ```
+
+## Additional settings
+
+FlakeHell provides a few additional options that aren't supported by the original flake8. They can be specified as everything else, in config or as CLI flags.
+
++ `--baseline` -- path to [baseline](commands/baseline) file.
++ `--safe` -- suppress exceptions from plugins. In that case, the exception will be converted into `E902` error.
 
 ## Ignored options
 

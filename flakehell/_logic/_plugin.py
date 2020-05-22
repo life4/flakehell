@@ -85,6 +85,10 @@ def check_include(code: str, rules: List[str]) -> bool:
     3. Return True if the latest glob-matching rule is include
     4. Return False if the latest glob-matching rule is exclude
     """
+    # always report exceptions in file processing
+    if code in ('E902', 'E999'):
+        return True
+
     for rule in rules:
         if len(rule) < 2 or rule[0] not in {'-', '+'}:
             raise ValueError('invalid rule: `{}`'.format(rule))

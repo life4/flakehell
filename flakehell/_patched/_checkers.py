@@ -201,6 +201,14 @@ class FlakeHellFileChecker(FileChecker):
         )
 
     def run_checks(self):
-        if self.processor:
+        if not self.processor:
+            return self.display_name, self.results, self.statistics
+        try:
             super().run_checks()
+        except Exception as exc:
+            if self.options.safe:
+                message = '{0}: {1}'.format(type(exc).__name__, exc)
+                self.report('E902', 0, 0, message)
+            else:
+                raise
         return self.display_name, self.results, self.statistics
