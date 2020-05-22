@@ -35,6 +35,11 @@ from = {format = "flit", path = "pyproject.toml"}
 envs = ["main", "dev"]
 command = "isort -rc -y"
 
+[tool.dephell.typing]
+from = {format = "flit", path = "pyproject.toml"}
+envs = ["main"]
+command = "mypy --ignore-missing-imports --allow-redefinition flakehell/"
+
 # -- ISORT -- #
 
 [tool.isort]

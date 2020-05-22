@@ -39,6 +39,8 @@ matrix:
     - name: lint
       python: "3.7"
       env: ENV=main
+    - python: "3.7"
+      env: ENV=typing
 
     # https://github.com/igorshubovych/markdownlint-cli
     - name: markdown lint
