@@ -139,9 +139,12 @@ class FlakeHellCheckersManager(Manager):
                 results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
                 checker.snapshot.dump(results)
 
-            with self.style_guide.processing_file(checker.filename):
+            filename = checker.filename
+            if filename is None or filename == '-':
+                filename = self.options.stdin_display_name or 'stdin'
+            with self.style_guide.processing_file(filename):
                 results_reported += self._handle_results(
-                    filename=checker.filename,
+                    filename=filename,
                     results=results,
                     check=checker.check,
                 )
