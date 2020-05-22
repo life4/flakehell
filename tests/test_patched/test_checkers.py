@@ -45,4 +45,6 @@ def test_catches_exception_on_invalid_syntax(tmp_path):
     assert fchecker.should_process is True
     assert fchecker.processor is not None
     fchecker.run_checks()
-    assert fchecker.results == [('E999', 1, 6, 'SyntaxError: invalid syntax', 'I exist!')]
+    assert len(fchecker.results) == 1
+    assert fchecker.results[0][0] == 'E999'
+    assert fchecker.results[0][3] == 'SyntaxError: invalid syntax'
