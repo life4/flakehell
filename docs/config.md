@@ -4,7 +4,7 @@ FlakeHell can be configured in [pyproject.toml](https://www.python.org/dev/peps/
 
 Config resolving order (every next step overwrites previous one):
 
-1. Flake8 legacy configs: `setup.cfg`, `tox.ini`, `.flake8`. Everything you've specified for Flake8 will work for FlakeHell. However, it's strongly recommend to migrate on FlakeHell's own config format, because in Flake8's config you can't specify `plugins`.
+1. Flake8 legacy configs: `setup.cfg`, `tox.ini`, `.flake8`. Everything you've specified for Flake8 will work for FlakeHell. The only exception is list of checks, it must be explicitly specified in FlakeHell's config via `plugins`. By default, FlakeHell runs only [pyflakes](https://github.com/PyCQA/pyflakes) and [pycodestyle](https://pypi.org/project/pycodestyle/).
 1. Modern and beautiful FlakeHell's config in [pyproject.toml](https://www.python.org/dev/peps/pep-0518/). Here you can configure everything for FlakeHell. Use it.
 1. CLI options.
 
@@ -66,15 +66,13 @@ FlakeHell provides a few additional options that aren't supported by the origina
 
 FlakeHell doesn't support some flake8 option by design. Flake8 has a long history and over-complicated logic to enable and disable some checks. We make it simple.
 
-| unsupported option    | alternative                   |
-| --------------------- | ----------------------------- |
-| `--extend-exclude`    | use just `exclude`, modify it right in the config if you need. |
-| `--per-file-ignores`  | use `exceptions`              |
-| `--statistics`        | use `--format=stat` instead   |
-| `--ignore`            | use `plugins`                 |
-| `--extend-ignore`     | use `plugins`                 |
-| `--select`            | use `plugins`                 |
-| `--enable-extensions` | use `plugins`                 |
++ `--extend-exclude` - use just `exclude`, modify it right in the config if you need.
++ `--per-file-ignores` - use `exceptions`.
++ `--statistics` - use `--format=stat` instead.
++ `--ignore` - use `plugins`.
++ `--extend-ignore` - use `plugins`.
++ `--select` - use `plugins`.
++ `--enable-extensions` - use `plugins`.
 
 ## Example
 

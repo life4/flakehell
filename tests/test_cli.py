@@ -149,3 +149,19 @@ def test_ignore_file_by_top_level_noqa(capsys, tmp_path: Path):
     ./example1.py:1:1: F401 'sys' imported but unused
     """
     assert captured.out.strip() == dedent(exp).strip()
+
+
+def test_exclude_file(capsys, tmp_path: Path):
+    (tmp_path / 'checked.py').write_text('import sys\n')
+    (tmp_path / 'ignored').mkdir()
+    (tmp_path / 'ignored' / 'first.py').write_text('import sys\n')
+    (tmp_path / 'ignored' / 'second.py').write_text('invalid syntax!')
+    with chdir(tmp_path):
+        result = main(['lint', '--format', 'default', '--exclude', 'ignored'])
+    assert result == (1, '')
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    exp = """
+    ./checked.py:1:1: F401 'sys' imported but unused
+    """
+    assert captured.out.strip() == dedent(exp).strip()
