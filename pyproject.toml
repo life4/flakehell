@@ -30,6 +30,11 @@ from = {format = "flit", path = "pyproject.toml"}
 envs = ["docs"]
 command = "sphinx-build -W docs docs/build"
 
+[tool.dephell.isort]
+from = {format = "flit", path = "pyproject.toml"}
+envs = ["main", "dev"]
+command = "isort -rc -y"
+
 # -- FLIT -- #
 
 [tool.flit.metadata]
