@@ -1,3 +1,4 @@
+# built-in
 import json
 import re
 from collections import defaultdict
@@ -6,7 +7,9 @@ from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Set
 
+# app
 from .._constants import NAME, VERSION
+
 
 # import tokenize_rt
 

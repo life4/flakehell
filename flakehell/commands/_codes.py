@@ -1,8 +1,11 @@
+# built-in
 import re
 
+# app
 from .._constants import ExitCodes
 from .._logic import color_code, color_description, extract
 from .._types import CommandResult
+
 
 REX_CODE = re.compile(r'([A-Z]+)([0-9]+)')
 REX_PLACEHOLDER = re.compile(r'(\{[a-z0-9]+\}|\%[a-z])')

@@ -1,5 +1,7 @@
+# built-in
 from types import SimpleNamespace
 
+# app
 from .._constants import NAME, VERSION
 from .._patched import FlakeHellApplication
 from .._types import CommandResult

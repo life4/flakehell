@@ -1,7 +1,10 @@
+# built-in
 from functools import lru_cache
 
+# external
 from flake8.style_guide import StyleGuide, StyleGuideManager
 
+# app
 from ._violation import FlakeHellViolation
 
 

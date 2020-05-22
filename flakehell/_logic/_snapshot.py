@@ -1,13 +1,17 @@
+# built-in
 import json
 from hashlib import md5
 from pathlib import Path
 from secrets import token_hex
 from time import localtime, strftime, time
 
+# external
 from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
 
+# app
 from ._plugin import get_plugin_name, get_plugin_rules
+
 
 CACHE_PATH = Path.home() / '.cache' / 'flakehell'
 THRESHOLD = 3600 * 24  # 1 day

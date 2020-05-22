@@ -1,5 +1,7 @@
+# built-in
 from collections import defaultdict
 
+# external
 from flake8.plugins.manager import Checkers, PluginManager
 
 

@@ -1,6 +1,9 @@
+# built-in
 import re
 
+# external
 from termcolor import colored
+
 
 COLORS = dict(
     W='yellow',

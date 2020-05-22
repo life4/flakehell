@@ -1,5 +1,7 @@
+# external
 from termcolor import colored
 
+# app
 from .._constants import NAME, VERSION, ExitCodes
 from .._logic import get_installed, get_plugin_rules
 from .._patched import FlakeHellApplication

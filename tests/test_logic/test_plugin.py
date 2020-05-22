@@ -1,5 +1,7 @@
+# built-in
 from pathlib import Path
 
+# project
 from flakehell._logic import get_exceptions
 
 

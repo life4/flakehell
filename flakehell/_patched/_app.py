@@ -1,19 +1,23 @@
+# built-in
 import sys
 from argparse import ArgumentParser
 from itertools import chain
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+# external
 from flake8.main.application import Application
 from flake8.options.config import MergedConfigParser, get_local_plugins
 from flake8.plugins.manager import ReportFormatters
 from flake8.utils import parse_unified_diff
 
+# app
 from .._constants import DEFAULTS
 from .._logic import read_config
 from ._checkers import FlakeHellCheckersManager
 from ._plugins import FlakeHellCheckers
 from ._style_guide import FlakeHellStyleGuideManager
+
 
 # Options that are related to the flake8 codes management logic.
 # We use our own codes management via `plugins` and `exceptions`.

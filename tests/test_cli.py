@@ -1,12 +1,16 @@
+# built-in
 import subprocess
 import sys
 from pathlib import Path
 from textwrap import dedent
 
+# external
 import pytest
 
+# project
 from flakehell._cli import main
 
+# app
 from .utils import chdir
 
 
