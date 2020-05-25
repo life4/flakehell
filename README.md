@@ -115,4 +115,4 @@ Thank you :heart:
 
 ![](./assets/flaky.png)
 
-The FlakeHell mascot (Flaky) is created by [@diana_leit](https://www.instagram.com/diana_leit/) and licensed under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
+The FlakeHell mascot (Flaky) is created by [@illustrator.way](https://www.instagram.com/illustrator.way/) and licensed under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
