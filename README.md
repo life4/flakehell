@@ -91,6 +91,28 @@ This command accepts all the same arguments as Flake8.
 
 Read [flakehell.readthedocs.io](https://flakehell.readthedocs.io/) for more information.
 
+## Contributing
+
+Contributions are welcome! A few ideas what you can contribute:
+
++ Improve documentation.
++ Add more tests.
++ Improve performance.
++ Found a bug? Fix it!
++ Made an article about FlakeHell? Great! Let's add it into the `README.md`.
++ Don't have time to code? No worries! Just tell your friends and subscribers about the project. More users -> more contributors -> more cool features.
+
+A convenient way to run tests is using [DepHell](https://github.com/dephell/dephell):
+
+```python
+curl -L dephell.org/install | python3
+dephell venv create --env=pytest
+dephell deps install --env=pytest
+dephell venv run --env=pytest
+```
+
+Thank you :heart:
+
 ![](./assets/flaky.png)
 
 The FlakeHell mascot (Flaky) is created by [@diana_leit](https://www.instagram.com/diana_leit/) and licensed under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
