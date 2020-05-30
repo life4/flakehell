@@ -1,6 +1,6 @@
 # built-in
 from collections import defaultdict
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, Dict, List, NamedTuple, Tuple, Optional
 
 # external
 from flake8.checker import FileChecker, Manager
@@ -28,7 +28,7 @@ class FlakeHellCheckersManager(Manager):
     """
     Patched flake8.checker.Manager to provide `plugins` support
     """
-    def __init__(self, baseline, **kwargs):
+    def __init__(self, baseline: Optional[str], **kwargs):
         self.baseline = set()
         if baseline:
             with open(baseline) as stream:
@@ -54,8 +54,13 @@ class FlakeHellCheckersManager(Manager):
         self.snapshots = []
         for argument in paths:
             for filename in filenames_from(argument, self.is_path_excluded):
-                # Get checks list.
-                selected_checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])
+                # get checks list
+                selected_checks: Dict[str, List[Dict[str, Any]]]
+                selected_checks = dict(
+                    ast_plugins=[],
+                    logical_line_plugins=[],
+                    physical_line_plugins=[],
+                )
                 has_checks = False
                 for check_type, checks in self.checks.to_dictionary().items():
                     for check in checks:
@@ -91,7 +96,7 @@ class FlakeHellCheckersManager(Manager):
                 self.checkers.append(checker)
 
     def _should_process(
-        self, argument, filename: str, check_type: str, check: Dict[str, Any],
+        self, argument: str, filename: str, check_type: str, check: Dict[str, Any],
     ) -> bool:
         # do not run plugins without rules specified
         plugin_name = get_plugin_name(check)
@@ -110,7 +115,7 @@ class FlakeHellCheckersManager(Manager):
             return False
         return argument == filename
 
-    def _get_rules(self, plugin_name: str, filename: str):
+    def _get_rules(self, plugin_name: str, filename: str) -> List[str]:
         rules = get_plugin_rules(
             plugin_name=plugin_name,
             plugins=self.options.plugins,
@@ -204,7 +209,7 @@ class FlakeHellFileChecker(FileChecker):
     snapshot: Snapshot
     _processed_plugin: str = DEFAULT_PLUGIN
 
-    def run_checks(self):
+    def run_checks(self) -> Tuple[str, List[Result], Dict[str, Any]]:
         if not self.processor:
             return self.filename, self.results, self.statistics
         try:
@@ -217,12 +222,15 @@ class FlakeHellFileChecker(FileChecker):
                 raise
         return self.filename, self.results, self.statistics
 
-    def run_check(self, plugin, **arguments):
+    def run_check(self, plugin: Dict[str, Any], **arguments):
         self._processed_plugin = get_plugin_name(plugin)
         return super().run_check(plugin=plugin, **arguments)
 
-    def report(self, error_code, line_number, column, text):
-        """Report an error by storing it in the results list."""
+    def report(self, error_code: Optional[str], line_number: int, column: int, text: str) -> str:
+        """
+        Copy-pasted `report` method to store `Result` in `self.results` instead of tuple
+        and provide `plugin_name`.
+        """
         if error_code is None:
             error_code, text = text.split(" ", 1)
 
