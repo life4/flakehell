@@ -242,7 +242,7 @@ class FlakeHellFileChecker(FileChecker):
 
         # If we're recovering from a problem in _make_processor, we will not
         # have this attribute.
-        if hasattr(self, "processor"):
+        if hasattr(self, 'processor'):
             line = self.processor.noqa_line_for(line_number)
         else:
             line = None
