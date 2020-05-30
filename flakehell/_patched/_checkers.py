@@ -155,7 +155,13 @@ class FlakeHellCheckersManager(Manager):
             grouped_results = defaultdict(list)
             for result in all_results:
                 if type(result) is not Result:
-                    result = Result(DEFAULT_PLUGIN, *result)
+                    if len(result) == 6:
+                        # cache entry is deserialized into list
+                        result = Result(*result)
+                    else:
+                        # flake8 sets custom error codes in a few places
+                        # where we didn't set `_processed_plugin`
+                        result = Result(DEFAULT_PLUGIN, *result)
                 grouped_results[result.plugin_name].append(result)
 
             # get filename
