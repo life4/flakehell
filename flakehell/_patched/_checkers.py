@@ -238,7 +238,7 @@ class FlakeHellFileChecker(FileChecker):
         and provide `plugin_name`.
         """
         if error_code is None:
-            error_code, text = text.split(" ", 1)
+            error_code, text = text.split(' ', 1)
 
         # If we're recovering from a problem in _make_processor, we will not
         # have this attribute.
