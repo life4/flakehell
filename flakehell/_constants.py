@@ -35,7 +35,7 @@ DEFAULTS = dict(
 )
 
 
-class ExitCodes(IntEnum):
+class ExitCode(IntEnum):
     OK = 0
 
     # CLI entrypoint

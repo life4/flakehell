@@ -2,7 +2,7 @@
 import re
 
 # app
-from .._constants import ExitCodes
+from .._constants import ExitCode
 from .._logic import color_code, color_description, extract
 from .._types import CommandResult
 
@@ -16,19 +16,19 @@ def codes_command(argv) -> CommandResult:
     """Show available codes and messages for given plugin.
     """
     if not argv:
-        return ExitCodes.NO_PLUGIN_NAME, 'no plugin name provided'
+        return ExitCode.NO_PLUGIN_NAME, 'no plugin name provided'
     if argv[0] == '--help':
         print(codes_command.__doc__)
-        return ExitCodes.OK, ''
+        return ExitCode.OK, ''
     if len(argv) > 1:
-        return ExitCodes.TOO_MANY_ARGS, 'the command accept only one argument'
+        return ExitCode.TOO_MANY_ARGS, 'the command accept only one argument'
 
     try:
         codes = extract(argv[0])
     except ImportError as e:
-        return ExitCodes.IMPORT_ERROR, 'cannot import module: {}'.format(e.args[0])
+        return ExitCode.IMPORT_ERROR, 'cannot import module: {}'.format(e.args[0])
     if not codes:
-        return ExitCodes.NO_CODES, 'no codes found'
+        return ExitCode.NO_CODES, 'no codes found'
 
     width = max(len(code) for code in codes)
     for code, info in sorted(codes.items()):
@@ -36,4 +36,4 @@ def codes_command(argv) -> CommandResult:
             code=color_code(code.ljust(width)),
             info=color_description(info),
         ))
-    return ExitCodes.OK, ''
+    return ExitCode.OK, ''

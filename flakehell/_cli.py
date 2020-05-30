@@ -6,7 +6,7 @@ from typing import List, NoReturn
 from termcolor import colored
 
 # app
-from ._constants import ExitCodes
+from ._constants import ExitCode
 from ._types import CommandResult
 from .commands import COMMANDS
 
@@ -23,14 +23,14 @@ def show_commands():
 def main(argv: List[str] = None) -> CommandResult:
     if not argv:
         show_commands()
-        return ExitCodes.NO_COMMAND, 'No command provided'
+        return ExitCode.NO_COMMAND, 'No command provided'
     command_name = argv[0]
     if command_name in ('help', '--help', 'commands'):
         show_commands()
-        return ExitCodes.OK, ''
+        return ExitCode.OK, ''
     if command_name not in COMMANDS:
         show_commands()
-        return ExitCodes.INVALID_COMMAND, 'Invalid command: {}'.format(command_name)
+        return ExitCode.INVALID_COMMAND, 'Invalid command: {}'.format(command_name)
     return COMMANDS[command_name](argv=argv[1:])
 
 
@@ -53,6 +53,6 @@ def flake8_entrypoint(argv: List[str] = None) -> NoReturn:
     exit_code, msg = main(['lint'] + argv)
     if msg:
         print(colored(msg, 'red'))
-    if isinstance(exit_code, ExitCodes):
+    if isinstance(exit_code, ExitCode):
         exit_code = exit_code.value
     sys.exit(exit_code)

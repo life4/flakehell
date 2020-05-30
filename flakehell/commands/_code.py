@@ -2,7 +2,7 @@
 from termcolor import colored
 
 # app
-from .._constants import NAME, VERSION, ExitCodes
+from .._constants import NAME, VERSION, ExitCode
 from .._logic import color_description, extract, get_installed
 from .._patched import FlakeHellApplication
 from .._types import CommandResult
@@ -12,18 +12,18 @@ def code_command(argv) -> CommandResult:
     """Show plugin name and message for given code.
     """
     if not argv:
-        return ExitCodes.NO_PLUGIN_NAME, 'no plugin name provided'
+        return ExitCode.NO_PLUGIN_NAME, 'no plugin name provided'
     if argv[0] == '--help':
         print(code_command.__doc__)
-        return ExitCodes.OK, ''
+        return ExitCode.OK, ''
     if len(argv) > 1:
-        return ExitCodes.TOO_MANY_ARGS, 'the command accept only one argument'
+        return ExitCode.TOO_MANY_ARGS, 'the command accept only one argument'
     code = argv[0]
 
     app = FlakeHellApplication(program=NAME, version=VERSION)
     plugins = sorted(get_installed(app=app), key=lambda p: p['name'])
     if not plugins:
-        return ExitCodes.NO_PLUGINS_INSTALLED, 'no plugins installed'
+        return ExitCode.NO_PLUGINS_INSTALLED, 'no plugins installed'
 
     messages = []
     checked = set()
@@ -45,7 +45,7 @@ def code_command(argv) -> CommandResult:
         ))
 
     if not messages:
-        return ExitCodes.NO_CODES, 'no messages found'
+        return ExitCode.NO_CODES, 'no messages found'
 
     width = max(len(m['plugin']) for m in messages)
     template = '{plugin} | {message}'
@@ -58,4 +58,4 @@ def code_command(argv) -> CommandResult:
             plugin=message['plugin'].ljust(width),
             message=color_description(message['message']),
         ))
-    return ExitCodes.OK, ''
+    return ExitCode.OK, ''

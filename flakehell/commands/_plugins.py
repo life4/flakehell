@@ -2,7 +2,7 @@
 from termcolor import colored
 
 # app
-from .._constants import NAME, VERSION, ExitCodes
+from .._constants import NAME, VERSION, ExitCode
 from .._logic import get_installed, get_plugin_rules
 from .._patched import FlakeHellApplication
 from .._types import CommandResult
@@ -14,7 +14,7 @@ def plugins_command(argv) -> CommandResult:
     app = FlakeHellApplication(program=NAME, version=VERSION)
     plugins = sorted(get_installed(app=app), key=lambda p: p['name'])
     if not plugins:
-        return ExitCodes.NO_PLUGINS_INSTALLED, 'no plugins installed'
+        return ExitCode.NO_PLUGINS_INSTALLED, 'no plugins installed'
 
     name_width = max(len(p['name']) for p in plugins)
     version_width = max(8, max(len(p['version']) for p in plugins))
@@ -52,4 +52,4 @@ def plugins_command(argv) -> CommandResult:
             codes=', '.join(plugin['codes']).ljust(codes_width),
             rules=', '.join(colored_rules),
         ))
-    return ExitCodes.OK, ''
+    return ExitCode.OK, ''
