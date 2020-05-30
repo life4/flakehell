@@ -22,6 +22,10 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + [PyLint](https://github.com/PyCQA/pylint) integration.
 + Allow codes intersection for different plugins.
 
+## Compatibility
+
+FlakeHell supports all flake8 plugins, formatters, and configs. However, FlakeHell has it's own beautiful way to configure enabled plugins and codes. So, options like `--ignore` and `--select` unsupported. You can have flake8 and FlakeHell in one project if you want but enabled plugins should be explicitly specified.
+
 ![output example](./assets/grouped.png)
 
 ## Installation
@@ -110,6 +114,8 @@ dephell venv create --env=pytest
 dephell deps install --env=pytest
 dephell venv run --env=pytest
 ```
+
+Bug-tracker is disabled by-design to shift contributions from words to actions. Please, help us make the project better and don't stalk maintainers in social networks and on the street.
 
 Thank you :heart:
 
