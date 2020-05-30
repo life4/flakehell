@@ -12,6 +12,9 @@ from .._logic import (
 )
 
 
+DEFAULT_PLUGIN = 'pycodestyle'
+
+
 class Result(NamedTuple):
     plugin_name: str
     error_code: str
@@ -87,9 +90,12 @@ class FlakeHellCheckersManager(Manager):
                     continue
                 self.checkers.append(checker)
 
-    def _should_process(self, argument, filename, check_type, check) -> bool:
+    def _should_process(
+        self, argument, filename: str, check_type: str, check: Dict[str, Any],
+    ) -> bool:
         # do not run plugins without rules specified
-        rules = self._get_rules(check=check, filename=filename)
+        plugin_name = get_plugin_name(check)
+        rules = self._get_rules(plugin_name=plugin_name, filename=filename)
         if not rules or set(rules) == {'-*'}:
             return False
 
@@ -104,8 +110,7 @@ class FlakeHellCheckersManager(Manager):
             return False
         return argument == filename
 
-    def _get_rules(self, check: Dict[str, Any], filename: str):
-        plugin_name = get_plugin_name(check)
+    def _get_rules(self, plugin_name: str, filename: str):
         rules = get_plugin_rules(
             plugin_name=plugin_name,
             plugins=self.options.plugins,
@@ -143,10 +148,9 @@ class FlakeHellCheckersManager(Manager):
 
             grouped_results = defaultdict(list)
             for result in all_results:
-                if type(result) is Result:
-                    grouped_results[result.plugin_name].append(result[1:])
-                else:
-                    grouped_results['UNKNOWN'].append(result)
+                if type(result) is not Result:
+                    result = Result(DEFAULT_PLUGIN, *result)
+                grouped_results[result.plugin_name].append(result)
 
             filename = checker.filename
             if filename is None or filename == '-':
@@ -165,41 +169,40 @@ class FlakeHellCheckersManager(Manager):
                         results_reported += self._handle_results(
                             filename=filename,
                             results=grouped_results[plugin_name],
-                            check=check,
+                            plugin_name=plugin_name,
                         )
                 results_reported += self._handle_results(
                     filename=filename,
-                    results=grouped_results['UNKNOWN'],
-                    check={},
+                    results=grouped_results[DEFAULT_PLUGIN],
+                    plugin_name=DEFAULT_PLUGIN,
                 )
             results_found += len(all_results)
         return (results_found, results_reported)
 
-    def _handle_results(self, filename: str, results: list, check: dict) -> int:
-        plugin_name = get_plugin_name(check)
-        rules = self._get_rules(check=check, filename=filename)
+    def _handle_results(self, filename: str, results: list, plugin_name: str) -> int:
+        rules = self._get_rules(plugin_name=plugin_name, filename=filename)
         reported_results_count = 0
-        for (error_code, line_number, column, text, physical_line) in results:
+        for result in results:
             if self.baseline:
                 digest = make_baseline(
                     path=filename,
-                    context=physical_line,
-                    code=error_code,
-                    line=line_number,
+                    context=result.line,
+                    code=result.error_code,
+                    line=result.line_number,
                 )
                 if digest in self.baseline:
                     continue
 
-            if not check_include(code=error_code, rules=rules):
+            if not check_include(code=result.error_code, rules=rules):
                 continue
 
             reported_results_count += self.style_guide.handle_error(
-                code=error_code,
+                code=result.error_code,
                 filename=filename,
-                line_number=line_number,
-                column_number=column,
-                text=text,
-                physical_line=physical_line,
+                line_number=result.line_number,
+                column_number=result.column,
+                text=result.text,
+                physical_line=result.line,
                 plugin=plugin_name,
             )
         return reported_results_count

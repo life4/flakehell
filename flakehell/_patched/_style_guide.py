@@ -22,7 +22,7 @@ class FlakeHellStyleGuideManager(StyleGuideManager):
         self.style_guides.extend(self.populate_style_guides_with(options))
 
     @lru_cache(maxsize=None)
-    def style_guide_for(self, filename):
+    def style_guide_for(self, filename: str):
         """Patched styleguide finder to give priority to flakehell's stileguides
         """
         guides = sorted(
