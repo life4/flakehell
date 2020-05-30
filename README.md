@@ -7,20 +7,23 @@
 
 It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
-+ Shareable and remote configs.
-+ Legacy-friendly: ability to get report only about new errors.
++ [Shareable and remote configs](https://flakehell.readthedocs.io/config.html#base).
++ [Legacy-friendly](https://flakehell.readthedocs.io/commands/baseline.html): ability to get report only about new errors.
 + Caching for much better performance.
-+ Use only specified plugins, not everything installed.
-+ Manage codes per plugin.
-+ Enable and disable plugins and codes by wildcard.
-+ Make output beautiful.
++ [Use only specified plugins](https://flakehell.readthedocs.io/config.html#plugins), not everything installed.
++ [Make output beautiful](https://flakehell.readthedocs.io/formatters.html).
 + [pyproject.toml](https://www.python.org/dev/peps/pep-0518/) support.
-+ Show codes for installed plugins.
-+ Show all messages and codes for a plugin.
-+ Check that all required plugins are installed.
-+ Syntax highlighting in messages and code snippets.
++ [Check that all required plugins are installed](https://flakehell.readthedocs.io/commands/missed.html).
++ [Syntax highlighting in messages and code snippets](https://flakehell.readthedocs.io/formatters.html#colored-with-source-code).
 + [PyLint](https://github.com/PyCQA/pylint) integration.
-+ Allow codes intersection for different plugins.
++ [Remove unused noqa](https://flakehell.readthedocs.io/commands/yesqa.html).
++ [Powerful GitLab support](https://flakehell.readthedocs.io/formatters.html#gitlab).
++ Codes management:
+    + Manage codes per plugin.
+    + Enable and disable plugins and codes by wildcard.
+    + [Show codes for installed plugins](https://flakehell.readthedocs.io/commands/plugins.html).
+    + [Show all messages and codes for a plugin](https://flakehell.readthedocs.io/commands/codes.html).
+    + Allow codes intersection for different plugins.
 
 ## Compatibility
 
