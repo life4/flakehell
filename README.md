@@ -25,11 +25,11 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     + [Show all messages and codes for a plugin](https://flakehell.readthedocs.io/commands/codes.html).
     + Allow codes intersection for different plugins.
 
+![output example](./assets/grouped.png)
+
 ## Compatibility
 
 FlakeHell supports all flake8 plugins, formatters, and configs. However, FlakeHell has it's own beautiful way to configure enabled plugins and codes. So, options like `--ignore` and `--select` unsupported. You can have flake8 and FlakeHell in one project if you want but enabled plugins should be explicitly specified.
-
-![output example](./assets/grouped.png)
 
 ## Installation
 
