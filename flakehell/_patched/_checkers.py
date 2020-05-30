@@ -135,47 +135,36 @@ class FlakeHellCheckersManager(Manager):
         """
         # self.run_serial()
         results_reported = results_found = 0
-        showed = set()
         for checker in self.checkers + self.snapshots:
             if not checker.results and not checker.snapshot.exists():
                 continue
 
+            # get results either from cache or actual run
             if checker.snapshot.exists():
                 all_results = checker.snapshot.results
             else:
                 all_results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
                 checker.snapshot.dump(all_results)
 
+            # group results by plugin name
             grouped_results = defaultdict(list)
             for result in all_results:
                 if type(result) is not Result:
                     result = Result(DEFAULT_PLUGIN, *result)
                 grouped_results[result.plugin_name].append(result)
 
+            # get filename
             filename = checker.filename
             if filename is None or filename == '-':
                 filename = self.options.stdin_display_name or 'stdin'
+
             with self.style_guide.processing_file(filename):
-                for checks in checker.checks.values():
-                    for check in checks:
-                        plugin_name = get_plugin_name(check)
-
-                        # IDK why we have duplicates but let's fight it
-                        full_name = (filename, plugin_name)
-                        if full_name in showed:
-                            continue
-                        showed.add(full_name)
-
-                        results_reported += self._handle_results(
-                            filename=filename,
-                            results=grouped_results[plugin_name],
-                            plugin_name=plugin_name,
-                        )
-                results_reported += self._handle_results(
-                    filename=filename,
-                    results=grouped_results[DEFAULT_PLUGIN],
-                    plugin_name=DEFAULT_PLUGIN,
-                )
+                for plugin_name, results in sorted(grouped_results.items()):
+                    results_reported += self._handle_results(
+                        filename=filename,
+                        results=results,
+                        plugin_name=plugin_name,
+                    )
             results_found += len(all_results)
         return (results_found, results_reported)
 
@@ -213,7 +202,7 @@ class FlakeHellFileChecker(FileChecker):
     A little bit patched FileChecker to support `--safe`
     """
     snapshot: Snapshot
-    _processed_plugin: str = None
+    _processed_plugin: str = DEFAULT_PLUGIN
 
     def run_checks(self):
         if not self.processor:
