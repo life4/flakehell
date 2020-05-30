@@ -31,6 +31,8 @@ def get_plugin_name(plugin: Dict[str, Any]) -> str:
     3. Normalized name that starts with `pep`
     4. `plugin_name`
     """
+    if not plugin:
+        return 'UNKNOWN'
     if plugin['plugin_name'] in ALIASES:
         return ALIASES[plugin['plugin_name']]
 

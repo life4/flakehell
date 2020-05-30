@@ -1,5 +1,6 @@
 # built-in
-from typing import Tuple
+from typing import Tuple, Union
+from ._constants import ExitCode
 
 
-CommandResult = Tuple[int, str]
+CommandResult = Tuple[Union[int, ExitCode], str]

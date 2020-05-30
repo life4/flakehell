@@ -2,15 +2,12 @@
 import json
 from hashlib import md5
 from pathlib import Path
-from secrets import token_hex
-from time import localtime, strftime, time
+from time import time
+from typing import Optional
 
 # external
 from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
-
-# app
-from ._plugin import get_plugin_name, get_plugin_rules
 
 
 CACHE_PATH = Path.home() / '.cache' / 'flakehell'
@@ -28,8 +25,8 @@ def prepare_cache(path=CACHE_PATH):
 
 
 class Snapshot:
-    _exists = None
-    _digest = None
+    _exists: Optional[bool] = None
+    _digest: Optional[str] = None
     _results = None
 
     def __init__(self, *, cache_path: Path, file_path: Path):
@@ -39,17 +36,10 @@ class Snapshot:
     @classmethod
     def create(cls, checker: FileChecker, options: OptionManager) -> 'Snapshot':
         hasher = md5()
-        # plugin info
-        for chunk in checker.display_name[:-1]:
-            hasher.update(chunk.encode())
 
         # plugins config
-        plugin_name = get_plugin_name(checker.check)
-        rules = get_plugin_rules(
-            plugin_name=plugin_name,
-            plugins=options.plugins,
-        )
-        hasher.update('|'.join(rules).encode())
+        plugins = json.dumps(options.plugins, sort_keys=True)
+        hasher.update(plugins.encode())
 
         # file path
         file_path = Path(checker.filename).resolve()
@@ -70,6 +60,10 @@ class Snapshot:
             self._exists = False
             return self._exists
 
+        # digest is None for non-existent files (stdin)
+        if self.digest is None:
+            return False
+
         # check that file content wasn't changed since the snapshot
         cache = json.loads(self.cache_path.read_text())
         self._exists = self.digest == cache['digest']
@@ -80,17 +74,16 @@ class Snapshot:
         return self._exists  # type: ignore
 
     @property
-    def digest(self):
+    def digest(self) -> Optional[str]:
         """Get hex digest for the current content of the file
         """
         # we cache it because it requested twice: from `exists` and from `dumps`
         if self._digest is None:
-            if self.file_path.exists():
-                self._digest = self.file_content_digest()
-            else:
-                # Cannot read file_path, likely because it's '-' for stdin
-                # Invent a random digest instead
-                self._digest = self.random_digest()
+            if not self.file_path.exists():
+                return None
+            hasher = md5()
+            hasher.update(self.file_path.read_bytes())
+            self._digest = hasher.hexdigest()
         return self._digest
 
     def dump(self, results) -> None:
@@ -112,12 +105,3 @@ class Snapshot:
         if self._results is not None:
             return self._results
         return json.loads(self.cache_path.read_text())['results']
-
-    @staticmethod
-    def random_digest():
-        return strftime('%Y%m%d%H%M%S', localtime()) + token_hex(16)
-
-    def file_content_digest(self):
-        hasher = md5()
-        hasher.update(self.file_path.read_bytes())
-        return hasher.hexdigest()

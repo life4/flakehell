@@ -2,7 +2,7 @@
 from pathlib import Path
 
 # app
-from .._constants import ExitCodes
+from .._constants import ExitCode
 from .._logic import YesQA
 from .._types import CommandResult
 
@@ -23,10 +23,10 @@ def yesqa_command(argv) -> CommandResult:
     """Remove bare and unused noqa comments.
     """
     if not argv:
-        return ExitCodes.NOT_ENOUGH_ARGS, 'no file path provided'
+        return ExitCode.NOT_ENOUGH_ARGS, 'no file path provided'
     if argv[0] == '--help':
         print(yesqa_command.__doc__)
-        return 0, ''
+        return ExitCode.OK, ''
 
     paths = get_paths(Path(fname) for fname in argv)
     fixer = YesQA()
@@ -34,4 +34,4 @@ def yesqa_command(argv) -> CommandResult:
         modified = fixer(path=path)
         if modified:
             print(str(path))
-    return 0, ''
+    return ExitCode.OK, ''
