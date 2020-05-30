@@ -9,9 +9,6 @@ from time import localtime, strftime, time
 from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
 
-# app
-from ._plugin import get_plugin_name, get_plugin_rules
-
 
 CACHE_PATH = Path.home() / '.cache' / 'flakehell'
 THRESHOLD = 3600 * 24  # 1 day
@@ -39,17 +36,10 @@ class Snapshot:
     @classmethod
     def create(cls, checker: FileChecker, options: OptionManager) -> 'Snapshot':
         hasher = md5()
-        # plugin info
-        for chunk in checker.display_name[:-1]:
-            hasher.update(chunk.encode())
 
         # plugins config
-        plugin_name = get_plugin_name(checker.check)
-        rules = get_plugin_rules(
-            plugin_name=plugin_name,
-            plugins=options.plugins,
-        )
-        hasher.update('|'.join(rules).encode())
+        plugins = json.dumps(options.plugins, sort_keys=True)
+        hasher.update(plugins.encode())
 
         # file path
         file_path = Path(checker.filename).resolve()
@@ -63,6 +53,7 @@ class Snapshot:
     def exists(self) -> bool:
         """Returns True if cache file exists and is actual.
         """
+        return False  #Dropme
         if self._exists is not None:
             return self._exists
 

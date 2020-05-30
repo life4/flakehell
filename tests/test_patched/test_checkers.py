@@ -7,14 +7,15 @@ from flakehell._patched._checkers import FlakeHellFileChecker
 
 def test_nonexistent_file():
     """Verify that checking non-existent file results in an error."""
+    plugin = {
+        'plugin_name': 'flake8-example',
+        'name': 'something',
+        'plugin': FlakeHellFileChecker,
+    }
+    checks = dict(ast_plugins=[plugin], logical_line_plugins=[], physical_line_plugins=[])
     c = FlakeHellFileChecker(
         filename='foobar.py',
-        check_type='ast',
-        check={
-            'plugin_name': 'flake8-example',
-            'name': 'something',
-            'plugin': FlakeHellFileChecker,
-        },
+        checks=checks,
         options=None,
     )
 
@@ -22,7 +23,7 @@ def test_nonexistent_file():
     assert not c.should_process
     assert len(c.results) == 1
     error = c.results[0]
-    assert error[0] == 'E902'
+    assert error.error_code == 'E902'
 
 
 def test_catches_exception_on_invalid_syntax(tmp_path):
@@ -36,15 +37,15 @@ def test_catches_exception_on_invalid_syntax(tmp_path):
     }
     options = mock.MagicMock()
     options.safe = False
+    checks = dict(ast_plugins=[plugin], logical_line_plugins=[], physical_line_plugins=[])
     fchecker = FlakeHellFileChecker(
         filename=str(code_path),
-        check_type='ast',
-        check=plugin,
+        checks=checks,
         options=options,
     )
     assert fchecker.should_process is True
     assert fchecker.processor is not None
     fchecker.run_checks()
     assert len(fchecker.results) == 1
-    assert fchecker.results[0][0] == 'E999'
-    assert fchecker.results[0][3] == 'SyntaxError: invalid syntax'
+    assert fchecker.results[0].error_code == 'E999'
+    assert fchecker.results[0].text == 'SyntaxError: invalid syntax'

@@ -176,10 +176,8 @@ def test_ignore_file_by_top_level_noqa(capsys, tmp_path: Path):
     assert result == (1, '')
     captured = capsys.readouterr()
     assert captured.err == ''
-    exp = """
-    ./example1.py:1:1: F401 'sys' imported but unused
-    """
-    assert captured.out.strip() == dedent(exp).strip()
+    exp = "./example1.py:1:1: F401 'sys' imported but unused"
+    assert captured.out.strip() == exp
 
 
 def test_exclude_file(capsys, tmp_path: Path):

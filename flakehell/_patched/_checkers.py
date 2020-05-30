@@ -1,5 +1,6 @@
 # built-in
-from typing import Any, Dict, List, Optional, Tuple
+from collections import defaultdict
+from typing import Any, Dict, List, NamedTuple, Tuple
 
 # external
 from flake8.checker import FileChecker, Manager
@@ -9,6 +10,15 @@ from flake8.utils import filenames_from, fnmatch
 from .._logic import (
     Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
 )
+
+
+class Result(NamedTuple):
+    plugin_name: str
+    error_code: str
+    line_number: int
+    column: int
+    text: str
+    line: str
 
 
 class FlakeHellCheckersManager(Manager):
@@ -41,47 +51,58 @@ class FlakeHellCheckersManager(Manager):
         self.snapshots = []
         for argument in paths:
             for filename in filenames_from(argument, self.is_path_excluded):
+                # Get checks list.
+                selected_checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])
+                has_checks = False
                 for check_type, checks in self.checks.to_dictionary().items():
                     for check in checks:
-                        checker = self._make_checker(
+                        should_process = self._should_process(
                             argument=argument,
                             filename=filename,
                             check_type=check_type,
                             check=check,
                         )
-                        if checker is None:
+                        if not should_process:
                             continue
+                        selected_checks[check_type].append(check)
+                        has_checks = True
 
-                        checker.snapshot = Snapshot.create(
-                            checker=checker,
-                            options=self.options,
-                        )
-                        if checker.snapshot.exists():
-                            self.snapshots.append(checker)
-                            continue
+                # Create checker with selected checks
+                if not has_checks:
+                    continue
+                checker = FlakeHellFileChecker(
+                    filename=filename,
+                    checks=selected_checks,
+                    options=self.options,
+                )
+                # ignore files with top-level `# flake8: noqa`
+                if not checker.should_process:
+                    continue
+                checker.snapshot = Snapshot.create(
+                    checker=checker,
+                    options=self.options,
+                )
+                if checker.snapshot.exists():
+                    self.snapshots.append(checker)
+                    continue
+                self.checkers.append(checker)
 
-                        self.checkers.append(checker)
-
-    def _make_checker(self, argument, filename, check_type,
-                      check) -> Optional['FlakeHellFileChecker']:
+    def _should_process(self, argument, filename, check_type, check) -> bool:
         # do not run plugins without rules specified
         rules = self._get_rules(check=check, filename=filename)
         if not rules or set(rules) == {'-*'}:
-            return None
+            return False
 
-        if not self._should_create_file_checker(filename=filename, argument=argument):
-            return None
+        if filename == '-':
+            return True
+        if fnmatch(filename=filename, patterns=self.options.filename):
+            return True
 
-        checker = FlakeHellFileChecker(
-            filename=filename,
-            check_type=check_type,
-            check=check,
-            options=self.options,
-        )
-        # check top-level `flake8: noqa`
-        if not checker.should_process:
-            return None
-        return checker
+        if self.options._running_from_vcs:
+            return False
+        if self.options.diff:
+            return False
+        return argument == filename
 
     def _get_rules(self, check: Dict[str, Any], filename: str):
         plugin_name = get_plugin_name(check)
@@ -101,20 +122,6 @@ class FlakeHellCheckersManager(Manager):
             )
         return rules
 
-    def _should_create_file_checker(self, filename: str, argument) -> bool:
-        """Filter out excluded files
-        """
-        if filename == '-':
-            return True
-        if fnmatch(filename=filename, patterns=self.options.filename):
-            return True
-
-        if self.options._running_from_vcs:
-            return False
-        if self.options.diff:
-            return False
-        return argument == filename
-
     def report(self) -> Tuple[int, int]:
         """Reloaded report generation to filter out excluded error codes.
 
@@ -128,27 +135,44 @@ class FlakeHellCheckersManager(Manager):
             if not checker.results and not checker.snapshot.exists():
                 continue
 
-            # IDK why we have duplicates but let's fight it
-            if checker.display_name in showed:
-                continue
-            showed.add(checker.display_name)
-
             if checker.snapshot.exists():
-                results = checker.snapshot.results
+                all_results = checker.snapshot.results
             else:
-                results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
-                checker.snapshot.dump(results)
+                all_results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
+                checker.snapshot.dump(all_results)
+
+            grouped_results = defaultdict(list)
+            for result in all_results:
+                if type(result) is Result:
+                    grouped_results[result.plugin_name].append(result[1:])
+                else:
+                    grouped_results['UNKNOWN'].append(result)
 
             filename = checker.filename
             if filename is None or filename == '-':
                 filename = self.options.stdin_display_name or 'stdin'
             with self.style_guide.processing_file(filename):
+                for checks in checker.checks.values():
+                    for check in checks:
+                        plugin_name = get_plugin_name(check)
+
+                        # IDK why we have duplicates but let's fight it
+                        full_name = (filename, plugin_name)
+                        if full_name in showed:
+                            continue
+                        showed.add(full_name)
+
+                        results_reported += self._handle_results(
+                            filename=filename,
+                            results=grouped_results[plugin_name],
+                            check=check,
+                        )
                 results_reported += self._handle_results(
                     filename=filename,
-                    results=results,
-                    check=checker.check,
+                    results=grouped_results['UNKNOWN'],
+                    check={},
                 )
-            results_found += len(results)
+            results_found += len(all_results)
         return (results_found, results_reported)
 
     def _handle_results(self, filename: str, results: list, check: dict) -> int:
@@ -183,40 +207,46 @@ class FlakeHellCheckersManager(Manager):
 
 class FlakeHellFileChecker(FileChecker):
     """
-    A little bit patched FileChecker to handle ane check per checker
+    A little bit patched FileChecker to support `--safe`
     """
     snapshot: Snapshot
-
-    def __init__(self, filename: str, check_type: str, check, options):
-        self.check_type = check_type
-        self.check = check
-
-        checks: Dict[str, list]
-        checks = dict(ast_plugins=[], logical_line_plugins=[], physical_line_plugins=[])
-        checks[check_type] = [check]
-
-        super().__init__(filename=filename, checks=checks, options=options)
-
-        # display_name used in run_parallel for grouping results.
-        # Flake8 groups by filename, we need to group also by the check
-        self.display_name = (get_plugin_name(check), check['name'], filename)
-
-    def __repr__(self):
-        return '{name}({plugin}, {filename})'.format(
-            name=type(self).__name__,
-            plugin=self.check['plugin_name'],
-            filename=self.filename,
-        )
+    _processed_plugin: str = None
 
     def run_checks(self):
         if not self.processor:
-            return self.display_name, self.results, self.statistics
+            return self.filename, self.results, self.statistics
         try:
-            super().run_checks()
+            return super().run_checks()
         except Exception as exc:
             if self.options.safe:
                 message = '{0}: {1}'.format(type(exc).__name__, exc)
                 self.report('E902', 0, 0, message)
             else:
                 raise
-        return self.display_name, self.results, self.statistics
+        return self.filename, self.results, self.statistics
+
+    def run_check(self, plugin, **arguments):
+        self._processed_plugin = get_plugin_name(plugin)
+        return super().run_check(plugin=plugin, **arguments)
+
+    def report(self, error_code, line_number, column, text):
+        """Report an error by storing it in the results list."""
+        if error_code is None:
+            error_code, text = text.split(" ", 1)
+
+        # If we're recovering from a problem in _make_processor, we will not
+        # have this attribute.
+        if hasattr(self, "processor"):
+            line = self.processor.noqa_line_for(line_number)
+        else:
+            line = None
+
+        self.results.append(Result(
+            plugin_name=self._processed_plugin,
+            error_code=error_code,
+            line_number=line_number,
+            column=column,
+            text=text,
+            line=line,
+        ))
+        return error_code
