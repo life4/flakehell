@@ -10,7 +10,7 @@ def missed_command(argv) -> CommandResult:
     """
     if argv and argv[0] == '--help':
         print(missed_command.__doc__)
-        return 0, ''
+        return ExitCodes.OK, ''
     if argv:
         return ExitCodes.TOO_MANY_ARGS, 'the command does not accept arguments'
 

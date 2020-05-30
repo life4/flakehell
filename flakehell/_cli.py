@@ -27,7 +27,7 @@ def main(argv: List[str] = None) -> CommandResult:
     command_name = argv[0]
     if command_name in ('help', '--help', 'commands'):
         show_commands()
-        return 0, ''
+        return ExitCodes.OK, ''
     if command_name not in COMMANDS:
         show_commands()
         return ExitCodes.INVALID_COMMAND, 'Invalid command: {}'.format(command_name)
@@ -53,4 +53,6 @@ def flake8_entrypoint(argv: List[str] = None) -> NoReturn:
     exit_code, msg = main(['lint'] + argv)
     if msg:
         print(colored(msg, 'red'))
+    if isinstance(exit_code, ExitCodes):
+        exit_code = exit_code.value
     sys.exit(exit_code)

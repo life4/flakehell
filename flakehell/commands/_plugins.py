@@ -52,4 +52,4 @@ def plugins_command(argv) -> CommandResult:
             codes=', '.join(plugin['codes']).ljust(codes_width),
             rules=', '.join(colored_rules),
         ))
-    return 0, ''
+    return ExitCodes.OK, ''

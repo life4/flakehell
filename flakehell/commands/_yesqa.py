@@ -26,7 +26,7 @@ def yesqa_command(argv) -> CommandResult:
         return ExitCodes.NOT_ENOUGH_ARGS, 'no file path provided'
     if argv[0] == '--help':
         print(yesqa_command.__doc__)
-        return 0, ''
+        return ExitCodes.OK, ''
 
     paths = get_paths(Path(fname) for fname in argv)
     fixer = YesQA()
@@ -34,4 +34,4 @@ def yesqa_command(argv) -> CommandResult:
         modified = fixer(path=path)
         if modified:
             print(str(path))
-    return 0, ''
+    return ExitCodes.OK, ''

@@ -19,7 +19,7 @@ def codes_command(argv) -> CommandResult:
         return ExitCodes.NO_PLUGIN_NAME, 'no plugin name provided'
     if argv[0] == '--help':
         print(codes_command.__doc__)
-        return 0, ''
+        return ExitCodes.OK, ''
     if len(argv) > 1:
         return ExitCodes.TOO_MANY_ARGS, 'the command accept only one argument'
 
@@ -36,4 +36,4 @@ def codes_command(argv) -> CommandResult:
             code=color_code(code.ljust(width)),
             info=color_description(info),
         ))
-    return 0, ''
+    return ExitCodes.OK, ''
