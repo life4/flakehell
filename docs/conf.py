@@ -58,7 +58,6 @@ html_theme_options = {
 
     'extra_nav_links': {
         'GitHub repository': 'https://github.com/life4/flakehell',
-        'Create an issue': 'https://github.com/life4/flakehell/issues/new',
     },
 }
 
