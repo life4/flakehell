@@ -14,7 +14,5 @@ class PythonParser:
             with tokenize.open(str(path)) as fd:
                 return fd.readlines()
         except (SyntaxError, UnicodeError):
-            # If we can't detect the codec with tokenize.detect_encoding, or
-            # the detected encoding is incorrect, just fallback to latin-1.
-            with open(str(path), encoding="latin-1") as fd:
+            with open(str(path), encoding='utf8') as fd:
                 return fd.readlines()

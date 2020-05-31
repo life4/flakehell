@@ -220,8 +220,8 @@ class FlakeHellFileChecker(FileChecker):
         try:
             return FlakeHellProcessor(self.filename, self.options)
         except IOError as e:
-            message = "{0}: {1}".format(type(e).__name__, e)
-            self.report("E902", 0, 0, message)
+            message = '{0}: {1}'.format(type(e).__name__, e)
+            self.report('E902', 0, 0, message)
             return None
 
     def run_checks(self) -> Tuple[str, List[Result], Dict[str, Any]]:
