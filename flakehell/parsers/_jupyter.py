@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from types import MappingProxyType
+from typing import List
 
 
 class JupyterParser:
@@ -10,13 +11,14 @@ class JupyterParser:
     })
 
     @staticmethod
-    def parse(path: Path) -> str:
+    def parse(path: Path) -> List[str]:
         lines = []
         with path.open('r', encoding='utf8') as stream:
             notebook = json.load(stream)
             for cell in notebook['cells']:
                 if cell['cell_type'] != 'code':
                     continue
-                lines.append('\n# In [{}]:'.format(cell.get('execution_count', 0)))
-                lines.extend(line.rstrip('\n') for line in cell['source'])
-        return '\n'.join(lines) + '\n'
+                lines.append('\n')
+                lines.append('# In [{}]:\n'.format(cell.get('execution_count', 0)))
+                lines.extend(line.rstrip('\n') + '\n' for line in cell['source'])
+        return lines

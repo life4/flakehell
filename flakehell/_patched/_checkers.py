@@ -7,6 +7,7 @@ from flake8.checker import FileChecker, Manager
 from flake8.utils import filenames_from, fnmatch
 
 # app
+from ._processor import FlakeHellProcessor
 from .._logic import (
     Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
 )
@@ -214,6 +215,14 @@ class FlakeHellFileChecker(FileChecker):
     """
     snapshot: Snapshot
     _processed_plugin: str = DEFAULT_PLUGIN
+
+    def _make_processor(self) -> Optional[FlakeHellProcessor]:
+        try:
+            return FlakeHellProcessor(self.filename, self.options)
+        except IOError as e:
+            message = "{0}: {1}".format(type(e).__name__, e)
+            self.report("E902", 0, 0, message)
+            return None
 
     def run_checks(self) -> Tuple[str, List[Result], Dict[str, Any]]:
         if not self.processor:

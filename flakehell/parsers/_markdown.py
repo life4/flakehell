@@ -2,6 +2,7 @@ from enum import Enum
 from pathlib import Path
 from types import MappingProxyType
 from typing import Optional
+from typing import List
 
 
 class CodeType(Enum):
@@ -16,7 +17,7 @@ class MarkdownParser:
     })
 
     @classmethod
-    def parse(cls, path: Path) -> str:
+    def parse(cls, path: Path) -> List[str]:
         code_type = None
         indent = None
         lines = []
@@ -58,7 +59,7 @@ class MarkdownParser:
 
                 # save code line as-is
                 lines.append(line)
-        return ''.join(lines)
+        return lines
 
     @staticmethod
     def _get_code_type(line: str) -> Optional[CodeType]:

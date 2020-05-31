@@ -79,7 +79,7 @@ def test_markdown_parser(tmp_path: Path):
     path = tmp_path / 'example.md'
     path.write_text(GIVEN)
     actual = JupyterParser.parse(path=path)
-    assert actual == EXPECTED
+    assert ''.join(actual) == EXPECTED
 
     # test that the result is a valid python code
-    ast.parse(actual)
+    ast.parse(''.join(actual))
