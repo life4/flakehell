@@ -1,12 +1,13 @@
 import tokenize
 from pathlib import Path
 from types import MappingProxyType
-from typing import List
+from typing import List, Mapping, Tuple
+from ._base import BaseParser
 
 
-class PythonParser:
+class PythonParser(BaseParser):
     extensions = frozenset({'.py'})
-    ignore = MappingProxyType({})
+    ignore: Mapping[str, Tuple[str, ...]] = MappingProxyType({})
 
     @staticmethod
     def parse(path: Path) -> List[str]:

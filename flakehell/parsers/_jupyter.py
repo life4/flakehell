@@ -2,9 +2,10 @@ import json
 from pathlib import Path
 from types import MappingProxyType
 from typing import List
+from ._base import BaseParser
 
 
-class JupyterParser:
+class JupyterParser(BaseParser):
     extensions = frozenset({'.ipynb'})
     ignore = MappingProxyType({
         'pycodestyle': (),

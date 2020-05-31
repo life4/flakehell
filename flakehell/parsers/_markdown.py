@@ -3,6 +3,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Optional
 from typing import List
+from ._base import BaseParser
 
 
 class CodeType(Enum):
@@ -10,7 +11,7 @@ class CodeType(Enum):
     PYCON = 'pycon'
 
 
-class MarkdownParser:
+class MarkdownParser(BaseParser):
     extensions = frozenset({'.md'})
     ignore = MappingProxyType({
         'pycodestyle': (),
