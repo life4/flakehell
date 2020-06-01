@@ -32,8 +32,8 @@ PyCon:
 
 1. Indented:
     ```python
-    a = 'look at me!'
-    print('i am indented!')
+    if 'look at me!':
+        print('i am indented!')
     ```
 """
 
@@ -67,8 +67,8 @@ for character in banana:
 
 # 1. Indented:
 # ```python
-a = 'look at me!'
-print('i am indented!')
+if 'look at me!':
+    print('i am indented!')
 # ```
 """
 
