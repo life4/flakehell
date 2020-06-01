@@ -66,10 +66,10 @@ for character in banana:
 # ```
 
 # 1. Indented:
-#     ```python
+# ```python
 a = 'look at me!'
 print('i am indented!')
-#     ```
+# ```
 """
 
 

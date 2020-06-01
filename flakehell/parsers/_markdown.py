@@ -35,13 +35,13 @@ class MarkdownParser(BaseParser):
                     if new_code_type:
                         code_type = new_code_type
                     # ignore markdown and code block starts
-                    lines.append('# <removed>\n')
+                    lines.append('# {}\n'.format(line[:40].strip()))
                     continue
 
                 # detect code block end
                 if line.strip() == '```':
                     code_type = None
-                    lines.append('# <removed>\n')
+                    lines.append('# {}\n'.format(line[:40].strip()))
                     indent = None
                     continue
 
