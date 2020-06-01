@@ -13,29 +13,43 @@ class YAMLParser(BaseParser):
     def parse(cls, path: Path) -> List[str]:
         if not path.name.startswith(('test-', 'test_')):
             return []
-        try:
-            import yaml
-        except ImportError:
-            return []
-
         with path.open(encoding='utf8') as stream:
-            cases = yaml.safe_load(stream)
-        return cls._pytest_mypy_plugins(cases)
+            return cls._pytest_mypy_plugins(stream)
 
     @staticmethod
-    def _pytest_mypy_plugins(cases) -> List[str]:
+    def _pytest_mypy_plugins(stream) -> List[str]:
         """Parse pytest-mypy-plugins tests
 
         https://github.com/typeddjango/pytest-mypy-plugins
         """
-        if not isinstance(cases, list):
-            return []
+        code_block = False
+        code_found = False
+        indent = True
         lines = []
-        for case in cases:
-            if 'case' not in case:
+        for line in stream:
+            if not line.strip():
+                lines.append('\n')
                 continue
-            if 'main' not in case:
+
+            # start of new case or another directive inside the current case
+            if line.lstrip().startswith(('- case: ', 'disable_cache: ', 'files:')):
+                code_block = False
+                lines.append('# ' + line)
                 continue
-            lines.append('\n')
-            lines.extend(line + '\n' for line in case['main'].splitlines())
+
+            # start of code block
+            if line.lstrip().startswith('main: |'):
+                code_block = True
+                indent = None
+                lines.append('# ' + line)
+                continue
+
+            if indent is None:
+                indent = len(line) - len(line.lstrip())
+            if code_block:
+                lines.append(line[indent:])
+                code_found = True
+        if not code_found:
+            return []
+        lines[0] = 'reveal_type = lambda x: x  # noqa\n'
         return lines
