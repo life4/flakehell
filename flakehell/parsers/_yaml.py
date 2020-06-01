@@ -31,26 +31,33 @@ class YAMLParser(BaseParser):
                 lines.append('\n')
                 continue
 
-            # start of new case or another directive inside the current case
-            current_indent = len(line) - len(line.lstrip())
-            if indent is not None and current_indent < indent:
-                code_block = False
-                lines.append('# ' + line)
-                continue
-
             # start of code block
             if line.lstrip().startswith('main: |'):
                 code_block = True
                 indent = None
-                lines.append('# ' + line)
+                lines.append('# ' + line.lstrip())
                 continue
 
+            # not a code block
+            if not code_block:
+                lines.append('# ' + line.lstrip())
+                continue
+
+            # end of code block
+            current_indent = len(line) - len(line.lstrip())
+            if indent is not None and current_indent < indent:
+                code_block = False
+                lines.append('# ' + line.lstrip())
+                continue
+
+            # wite line from a code block
             if indent is None:
                 indent = current_indent
-            if code_block:
-                lines.append(line[indent:])
-                code_found = True
+            lines.append(line[indent:])
+            code_found = True
+
         if not code_found:
             return []
+        # Replace the first line (it can't be an actual code) by a mock for `reveal_type`.
         lines[0] = 'reveal_type = lambda x: x  # noqa\n'
         return lines
