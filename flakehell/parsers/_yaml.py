@@ -6,7 +6,7 @@ from ._base import BaseParser
 
 class YAMLParser(BaseParser):
     ignore = MappingProxyType({
-        'pycodestyle': (),
+        'pycodestyle': ('E302', 'E303', 'E305', 'E402', 'E501', 'W391'),
     })
 
     @classmethod
@@ -32,7 +32,8 @@ class YAMLParser(BaseParser):
                 continue
 
             # start of new case or another directive inside the current case
-            if line.lstrip().startswith(('- case: ', 'disable_cache: ', 'files:')):
+            current_indent = len(line) - len(line.lstrip())
+            if indent is not None and current_indent < indent:
                 code_block = False
                 lines.append('# ' + line)
                 continue
@@ -45,7 +46,7 @@ class YAMLParser(BaseParser):
                 continue
 
             if indent is None:
-                indent = len(line) - len(line.lstrip())
+                indent = current_indent
             if code_block:
                 lines.append(line[indent:])
                 code_found = True

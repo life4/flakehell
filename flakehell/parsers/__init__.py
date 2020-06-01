@@ -9,9 +9,10 @@ from ._yaml import YAMLParser
 
 
 __all__ = [
-    'PARSERS',
+    'BaseParser',
     'JupyterParser',
     'MarkdownParser',
+    'PARSERS',
     'PythonParser',
     'YAMLParser',
 ]

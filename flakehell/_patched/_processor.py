@@ -1,12 +1,14 @@
 from pathlib import Path
-from typing import List
+from typing import List, Type
 from flake8.processor import FileProcessor
-from ..parsers import PARSERS, PythonParser
+from ..parsers import BaseParser, PARSERS, PythonParser
 
 
 class FlakeHellProcessor(FileProcessor):
+    parser: Type[BaseParser] = PythonParser
+
     def read_lines_from_filename(self) -> List[str]:
         """Read the lines for a file."""
         path = Path(self.filename)
-        parser = PARSERS.get(path.suffix, PythonParser)
-        return parser.parse(path=path)
+        self.parser = PARSERS.get(path.suffix, PythonParser)
+        return self.parser.parse(path=path)

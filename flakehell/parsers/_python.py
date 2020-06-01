@@ -1,13 +1,10 @@
 import tokenize
 from pathlib import Path
-from types import MappingProxyType
-from typing import List, Mapping, Tuple
+from typing import List
 from ._base import BaseParser
 
 
 class PythonParser(BaseParser):
-    ignore: Mapping[str, Tuple[str, ...]] = MappingProxyType({})
-
     @staticmethod
     def parse(path: Path) -> List[str]:
         try:

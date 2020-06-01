@@ -171,19 +171,25 @@ class FlakeHellCheckersManager(Manager):
                 filename = self.options.stdin_display_name or 'stdin'
 
             with self.style_guide.processing_file(filename):
+                ignored = checker.processor.parser.ignore
                 for plugin_name, results in sorted(grouped_results.items()):
                     results_reported += self._handle_results(
                         filename=filename,
                         results=results,
                         plugin_name=plugin_name,
+                        ignored_codes=ignored.get(plugin_name, ()),
                     )
             results_found += len(all_results)
         return (results_found, results_reported)
 
-    def _handle_results(self, filename: str, results: list, plugin_name: str) -> int:
+    def _handle_results(
+        self, filename: str, results: list, plugin_name: str, ignored_codes: Tuple[str, ...],
+    ) -> int:
         rules = self._get_rules(plugin_name=plugin_name, filename=filename)
         reported_results_count = 0
         for result in results:
+            if result.error_code in ignored_codes:
+                continue
             if self.baseline:
                 digest = make_baseline(
                     path=filename,
