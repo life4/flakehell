@@ -1,10 +1,15 @@
 from pathlib import Path
+from types import MappingProxyType
 from typing import List, Optional
 from ._base import BaseParser
 from ._markdown import CodeType
 
 
 class RSTParser(BaseParser):
+    ignore = MappingProxyType({
+        'pycodestyle': ('E302', 'E303', 'E305', 'E402'),
+    })
+
     @classmethod
     def parse(cls, path: Path) -> List[str]:
         code_found = False
@@ -39,6 +44,8 @@ class RSTParser(BaseParser):
                 # For the first line of code check indentation.
                 if indent is None:
                     indent = current_indent
+                    if line.lstrip()[:4] == '>>> ':
+                        code_type = CodeType.PYCON
                 # Remove this identation from every line of the code block
                 line = line[indent:]
 
