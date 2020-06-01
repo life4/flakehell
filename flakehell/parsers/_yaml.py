@@ -24,7 +24,7 @@ class YAMLParser(BaseParser):
         """
         code_block = False
         code_found = False
-        indent = True
+        indent = None
         lines = []
         for line in stream:
             if not line.strip():
