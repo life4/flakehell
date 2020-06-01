@@ -12,13 +12,13 @@ class CodeType(Enum):
 
 
 class MarkdownParser(BaseParser):
-    extensions = frozenset({'.md'})
     ignore = MappingProxyType({
         'pycodestyle': (),
     })
 
     @classmethod
     def parse(cls, path: Path) -> List[str]:
+        code_found = False
         code_type = None
         indent = None
         lines = []
@@ -35,13 +35,13 @@ class MarkdownParser(BaseParser):
                     if new_code_type:
                         code_type = new_code_type
                     # ignore markdown and code block starts
-                    lines.append('# ' + line)
+                    lines.append('# <removed>\n')
                     continue
 
                 # detect code block end
                 if line.strip() == '```':
                     code_type = None
-                    lines.append('# ' + line)
+                    lines.append('# <removed>\n')
                     indent = None
                     continue
 
@@ -60,6 +60,9 @@ class MarkdownParser(BaseParser):
 
                 # save code line as-is
                 lines.append(line)
+                code_found = True
+        if not code_found:
+            return []
         return lines
 
     @staticmethod

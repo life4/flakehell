@@ -6,7 +6,6 @@ from ._base import BaseParser
 
 
 class JupyterParser(BaseParser):
-    extensions = frozenset({'.ipynb'})
     ignore = MappingProxyType({
         'pycodestyle': (),
     })

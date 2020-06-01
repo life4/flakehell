@@ -21,6 +21,9 @@ class Reporter(BaseReporter):
         pass
 
     def handle_message(self, msg):
+        # ignore `invalid syntax` messages, it is already checked by `pycodestyle`
+        if msg.msg_id == 'E0001':
+            return
         self.errors.append(dict(
             row=msg.line,
             col=msg.column,

@@ -111,7 +111,7 @@ Contributions are welcome! A few ideas what you can contribute:
 
 A convenient way to run tests is using [DepHell](https://github.com/dephell/dephell):
 
-```python
+```bash
 curl -L dephell.org/install | python3
 dephell venv create --env=pytest
 dephell deps install --env=pytest

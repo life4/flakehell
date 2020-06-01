@@ -227,6 +227,8 @@ class FlakeHellFileChecker(FileChecker):
     def run_checks(self) -> Tuple[str, List[Result], Dict[str, Any]]:
         if not self.processor:
             return self.filename, self.results, self.statistics
+        if not self.processor.lines:
+            return self.filename, self.results, self.statistics
         try:
             return super().run_checks()
         except Exception as exc:

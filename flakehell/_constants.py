@@ -12,6 +12,7 @@ VERSION = __version__
 # our own modern defaults
 DEFAULTS = dict(
     # redefined defaults
+    filename=['*.py', '*.ipynb', '*.md'],
     format='colored',
     max_line_length=90,
 

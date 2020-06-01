@@ -6,7 +6,6 @@ from ._base import BaseParser
 
 
 class PythonParser(BaseParser):
-    extensions = frozenset({'.py'})
     ignore: Mapping[str, Tuple[str, ...]] = MappingProxyType({})
 
     @staticmethod
