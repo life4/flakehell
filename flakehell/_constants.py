@@ -12,7 +12,7 @@ VERSION = __version__
 # our own modern defaults
 DEFAULTS = dict(
     # redefined defaults
-    filename=['*.py', '*.ipynb', '*.md'],
+    filename=['*.py', '*.ipynb', '*.md', '*.yml', '*.yaml'],
     format='colored',
     max_line_length=90,
 

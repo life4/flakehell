@@ -5,13 +5,22 @@ from ._base import BaseParser
 from ._jupyter import JupyterParser
 from ._markdown import MarkdownParser
 from ._python import PythonParser
+from ._yaml import YAMLParser
 
 
-__all__ = ['PARSERS', 'JupyterParser', 'MarkdownParser', 'PythonParser']
+__all__ = [
+    'PARSERS',
+    'JupyterParser',
+    'MarkdownParser',
+    'PythonParser',
+    'YAMLParser',
+]
 
 
 PARSERS: Mapping[str, Type[BaseParser]] = MappingProxyType({
     '.ipynb': JupyterParser,
     '.md': MarkdownParser,
     '.py': PythonParser,
+    '.yaml': YAMLParser,
+    '.yml': YAMLParser,
 })
