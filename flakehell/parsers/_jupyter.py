@@ -13,7 +13,7 @@ class JupyterParser(BaseParser):
     @staticmethod
     def parse(path: Path) -> List[str]:
         lines = []
-        with path.open('r', encoding='utf8') as stream:
+        with path.open(encoding='utf8') as stream:
             notebook = json.load(stream)
             for cell in notebook['cells']:
                 if cell['cell_type'] != 'code':

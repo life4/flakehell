@@ -31,15 +31,12 @@ class YAMLParser(BaseParser):
                 lines.append('\n')
                 continue
 
-            # start of code block
-            if line.lstrip().startswith('main: |'):
-                code_block = True
-                indent = None
-                lines.append('# ' + line.lstrip())
-                continue
-
-            # not a code block
             if not code_block:
+                # start of code block
+                if line.lstrip().startswith('main: |'):
+                    code_block = True
+                    indent = None
+                # ignore not code blocks
                 lines.append('# ' + line.lstrip())
                 continue
 
