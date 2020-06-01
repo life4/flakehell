@@ -1,15 +1,10 @@
 import json
 from pathlib import Path
-from types import MappingProxyType
 from typing import List
 from ._base import BaseParser
 
 
 class JupyterParser(BaseParser):
-    ignore = MappingProxyType({
-        'pycodestyle': (),
-    })
-
     @staticmethod
     def parse(path: Path) -> List[str]:
         lines = []

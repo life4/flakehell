@@ -11,9 +11,20 @@ class CodeType(Enum):
     PYCON = 'pycon'
 
 
+CODE_TYPES = {
+    'python': CodeType.PYTHON,
+    'python3': CodeType.PYTHON,
+    'py3': CodeType.PYTHON,
+    'python2': CodeType.PYTHON,
+    'py2': CodeType.PYTHON,
+
+    'pycon': CodeType.PYCON,
+}
+
+
 class MarkdownParser(BaseParser):
     ignore = MappingProxyType({
-        'pycodestyle': (),
+        'pycodestyle': ('E302', 'E303', 'E305', 'E402'),
     })
 
     @classmethod
@@ -48,6 +59,8 @@ class MarkdownParser(BaseParser):
                 # For the first line of code check indentation.
                 if indent is None:
                     indent = len(line) - len(line.lstrip())
+                    if line.lstrip()[:4] == '>>> ':
+                        code_type = CodeType.PYCON
                 # Remove this identation from every line of the code block
                 line = line[indent:]
 
@@ -70,8 +83,5 @@ class MarkdownParser(BaseParser):
         line = line.lstrip()
         if line[:3] != '```':
             return None
-        line = line[3:]
-        for tp in CodeType:
-            if line.lower().startswith(tp.value):
-                return tp
-        return None
+        lang = line[3:].lower().split()[0]
+        return CODE_TYPES.get(lang, None)

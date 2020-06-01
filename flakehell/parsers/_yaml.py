@@ -6,7 +6,7 @@ from ._base import BaseParser
 
 class YAMLParser(BaseParser):
     ignore = MappingProxyType({
-        'pycodestyle': ('E302', 'E303', 'E305', 'E402', 'E501', 'W391'),
+        'pycodestyle': ('E302', 'E303', 'E305', 'E402'),
     })
 
     @classmethod

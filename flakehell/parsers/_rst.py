@@ -2,7 +2,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import List, Optional
 from ._base import BaseParser
-from ._markdown import CodeType
+from ._markdown import CODE_TYPES, CodeType
 
 
 class RSTParser(BaseParser):
@@ -75,7 +75,4 @@ class RSTParser(BaseParser):
         if block.strip() not in ('code-block', 'code', 'sourcecode', 'ipython'):
             return None
         lang = lang.strip().lower()
-        for tp in CodeType:
-            if lang == tp.value:
-                return tp
-        return None
+        return CODE_TYPES.get(lang, None)
