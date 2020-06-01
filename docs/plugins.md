@@ -1,6 +1,6 @@
 # Plugins
 
-The main reason why flake8 is so popular is plugins support. FlakeHell is fully compatible with all plugins. Let's talk about most important ones.
+The main reason why flake8 is so popular is a powerful plugins' support. FlakeHell is fully compatible with all plugins. Let's talk about most important ones.
 
 + [pyflakes](https://github.com/PyCQA/pyflakes) -- checks only obvious bugs and never code style. There are no opinionated checks. Pyflakes must be enabled in any project, and all error must be fixed.
 + [pycodestyle](https://github.com/PyCQA/pycodestyle) -- most important code style checker. Controls compatibility with [PEP-8](https://www.python.org/dev/peps/pep-0008/) that is standard de-facto for how Python code should look like. Initially, with tool was called pep8, but [renamed after Guido's request](https://github.com/PyCQA/pycodestyle/issues/466).

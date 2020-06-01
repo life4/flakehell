@@ -7,6 +7,7 @@ from flake8.checker import FileChecker, Manager
 from flake8.utils import filenames_from, fnmatch
 
 # app
+from ._processor import FlakeHellProcessor
 from .._logic import (
     Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
 )
@@ -170,19 +171,29 @@ class FlakeHellCheckersManager(Manager):
                 filename = self.options.stdin_display_name or 'stdin'
 
             with self.style_guide.processing_file(filename):
+                ignored = checker.processor.parser.ignore
                 for plugin_name, results in sorted(grouped_results.items()):
                     results_reported += self._handle_results(
                         filename=filename,
                         results=results,
                         plugin_name=plugin_name,
+                        ignored_codes=ignored.get(plugin_name, ()),
                     )
             results_found += len(all_results)
         return (results_found, results_reported)
 
-    def _handle_results(self, filename: str, results: list, plugin_name: str) -> int:
+    def _handle_results(
+        self, filename: str, results: list, plugin_name: str, ignored_codes: Tuple[str, ...],
+    ) -> int:
         rules = self._get_rules(plugin_name=plugin_name, filename=filename)
         reported_results_count = 0
         for result in results:
+            # Some codes are ignored for a specific parser.
+            # For example, lack of blank lines for YAML parser.
+            if result.error_code in ignored_codes:
+                continue
+
+            # skip baselined errors
             if self.baseline:
                 digest = make_baseline(
                     path=filename,
@@ -193,9 +204,11 @@ class FlakeHellCheckersManager(Manager):
                 if digest in self.baseline:
                     continue
 
+            # skip explicitly excluded codes
             if not check_include(code=result.error_code, rules=rules):
                 continue
 
+            # report
             reported_results_count += self.style_guide.handle_error(
                 code=result.error_code,
                 filename=filename,
@@ -215,8 +228,18 @@ class FlakeHellFileChecker(FileChecker):
     snapshot: Snapshot
     _processed_plugin: str = DEFAULT_PLUGIN
 
+    def _make_processor(self) -> Optional[FlakeHellProcessor]:
+        try:
+            return FlakeHellProcessor(self.filename, self.options)
+        except IOError as e:
+            message = '{0}: {1}'.format(type(e).__name__, e)
+            self.report('E902', 0, 0, message)
+            return None
+
     def run_checks(self) -> Tuple[str, List[Result], Dict[str, Any]]:
         if not self.processor:
+            return self.filename, self.results, self.statistics
+        if not self.processor.lines:
             return self.filename, self.results, self.statistics
         try:
             return super().run_checks()
