@@ -188,8 +188,12 @@ class FlakeHellCheckersManager(Manager):
         rules = self._get_rules(plugin_name=plugin_name, filename=filename)
         reported_results_count = 0
         for result in results:
+            # Some codes are ignored for a specific parser.
+            # For example, lack of blank lines for YAML parser.
             if result.error_code in ignored_codes:
                 continue
+
+            # skip baselined errors
             if self.baseline:
                 digest = make_baseline(
                     path=filename,
@@ -200,9 +204,11 @@ class FlakeHellCheckersManager(Manager):
                 if digest in self.baseline:
                     continue
 
+            # skip explicitly excluded codes
             if not check_include(code=result.error_code, rules=rules):
                 continue
 
+            # report
             reported_results_count += self.style_guide.handle_error(
                 code=result.error_code,
                 filename=filename,

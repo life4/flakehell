@@ -11,10 +11,10 @@ Of course, it is fully integrated with FlakeHell and will take into account all 
 
 ```python
 # before
-err=1 # noqa: E225, E117
+err=1  # noqa: E225, E117
 
 # after
-err=1 # noqa: E225
+err=1  # noqa: E225
 ```
 
 Usage is simple: just provide paths you want to fix:
