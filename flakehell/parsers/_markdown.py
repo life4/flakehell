@@ -83,5 +83,8 @@ class MarkdownParser(BaseParser):
         line = line.lstrip()
         if line[:3] != '```':
             return None
-        lang = line[3:].lower().split()[0]
+        words = line[3:].lower().split()
+        if not words:
+            return None
+        lang = words[0]
         return CODE_TYPES.get(lang, None)

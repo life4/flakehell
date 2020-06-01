@@ -25,6 +25,7 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
     config
     formatters
     plugins
+    parsers
     ide
 
 .. toctree::

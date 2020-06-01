@@ -7,6 +7,7 @@
 
 It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
++ [Lint md, rst, ipynb, and more](https://flakehell.readthedocs.io/parsers.html).
 + [Shareable and remote configs](https://flakehell.readthedocs.io/config.html#base).
 + [Legacy-friendly](https://flakehell.readthedocs.io/commands/baseline.html): ability to get report only about new errors.
 + Caching for much better performance.
