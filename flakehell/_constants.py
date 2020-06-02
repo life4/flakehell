@@ -66,14 +66,12 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-bandit': 'https://github.com/tylerwince/flake8-bandit',
     'flake8-black': 'https://github.com/peterjc/flake8-black',
     'flake8-broken-line': 'https://github.com/sobolevn/flake8-broken-line',
-    'flake8-bugbear': 'https://github.com/PyCQA/flake8-bugbear',
     'flake8-builtins': 'https://github.com/gforcada/flake8-builtins',
     'flake8-coding': 'https://github.com/tk0miya/flake8-coding',
-    'flake8-commas': 'https://github.com/PyCQA/flake8-commas',
     'flake8-comprehensions': 'https://github.com/adamchainz/flake8-comprehensions',
     'flake8-debugger': 'https://github.com/JBKahn/flake8-debugger',
     'flake8-django': 'https://github.com/rocioar/flake8-django',
-    'flake8-docstrings': '',  # pydocstyle
+    'flake8-docstrings': 'https://gitlab.com/pycqa/flake8-docstrings',  # pydocstyle
     'flake8-eradicate': 'https://github.com/sobolevn/flake8-eradicate',
     'flake8-executable': 'https://github.com/xuhdev/flake8-executable',
     'flake8-fixme': 'https://github.com/tommilligan/flake8-fixme',
@@ -85,8 +83,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-print': 'https://github.com/JBKahn/flake8-print',
     'flake8-printf-formatting': 'https://github.com/atugushev/flake8-printf-formatting',
     'flake8-pyi': 'https://github.com/ambv/flake8-pyi',
-    'flake8-pytest-style': 'https://github.com/m-burst/flake8-pytest-style',
-    'flake8-pytest': '',
     'flake8-quotes': 'https://github.com/zheller/flake8-quotes',
     'flake8-requirements': 'https://github.com/Arkq/flake8-requirements',
     'flake8-rst-docstrings': '',
@@ -98,8 +94,17 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-todo': 'https://github.com/schlamar/flake8-todo',
     'flake8-variables-names': 'https://github.com/best-doctor/flake8-variables-names',
     'mccabe': '',
+
+    # tests
+    'flake8-aaa': 'https://github.com/jamescooke/flake8-aaa',
+    'flake8-pytest': 'https://github.com/vikingco/flake8-pytest',
+    'flake8-pytest-style': 'https://github.com/m-burst/flake8-pytest-style',
+
+    # PyCQA
+    'flake8-bugbear': 'https://github.com/PyCQA/flake8-bugbear',
+    'flake8-commas': 'https://github.com/PyCQA/flake8-commas',
     'pep8-naming': 'https://github.com/PyCQA/pep8-naming',
-    'pylint': '',
+    'pylint': 'https://github.com/PyCQA/pylint',
 
     # imports
     'flake8-future-import': 'https://github.com/xZise/flake8-future-import',
@@ -109,6 +114,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-tidy-imports': 'https://github.com/adamchainz/flake8-tidy-imports',
 
     # built-in in flake8
-    'pycodestyle': '',
-    'pyflakes': '',
+    'pycodestyle': 'https://github.com/PyCQA/pycodestyle',
+    'pyflakes': 'https://github.com/PyCQA/pyflakes',
 })

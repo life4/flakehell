@@ -66,6 +66,10 @@ def extract_flake8_absolute_import() -> Dict[str, str]:
     return extract_default(name='flake8_absolute_import.core')
 
 
+def extract_flake8_aaa() -> Dict[str, str]:
+    return extract_default(name='flake8_aaa.line_markers')
+
+
 def extract_flake8_variables_names() -> Dict[str, str]:
     return extract_default(name='flake8_variables_names.checker')
 

@@ -116,6 +116,7 @@ docs = [
 dev = [
     "dlint",
     "flake8-2020",
+    "flake8-aaa",
     "flake8-absolute-import",
     "flake8-alfred",
     "flake8-annotations-complexity",

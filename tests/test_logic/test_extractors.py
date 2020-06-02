@@ -47,3 +47,6 @@ def test_no_duplicate_links():
     all_urls = sorted(pl for pl in KNOWN_PLUGINS.values() if pl)
     unique_urls = sorted(set(all_urls))
     assert all_urls == unique_urls
+
+    for url in all_urls:
+        assert url.startswith('https://')

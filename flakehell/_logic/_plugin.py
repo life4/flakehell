@@ -9,6 +9,7 @@ from flake8.utils import fnmatch
 
 REX_NAME = re.compile(r'[-_.]+')
 ALIASES = {
+    'aaa': 'flake8-aaa',
     'flake-mutable': 'flake8-mutable',
     'import-order': 'flake8-import-order',
     'logging-format': 'flake8-logging-format',
