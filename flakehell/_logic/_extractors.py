@@ -323,13 +323,6 @@ def extract_dlint() -> Dict[str, str]:
     return codes
 
 
-def extract_mccabe() -> Dict[str, str]:
-    from mccabe import McCabeChecker
-
-    code, message = McCabeChecker._error_tmpl.split(' ', maxsplit=1)
-    return {code: message}
-
-
 def extract_flake8_mock() -> Dict[str, str]:
     from flake8_mock import MOCK_ERROR_CODE, ERROR_MESSAGE
 
