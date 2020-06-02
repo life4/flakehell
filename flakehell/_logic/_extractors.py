@@ -39,7 +39,7 @@ def get_messages(code: str, content: str) -> Dict[str, str]:
     return messages
 
 
-def extract_default(name) -> Dict[str, str]:
+def extract_default(name: str) -> Dict[str, str]:
     module = import_module(name)
     content = Path(module.__file__).read_text()
     return get_messages(code='', content=content)
@@ -126,6 +126,33 @@ def extract_pep8_naming() -> Dict[str, str]:
         for code, message in checker.__dict__.items():
             if code[0] == 'N':
                 codes[code] = message
+    return codes
+
+
+def extract_flake8_pyi() -> Dict[str, str]:
+    import pyi
+    codes = dict()
+    for name, value in vars(pyi).items():
+        if name.startswith('Y0'):
+            codes[name] = value
+    return codes
+
+
+def extract_flake8_requirements() -> Dict[str, str]:
+    return extract_default(name='flake8_requirements.checker')
+
+
+def extract_flake8_pytest_style() -> Dict[str, str]:
+    from flake8_pytest_style import errors
+    codes = dict()
+    for error in vars(errors).values():
+        if error is errors.Error:
+            continue
+        if not isinstance(error, type):
+            continue
+        if not issubclass(error, errors.Error):
+            continue
+        codes[error.code] = error.message
     return codes
 
 
