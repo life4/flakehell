@@ -17,6 +17,8 @@ ALIASES = {
     'naming': 'pep8-naming',
     'pyflakes': 'pyflakes',
     'sql': 'flake8-sql',
+    'use-fstring-format': 'flake8-use-fstring',
+    'use-fstring-percent': 'flake8-use-fstring',
 }
 PluginsType = Dict[str, List[str]]
 

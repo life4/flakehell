@@ -74,6 +74,7 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-docstrings': 'https://gitlab.com/pycqa/flake8-docstrings',  # pydocstyle
     'flake8-eradicate': 'https://github.com/sobolevn/flake8-eradicate',
     'flake8-executable': 'https://github.com/xuhdev/flake8-executable',
+    'flake8-expression-complexity': 'https://github.com/best-doctor/flake8-expression-complexity',
     'flake8-fixme': 'https://github.com/tommilligan/flake8-fixme',
     'flake8-functions': 'https://github.com/best-doctor/flake8-functions',
     'flake8-logging-format': 'https://github.com/globality-corp/flake8-logging-format',
@@ -92,6 +93,7 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-strict': 'https://github.com/smarkets/flake8-strict',
     'flake8-string-format': 'https://github.com/xZise/flake8-string-format',
     'flake8-todo': 'https://github.com/schlamar/flake8-todo',
+    'flake8-use-fstring': 'https://github.com/MichaelKim0407/flake8-use-fstring',
     'flake8-variables-names': 'https://github.com/best-doctor/flake8-variables-names',
     'mccabe': '',
 

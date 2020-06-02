@@ -90,6 +90,34 @@ def extract_flake8_requirements() -> Dict[str, str]:
     return extract_default(name='flake8_requirements.checker')
 
 
+def extract_flake8_expression_complexity() -> Dict[str, str]:
+    return extract_default(name='flake8_expression_complexity.checker')
+
+
+def extract_flake8_use_fstring() -> Dict[str, str]:
+    codes = dict()
+    codes.update(extract_default(name='flake8_use_fstring.format'))
+    codes.update(extract_default(name='flake8_use_fstring.percent'))
+    # https://github.com/MichaelKim0407/flake8-use-fstring/pull/2
+    try:
+        codes.update(extract_default(name='flake8_use_fstring.prefix'))
+    except ImportError:
+        pass
+    return codes
+
+
+def extract_flake8_functions() -> Dict[str, str]:
+    codes = dict()
+    codes.update(extract_default('flake8_functions.checker'))
+    try:
+        codes.update(extract_default('flake8_functions.function_arguments_amount'))
+        codes.update(extract_default('flake8_functions.function_lenght'))
+        codes.update(extract_default('flake8_functions.function_purity'))
+    except ImportError:
+        pass
+    return codes
+
+
 # -- HARDCODED CODES -- #
 
 
@@ -135,18 +163,6 @@ def extract_flake8_commas() -> Dict[str, str]:
     from flake8_commas._base import ERRORS
 
     return dict(ERRORS.values())
-
-
-def extract_flake8_functions() -> Dict[str, str]:
-    codes = dict()
-    codes.update(extract_default('flake8_functions.checker'))
-    try:
-        codes.update(extract_default('flake8_functions.function_arguments_amount'))
-        codes.update(extract_default('flake8_functions.function_lenght'))
-        codes.update(extract_default('flake8_functions.function_purity'))
-    except ImportError:
-        pass
-    return codes
 
 
 def extract_flake8_debugger() -> Dict[str, str]:
