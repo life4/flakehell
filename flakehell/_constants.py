@@ -68,6 +68,7 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-broken-line': 'https://github.com/sobolevn/flake8-broken-line',
     'flake8-builtins': 'https://github.com/gforcada/flake8-builtins',
     'flake8-coding': 'https://github.com/tk0miya/flake8-coding',
+    'flake8-cognitive-complexity': 'https://github.com/Melevir/flake8-cognitive-complexity',
     'flake8-comprehensions': 'https://github.com/adamchainz/flake8-comprehensions',
     'flake8-debugger': 'https://github.com/JBKahn/flake8-debugger',
     'flake8-docstrings': 'https://gitlab.com/pycqa/flake8-docstrings',  # pydocstyle
