@@ -95,7 +95,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-todo': 'https://github.com/schlamar/flake8-todo',
     'flake8-use-fstring': 'https://github.com/MichaelKim0407/flake8-use-fstring',
     'flake8-variables-names': 'https://github.com/best-doctor/flake8-variables-names',
-    'mccabe': '',
 
     # framework-specific
     'flake8-django': 'https://github.com/rocioar/flake8-django',
@@ -104,12 +103,14 @@ KNOWN_PLUGINS = MappingProxyType({
 
     # tests
     'flake8-aaa': 'https://github.com/jamescooke/flake8-aaa',
+    'flake8-mock': 'https://github.com/aleGpereira/flake8-mock',
     'flake8-pytest': 'https://github.com/vikingco/flake8-pytest',
     'flake8-pytest-style': 'https://github.com/m-burst/flake8-pytest-style',
 
     # PyCQA
     'flake8-bugbear': 'https://github.com/PyCQA/flake8-bugbear',
     'flake8-commas': 'https://github.com/PyCQA/flake8-commas',
+    'mccabe': 'https://github.com/PyCQA/mccabe',
     'pep8-naming': 'https://github.com/PyCQA/pep8-naming',
     'pylint': 'https://github.com/PyCQA/pylint',
 
