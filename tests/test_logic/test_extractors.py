@@ -12,6 +12,14 @@ def test_smoke_extract(plugin_name):
     codes = extract(plugin_name)
     assert codes
 
+    for code, msg in codes.items():
+        assert type(code) is str, 'bad code type'
+        assert type(msg) is str, 'bad message type'
+
+        # that's not exactly true but all plugins follow this convention
+        assert code[0].isalpha(), 'code must start from letter'
+        assert code[0].isupper(), 'code must be uppercase'
+
 
 @pytest.mark.parametrize('plugin_name', KNOWN_PLUGINS)
 def test_smoke_prefixes(plugin_name):
