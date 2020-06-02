@@ -70,7 +70,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-coding': 'https://github.com/tk0miya/flake8-coding',
     'flake8-comprehensions': 'https://github.com/adamchainz/flake8-comprehensions',
     'flake8-debugger': 'https://github.com/JBKahn/flake8-debugger',
-    'flake8-django': 'https://github.com/rocioar/flake8-django',
     'flake8-docstrings': 'https://gitlab.com/pycqa/flake8-docstrings',  # pydocstyle
     'flake8-eradicate': 'https://github.com/sobolevn/flake8-eradicate',
     'flake8-executable': 'https://github.com/xuhdev/flake8-executable',
@@ -86,7 +85,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-quotes': 'https://github.com/zheller/flake8-quotes',
     'flake8-requirements': 'https://github.com/Arkq/flake8-requirements',
     'flake8-rst-docstrings': '',
-    'flake8-scrapy': 'https://github.com/stummjr/flake8-scrapy',
     'flake8-spellcheck': 'https://github.com/MichaelAquilina/flake8-spellcheck',
     'flake8-sql': 'https://github.com/pgjones/flake8-sql',
     'flake8-strict': 'https://github.com/smarkets/flake8-strict',
@@ -94,6 +92,11 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-todo': 'https://github.com/schlamar/flake8-todo',
     'flake8-variables-names': 'https://github.com/best-doctor/flake8-variables-names',
     'mccabe': '',
+
+    # framework-specific
+    'flake8-django': 'https://github.com/rocioar/flake8-django',
+    'flake8-scrapy': 'https://github.com/stummjr/flake8-scrapy',
+    'pandas-vet': 'https://github.com/deppen8/pandas-vet',
 
     # tests
     'flake8-aaa': 'https://github.com/jamescooke/flake8-aaa',

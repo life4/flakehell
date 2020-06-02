@@ -160,6 +160,7 @@ dev = [
     "flake8-todo",
     "flake8-variables-names",
     "mccabe",
+    "pandas-vet",
     "pep8-naming",
     "pylint",
     "typing-extensions", # required by WPS but isn't installed by DepHell
