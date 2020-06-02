@@ -31,6 +31,7 @@ def get_messages(code: str, content: str) -> Dict[str, str]:
         message_code, _, message_text = message.partition(' ')
         if not message_text:
             continue
+        message_code = message_code.rstrip(':')
         if not REX_CODE.match(message_code):
             continue
         if code and not message_code.startswith(code):
@@ -190,16 +191,6 @@ def extract_flake8_string_format() -> Dict[str, str]:
     return {'P{}'.format(c): m for c, m in StringFormatChecker.ERRORS.items()}
 
 
-def extract_flake8_broken_line() -> Dict[str, str]:
-    try:
-        from flake8_broken_line import N400
-    except ImportError:
-        from flake8_broken_line import _N400 as N400
-
-    code, message = N400.split(': ')
-    return {code: message}
-
-
 def extract_flake8_bandit() -> Dict[str, str]:
     from bandit.core.extension_loader import MANAGER
 
@@ -285,19 +276,6 @@ def extract_flake8_scrapy() -> Dict[str, str]:
     for finders in ScrapyStyleIssueFinder().finders.values():
         for finder in finders:
             codes[finder.msg_code] = finder.msg_info
-    return codes
-
-
-def extract_flake8_pie() -> Dict[str, str]:
-    import flake8_pie
-
-    codes = dict()
-    for name in dir(flake8_pie):
-        if not name.startswith('PIE'):
-            continue
-        obj = getattr(flake8_pie, name)('', '')
-        code, msg = obj.message.split(': ', maxsplit=1)
-        codes[code] = msg
     return codes
 
 
