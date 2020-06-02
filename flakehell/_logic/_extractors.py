@@ -215,7 +215,7 @@ def extract_flake8_pytest_style() -> Dict[str, str]:
             continue
         if not issubclass(error, errors.Error):
             continue
-        codes[error.code] = error.message
+        codes[error.code] = error.message  # type: ignore
     return codes
 
 
