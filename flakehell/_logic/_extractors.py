@@ -62,6 +62,10 @@ def extract(name) -> Dict[str, str]:
 # -- EXTRACTORS WITH A CUSTOM PATH -- #
 
 
+def extract_flake8_absolute_import() -> Dict[str, str]:
+    return extract_default(name='flake8_absolute_import.core')
+
+
 def extract_flake8_variables_names() -> Dict[str, str]:
     return extract_default(name='flake8_variables_names.checker')
 

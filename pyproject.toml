@@ -116,6 +116,7 @@ docs = [
 dev = [
     "dlint",
     "flake8-2020",
+    "flake8-absolute-import",
     "flake8-alfred",
     "flake8-annotations-complexity",
     "flake8-bandit",
@@ -154,6 +155,7 @@ dev = [
     "flake8-sql",
     "flake8-strict",
     "flake8-string-format",
+    "flake8-tidy-imports",
     "flake8-todo",
     "flake8-variables-names",
     "mccabe",

@@ -105,6 +105,8 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-future-import': 'https://github.com/xZise/flake8-future-import',
     'flake8-import-order': 'https://github.com/PyCQA/flake8-import-order',
     'flake8-isort': 'https://github.com/gforcada/flake8-isort',
+    'flake8-absolute-import': 'https://github.com/bskinn/flake8-absolute-import',
+    'flake8-tidy-imports': 'https://github.com/adamchainz/flake8-tidy-imports',
 
     # built-in in flake8
     'pycodestyle': '',
