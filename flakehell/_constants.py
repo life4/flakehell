@@ -56,12 +56,14 @@ class ExitCode(IntEnum):
     NOT_ENOUGH_ARGS = 32
 
 
+# If a plugin isn't there, it still should be supported.
+# However, support for these plugins is tested on CI.
 KNOWN_PLUGINS = MappingProxyType({
-    'dlint': '',
+    'dlint': 'https://github.com/dlint-py/dlint',
     'flake8-2020': 'https://github.com/asottile/flake8-2020',
     'flake8-alfred': 'https://github.com/datatheorem/flake8-alfred',
-    'flake8-annotations-complexity': '',
-    'flake8-bandit': '',
+    'flake8-annotations-complexity': 'https://github.com/best-doctor/flake8-annotations-complexity',
+    'flake8-bandit': 'https://github.com/tylerwince/flake8-bandit',
     'flake8-black': 'https://github.com/peterjc/flake8-black',
     'flake8-broken-line': 'https://github.com/sobolevn/flake8-broken-line',
     'flake8-bugbear': 'https://github.com/PyCQA/flake8-bugbear',
@@ -75,8 +77,6 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-eradicate': 'https://github.com/sobolevn/flake8-eradicate',
     'flake8-executable': 'https://github.com/xuhdev/flake8-executable',
     'flake8-fixme': 'https://github.com/tommilligan/flake8-fixme',
-    'flake8-future-import': '',
-    'flake8-isort': '',
     'flake8-logging-format': 'https://github.com/globality-corp/flake8-logging-format',
     'flake8-mutable': 'https://github.com/ebeweber/flake8-mutable',
     'flake8-mypy': 'https://github.com/ambv/flake8-mypy',
@@ -87,16 +87,24 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-pyi': 'https://github.com/ambv/flake8-pyi',
     'flake8-pytest-style': 'https://github.com/m-burst/flake8-pytest-style',
     'flake8-pytest': '',
-    'flake8-requirements': 'https://github.com/Arkq/flake8-requirements',
     'flake8-quotes': 'https://github.com/zheller/flake8-quotes',
+    'flake8-requirements': 'https://github.com/Arkq/flake8-requirements',
     'flake8-rst-docstrings': '',
     'flake8-scrapy': 'https://github.com/stummjr/flake8-scrapy',
+    'flake8-spellcheck': 'https://github.com/MichaelAquilina/flake8-spellcheck',
+    'flake8-sql': 'https://github.com/pgjones/flake8-sql',
     'flake8-strict': 'https://github.com/smarkets/flake8-strict',
     'flake8-string-format': 'https://github.com/xZise/flake8-string-format',
+    'flake8-todo': 'https://github.com/schlamar/flake8-todo',
     'flake8-variables-names': 'https://github.com/best-doctor/flake8-variables-names',
     'mccabe': '',
-    'pep8-naming': '',
+    'pep8-naming': 'https://github.com/PyCQA/pep8-naming',
     'pylint': '',
+
+    # imports
+    'flake8-future-import': 'https://github.com/xZise/flake8-future-import',
+    'flake8-import-order': 'https://github.com/PyCQA/flake8-import-order',
+    'flake8-isort': 'https://github.com/gforcada/flake8-isort',
 
     # built-in in flake8
     'pycodestyle': '',
