@@ -59,51 +59,26 @@ def extract(name) -> Dict[str, str]:
     return extract_default(name)
 
 
-# AD-HOC EXTRACTORS
-
-
-def extract_flake8_commas() -> Dict[str, str]:
-    from flake8_commas._base import ERRORS
-
-    return dict(ERRORS.values())
-
-
-def extract_flake8_quotes() -> Dict[str, str]:
-    import flake8_quotes
-
-    content = Path(flake8_quotes.__file__).read_text()
-    return get_messages(code='Q0', content=content)
+# -- EXTRACTORS WITH A CUSTOM PATH -- #
 
 
 def extract_flake8_variables_names() -> Dict[str, str]:
-    from flake8_variables_names import checker
-
-    content = Path(checker.__file__).read_text()
-    return get_messages(code='VNE', content=content)
+    return extract_default(name='flake8_variables_names.checker')
 
 
 def extract_logging_format() -> Dict[str, str]:
-    from logging_format import violations
-
-    content = Path(violations.__file__).read_text()
-    return get_messages(code='G', content=content)
+    return extract_default(name='logging_format.violations')
 
 
-def extract_flake8_debugger() -> Dict[str, str]:
-    from flake8_debugger import DEBUGGER_ERROR_CODE
-    return {DEBUGGER_ERROR_CODE: 'trace found'}
+def extract_flake8_sql() -> Dict[str, str]:
+    return extract_default(name='flake8_sql.linter')
 
 
-def extract_flake8_mutable() -> Dict[str, str]:
-    from mutable_defaults import MutableDefaultChecker
-
-    return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
+def extract_flake8_requirements() -> Dict[str, str]:
+    return extract_default(name='flake8_requirements.checker')
 
 
-def extract_flake8_fixme() -> Dict[str, str]:
-    from flake8_fixme import WORD_CODES
-
-    return {code: 'fixme found ({})'.format(word) for word, code in WORD_CODES.items()}
+# -- HARDCODED CODES -- #
 
 
 def extract_flake8_spellcheck() -> Dict[str, str]:
@@ -123,10 +98,6 @@ def extract_flake8_import_order() -> Dict[str, str]:
     }
 
 
-def extract_flake8_sql() -> Dict[str, str]:
-    return extract_default(name='flake8_sql.linter')
-
-
 def extract_flake8_black() -> Dict[str, str]:
     from flake8_black import black_prefix
 
@@ -135,6 +106,40 @@ def extract_flake8_black() -> Dict[str, str]:
         black_prefix + '997': 'Invalid TOML file',
         black_prefix + '999': 'Unexpected exception',
     }
+
+
+def extract_flake8_alfred() -> Dict[str, str]:
+    return {'B1': 'banned symbol'}
+
+
+def extract_flake8_eradicate() -> Dict[str, str]:
+    return {'E800': 'Found commented out code: {0}'}
+
+
+# -- AD-HOC EXTRACTORS -- #
+
+
+def extract_flake8_commas() -> Dict[str, str]:
+    from flake8_commas._base import ERRORS
+
+    return dict(ERRORS.values())
+
+
+def extract_flake8_debugger() -> Dict[str, str]:
+    from flake8_debugger import DEBUGGER_ERROR_CODE
+    return {DEBUGGER_ERROR_CODE: 'trace found'}
+
+
+def extract_flake8_mutable() -> Dict[str, str]:
+    from mutable_defaults import MutableDefaultChecker
+
+    return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
+
+
+def extract_flake8_fixme() -> Dict[str, str]:
+    from flake8_fixme import WORD_CODES
+
+    return {code: 'fixme found ({})'.format(word) for word, code in WORD_CODES.items()}
 
 
 def extract_pep8_naming() -> Dict[str, str]:
@@ -160,10 +165,6 @@ def extract_flake8_pyi() -> Dict[str, str]:
     return codes
 
 
-def extract_flake8_requirements() -> Dict[str, str]:
-    return extract_default(name='flake8_requirements.checker')
-
-
 def extract_flake8_pytest_style() -> Dict[str, str]:
     from flake8_pytest_style import errors
     codes = dict()
@@ -176,14 +177,6 @@ def extract_flake8_pytest_style() -> Dict[str, str]:
             continue
         codes[error.code] = error.message
     return codes
-
-
-def extract_flake8_alfred() -> Dict[str, str]:
-    return {'B1': 'banned symbol'}
-
-
-def extract_flake8_eradicate() -> Dict[str, str]:
-    return {'E800': 'Found commented out code: {0}'}
 
 
 def extract_flake8_annotations_complexity() -> Dict[str, str]:
