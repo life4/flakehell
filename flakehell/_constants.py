@@ -64,7 +64,7 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-alfred': 'https://github.com/datatheorem/flake8-alfred',
     'flake8-annotations-complexity': 'https://github.com/best-doctor/flake8-annotations-complexity',
     'flake8-bandit': 'https://github.com/tylerwince/flake8-bandit',
-    # 'flake8-black': 'https://github.com/peterjc/flake8-black',
+    'flake8-black': 'https://github.com/peterjc/flake8-black',
     'flake8-broken-line': 'https://github.com/sobolevn/flake8-broken-line',
     'flake8-builtins': 'https://github.com/gforcada/flake8-builtins',
     'flake8-coding': 'https://github.com/tk0miya/flake8-coding',
