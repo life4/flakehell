@@ -135,6 +135,7 @@ dev = [
     "flake8-eradicate",
     "flake8-executable",
     "flake8-fixme",
+    "flake8-functions",
     "flake8-future-import",
     "flake8-import-order",
     "flake8-isort",

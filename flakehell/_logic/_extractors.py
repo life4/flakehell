@@ -137,6 +137,18 @@ def extract_flake8_commas() -> Dict[str, str]:
     return dict(ERRORS.values())
 
 
+def extract_flake8_functions() -> Dict[str, str]:
+    codes = dict()
+    codes.update(extract_default('flake8_functions.checker'))
+    try:
+        codes.update(extract_default('flake8_functions.function_arguments_amount'))
+        codes.update(extract_default('flake8_functions.function_lenght'))
+        codes.update(extract_default('flake8_functions.function_purity'))
+    except ImportError:
+        pass
+    return codes
+
+
 def extract_flake8_debugger() -> Dict[str, str]:
     from flake8_debugger import DEBUGGER_ERROR_CODE
     return {DEBUGGER_ERROR_CODE: 'trace found'}

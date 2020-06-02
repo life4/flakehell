@@ -75,6 +75,7 @@ KNOWN_PLUGINS = MappingProxyType({
     'flake8-eradicate': 'https://github.com/sobolevn/flake8-eradicate',
     'flake8-executable': 'https://github.com/xuhdev/flake8-executable',
     'flake8-fixme': 'https://github.com/tommilligan/flake8-fixme',
+    'flake8-functions': 'https://github.com/best-doctor/flake8-functions',
     'flake8-logging-format': 'https://github.com/globality-corp/flake8-logging-format',
     'flake8-mutable': 'https://github.com/ebeweber/flake8-mutable',
     'flake8-mypy': 'https://github.com/ambv/flake8-mypy',
