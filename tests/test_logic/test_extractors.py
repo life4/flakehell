@@ -44,7 +44,7 @@ def test_no_custom_extractor_needed(plugin_name):
 
 
 def test_no_duplicate_links():
-    all_urls = sorted(pl for pl in KNOWN_PLUGINS.values() if pl)
+    all_urls = sorted(KNOWN_PLUGINS.values())
     unique_urls = sorted(set(all_urls))
     assert all_urls == unique_urls
 
