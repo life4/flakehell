@@ -99,6 +99,22 @@ def extract_flake8_mutable() -> Dict[str, str]:
     return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
 
 
+def extract_flake8_fixme() -> Dict[str, str]:
+    from flake8_fixme import WORD_CODES
+
+    return {code: 'fixme found ({})'.format(word) for word, code in WORD_CODES.items()}
+
+
+def extract_flake8_black() -> Dict[str, str]:
+    from flake8_black import black_prefix
+
+    return {
+        black_prefix + '901': 'Invalid input',
+        black_prefix + '997': 'Invalid TOML file',
+        black_prefix + '999': 'Unexpected exception',
+    }
+
+
 def extract_pep8_naming() -> Dict[str, str]:
     import pep8ext_naming
 
