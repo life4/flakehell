@@ -5,6 +5,7 @@ from typing import Any, Dict
 # external
 import toml
 import urllib3
+from flake8.utils import normalize_paths
 
 
 def read_config(*paths) -> Dict[str, Any]:
@@ -59,5 +60,8 @@ def _parse_config(content: str) -> Dict[str, Any]:
         if not isinstance(paths, list):
             paths = [paths]
         config = _merge_configs(read_config(*paths), config)
+
+    if 'exclude' in config:
+        config['exclude'] = normalize_paths(config['exclude'])
 
     return config
