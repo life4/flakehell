@@ -17,9 +17,7 @@ before_install:
   - tree
   # install DepHell
   - curl -L dephell.org/install > install.py
-  - ls -lah /opt/python/
-  - ls -lah /opt/python/3.7/
-  - /opt/python/3.7/bin/python install.py --branch=master
+  - /opt/python/3.7.1/bin/python install.py --branch=master
   - dephell inspect self
 install:
   - dephell venv create --env=$ENV --python="/opt/python/$TRAVIS_PYTHON_VERSION/bin/python"
