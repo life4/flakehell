@@ -22,7 +22,7 @@ before_install:
 install:
   - dephell venv create --env=$ENV --python="/opt/python/$TRAVIS_PYTHON_VERSION/bin/python"
   - dephell deps install --env=$ENV
-  - dephell project register
+  - dephell project register --traceback --level=DEBUG
 script:
   - dephell venv run --env=$ENV --traceback --level=DEBUG
 
