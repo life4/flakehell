@@ -16,30 +16,30 @@ before_install:
   - env
   - tree
   # install DepHell
-  # https://github.com/travis-ci/travis-ci/issues/8589
-  - curl -L dephell.org/install | /opt/python/3.7/bin/python
+  - curl -L dephell.org/install > install.py
+  - /opt/python/3.7.1/bin/python install.py --branch=master
   - dephell inspect self
 install:
   - dephell venv create --env=$ENV --python="/opt/python/$TRAVIS_PYTHON_VERSION/bin/python"
   - dephell deps install --env=$ENV
-  - dephell project register
+  - dephell project register --traceback --level=DEBUG
 script:
-  - dephell venv run --env=$ENV
+  - dephell venv run --env=$ENV --traceback --level=DEBUG
 
 matrix:
   include:
 
     - python: "3.6.7"
       env: ENV=pytest
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=pytest
     - python: "3.8"
       env: ENV=pytest
 
     - name: lint
-      python: "3.7"
+      python: "3.7.1"
       env: ENV=main
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=typing
 
     # https://github.com/igorshubovych/markdownlint-cli
@@ -53,5 +53,5 @@ matrix:
       script:
         - bash -c "markdownlint --config markdownlint.json **/*.md"
 
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=docs
