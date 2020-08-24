@@ -19,6 +19,7 @@ ALIASES = {
     'sql': 'flake8-sql',
     'use-fstring-format': 'flake8-use-fstring',
     'use-fstring-percent': 'flake8-use-fstring',
+    'use-fstring-prefix': 'flake8-use-fstring',
 }
 PluginsType = Dict[str, List[str]]
 
