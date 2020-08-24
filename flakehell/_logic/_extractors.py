@@ -31,6 +31,7 @@ def get_messages(code: str, content: str) -> Dict[str, str]:
         message_code, _, message_text = message.partition(' ')
         if not message_text:
             continue
+        message_code = message_code.rstrip(':')
         if not REX_CODE.match(message_code):
             continue
         if code and not message_code.startswith(code):
@@ -39,7 +40,7 @@ def get_messages(code: str, content: str) -> Dict[str, str]:
     return messages
 
 
-def extract_default(name) -> Dict[str, str]:
+def extract_default(name: str) -> Dict[str, str]:
     module = import_module(name)
     content = Path(module.__file__).read_text()
     return get_messages(code='', content=content)
@@ -58,34 +59,110 @@ def extract(name) -> Dict[str, str]:
     return extract_default(name)
 
 
-# AD-HOC EXTRACTORS
+# -- EXTRACTORS WITH A CUSTOM PATH -- #
+
+
+def extract_flake8_absolute_import() -> Dict[str, str]:
+    return extract_default(name='flake8_absolute_import.core')
+
+
+def extract_flake8_aaa() -> Dict[str, str]:
+    return extract_default(name='flake8_aaa.line_markers')
+
+
+def extract_flake8_cognitive_complexity() -> Dict[str, str]:
+    return extract_default(name='flake8_cognitive_complexity.checker')
+
+
+def extract_flake8_variables_names() -> Dict[str, str]:
+    return extract_default(name='flake8_variables_names.checker')
+
+
+def extract_logging_format() -> Dict[str, str]:
+    return extract_default(name='logging_format.violations')
+
+
+def extract_flake8_sql() -> Dict[str, str]:
+    return extract_default(name='flake8_sql.linter')
+
+
+def extract_flake8_requirements() -> Dict[str, str]:
+    return extract_default(name='flake8_requirements.checker')
+
+
+def extract_flake8_expression_complexity() -> Dict[str, str]:
+    return extract_default(name='flake8_expression_complexity.checker')
+
+
+def extract_flake8_use_fstring() -> Dict[str, str]:
+    codes = dict()
+    codes.update(extract_default(name='flake8_use_fstring.format'))
+    codes.update(extract_default(name='flake8_use_fstring.percent'))
+    # https://github.com/MichaelKim0407/flake8-use-fstring/pull/2
+    try:
+        codes.update(extract_default(name='flake8_use_fstring.prefix'))
+    except ImportError:
+        pass
+    return codes
+
+
+def extract_flake8_functions() -> Dict[str, str]:
+    codes = dict()
+    codes.update(extract_default('flake8_functions.checker'))
+    try:
+        codes.update(extract_default('flake8_functions.function_arguments_amount'))
+        codes.update(extract_default('flake8_functions.function_lenght'))
+        codes.update(extract_default('flake8_functions.function_purity'))
+    except ImportError:
+        pass
+    return codes
+
+
+# -- HARDCODED CODES -- #
+
+
+def extract_flake8_spellcheck() -> Dict[str, str]:
+    return {
+        'SC100': 'Spelling error in comments',
+        'SC200': 'Spelling error in name',
+    }
+
+
+def extract_flake8_import_order() -> Dict[str, str]:
+    return {
+        'I666': 'Import statement mixes groups.',
+        'I100': 'Import statements are in the wrong order.',
+        'I101': 'Imported names are in the wrong order.',
+        'I201': 'Missing newline between import groups.',
+        'I202': 'Additional newline in a group of imports.',
+    }
+
+
+def extract_flake8_black() -> Dict[str, str]:
+    from flake8_black import black_prefix
+
+    return {
+        black_prefix + '901': 'Invalid input',
+        black_prefix + '997': 'Invalid TOML file',
+        black_prefix + '999': 'Unexpected exception',
+    }
+
+
+def extract_flake8_alfred() -> Dict[str, str]:
+    return {'B1': 'banned symbol'}
+
+
+def extract_flake8_eradicate() -> Dict[str, str]:
+    return {'E800': 'Found commented out code: {0}'}
+
+
+# -- AD-HOC EXTRACTORS -- #
 
 
 def extract_flake8_commas() -> Dict[str, str]:
     from flake8_commas._base import ERRORS
 
     return dict(ERRORS.values())
-
-
-def extract_flake8_quotes() -> Dict[str, str]:
-    import flake8_quotes
-
-    content = Path(flake8_quotes.__file__).read_text()
-    return get_messages(code='Q0', content=content)
-
-
-def extract_flake8_variables_names() -> Dict[str, str]:
-    from flake8_variables_names import checker
-
-    content = Path(checker.__file__).read_text()
-    return get_messages(code='VNE', content=content)
-
-
-def extract_logging_format() -> Dict[str, str]:
-    from logging_format import violations
-
-    content = Path(violations.__file__).read_text()
-    return get_messages(code='G', content=content)
 
 
 def extract_flake8_debugger() -> Dict[str, str]:
@@ -97,6 +174,12 @@ def extract_flake8_mutable() -> Dict[str, str]:
     from mutable_defaults import MutableDefaultChecker
 
     return {MutableDefaultChecker._code: MutableDefaultChecker._error_tmpl}
+
+
+def extract_flake8_fixme() -> Dict[str, str]:
+    from flake8_fixme import WORD_CODES
+
+    return {code: 'fixme found ({})'.format(word) for word, code in WORD_CODES.items()}
 
 
 def extract_pep8_naming() -> Dict[str, str]:
@@ -113,12 +196,27 @@ def extract_pep8_naming() -> Dict[str, str]:
     return codes
 
 
-def extract_flake8_alfred() -> Dict[str, str]:
-    return {'B1': 'banned symbol'}
+def extract_flake8_pyi() -> Dict[str, str]:
+    import pyi
+    codes = dict()
+    for name, value in vars(pyi).items():
+        if name.startswith('Y0'):
+            codes[name] = value
+    return codes
 
 
-def extract_flake8_eradicate() -> Dict[str, str]:
-    return {'E800': 'Found commented out code: {0}'}
+def extract_flake8_pytest_style() -> Dict[str, str]:
+    from flake8_pytest_style import errors
+    codes = dict()
+    for error in vars(errors).values():
+        if error is errors.Error:
+            continue
+        if not isinstance(error, type):
+            continue
+        if not issubclass(error, errors.Error):
+            continue
+        codes[error.code] = error.message  # type: ignore
+    return codes
 
 
 def extract_flake8_annotations_complexity() -> Dict[str, str]:
@@ -145,16 +243,6 @@ def extract_flake8_string_format() -> Dict[str, str]:
     from flake8_string_format import StringFormatChecker
 
     return {'P{}'.format(c): m for c, m in StringFormatChecker.ERRORS.items()}
-
-
-def extract_flake8_broken_line() -> Dict[str, str]:
-    try:
-        from flake8_broken_line import N400
-    except ImportError:
-        from flake8_broken_line import _N400 as N400
-
-    code, message = N400.split(': ')
-    return {code: message}
 
 
 def extract_flake8_bandit() -> Dict[str, str]:
@@ -245,19 +333,6 @@ def extract_flake8_scrapy() -> Dict[str, str]:
     return codes
 
 
-def extract_flake8_pie() -> Dict[str, str]:
-    import flake8_pie
-
-    codes = dict()
-    for name in dir(flake8_pie):
-        if not name.startswith('PIE'):
-            continue
-        obj = getattr(flake8_pie, name)('', '')
-        code, msg = obj.message.split(': ', maxsplit=1)
-        codes[code] = msg
-    return codes
-
-
 def extract_flake8_executable() -> Dict[str, str]:
     import flake8_executable
 
@@ -300,13 +375,6 @@ def extract_dlint() -> Dict[str, str]:
         code, msg = linter._error_tmpl.split(' ', maxsplit=1)
         codes[code] = msg
     return codes
-
-
-def extract_mccabe() -> Dict[str, str]:
-    from mccabe import McCabeChecker
-
-    code, message = McCabeChecker._error_tmpl.split(' ', maxsplit=1)
-    return {code: message}
 
 
 def extract_flake8_mock() -> Dict[str, str]:

@@ -9,10 +9,17 @@ from flake8.utils import fnmatch
 
 REX_NAME = re.compile(r'[-_.]+')
 ALIASES = {
+    'aaa': 'flake8-aaa',
     'flake-mutable': 'flake8-mutable',
-    'pyflakes': 'pyflakes',
-    'naming': 'pep8-naming',
+    'flake8-pandas-vet': 'pandas-vet',
+    'import-order': 'flake8-import-order',
     'logging-format': 'flake8-logging-format',
+    'naming': 'pep8-naming',
+    'pyflakes': 'pyflakes',
+    'sql': 'flake8-sql',
+    'use-fstring-format': 'flake8-use-fstring',
+    'use-fstring-percent': 'flake8-use-fstring',
+    'use-fstring-prefix': 'flake8-use-fstring',
 }
 PluginsType = Dict[str, List[str]]
 
