@@ -24,22 +24,22 @@ install:
   - dephell deps install --env=$ENV
   - dephell project register
 script:
-  - dephell venv run --env=$ENV
+  - dephell venv run --env=$ENV --traceback --level=DEBUG
 
 matrix:
   include:
 
     - python: "3.6.7"
       env: ENV=pytest
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=pytest
     - python: "3.8"
       env: ENV=pytest
 
     - name: lint
-      python: "3.7"
+      python: "3.7.1"
       env: ENV=main
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=typing
 
     # https://github.com/igorshubovych/markdownlint-cli
@@ -53,5 +53,5 @@ matrix:
       script:
         - bash -c "markdownlint --config markdownlint.json **/*.md"
 
-    - python: "3.7"
+    - python: "3.7.1"
       env: ENV=docs
