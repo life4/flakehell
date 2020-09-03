@@ -71,6 +71,7 @@ requires=[
     "termcolor",
     "toml",
     "urllib3",
+    "colorama",
 ]
 description-file="README.md"
 classifiers=[
