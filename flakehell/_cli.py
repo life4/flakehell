@@ -4,15 +4,16 @@ from typing import List, NoReturn
 
 # external
 from termcolor import colored
-
-# use colorama to make termcolor work on Windows
 import colorama
-colorama.init()
 
 # app
 from ._constants import ExitCode
 from ._types import CommandResult
 from .commands import COMMANDS
+
+
+# use colorama to make termcolor work on Windows
+colorama.init()
 
 
 def show_commands():
