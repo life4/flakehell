@@ -127,7 +127,7 @@ def get_exceptions(
     try:
         path = path.resolve().relative_to(root).as_posix()
     except ValueError:
-        path = Path().resolve()
+        path = path.resolve().as_posix()
     exceptions = sorted(
         exceptions.items(),
         key=lambda item: len(item[0]),
