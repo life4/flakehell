@@ -1,5 +1,6 @@
 # built-in
 import sys
+import os
 from typing import List, NoReturn
 
 # external
@@ -12,8 +13,9 @@ from ._types import CommandResult
 from .commands import COMMANDS
 
 
-# use colorama to make termcolor work on Windows
-colorama.init()
+if os.name == 'nt':
+    # use colorama to make termcolor work on Windows
+    colorama.init()
 
 
 def show_commands():
