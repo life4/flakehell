@@ -122,7 +122,6 @@ def get_exceptions(
         return dict()
     if isinstance(path, str):
         path = Path(path)
-    
     if root is None:
         root = Path().resolve()
     try:
