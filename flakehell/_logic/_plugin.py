@@ -122,9 +122,13 @@ def get_exceptions(
         return dict()
     if isinstance(path, str):
         path = Path(path)
+    
     if root is None:
         root = Path().resolve()
-    path = path.resolve().relative_to(root).as_posix()
+    try:
+        path = path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        path = Path().resolve()
     exceptions = sorted(
         exceptions.items(),
         key=lambda item: len(item[0]),
