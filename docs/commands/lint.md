@@ -23,7 +23,7 @@ flakehell lint ./flakehell/ ./tests/
 Show available arguments:
 
 ```bash
-flakehell lint ./flakehell/ ./tests/
+flakehell lint --help
 ```
 
 Read [flake8 documentation](http://flake8.pycqa.org/en/latest/user/options.html) for list of available options.
