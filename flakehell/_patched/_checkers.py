@@ -9,7 +9,8 @@ from flake8.utils import filenames_from, fnmatch
 
 # app
 from .._logic import (
-    Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache
+    Snapshot, check_include, get_exceptions, get_plugin_name,
+    get_plugin_rules, make_baseline, prepare_cache,
 )
 from ._processor import FlakeHellProcessor
 
@@ -184,7 +185,8 @@ class FlakeHellCheckersManager(Manager):
             if checker.snapshot.exists():
                 all_results = checker.snapshot.results
             else:
-                all_results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
+                all_results = sorted(
+                    checker.results, key=lambda tup: (tup[1], tup[2]))
                 checker.snapshot.dump(all_results)
 
             # group results by plugin name
