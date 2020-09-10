@@ -1,17 +1,17 @@
 # built-in
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Tuple, Optional
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 # external
 from flake8.checker import FileChecker, Manager
 from flake8.utils import filenames_from, fnmatch
 
 # app
-from ._processor import FlakeHellProcessor
 from .._logic import (
-    Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
+    Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache
 )
+from ._processor import FlakeHellProcessor
 
 
 DEFAULT_PLUGIN = 'pycodestyle'

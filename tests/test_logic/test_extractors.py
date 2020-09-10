@@ -1,3 +1,4 @@
+# built-in
 from unittest.mock import patch
 
 # external
@@ -5,7 +6,7 @@ import pytest
 
 # project
 from flakehell._constants import KNOWN_PLUGINS
-from flakehell._logic import extract, get_installed, _extractors
+from flakehell._logic import _extractors, extract, get_installed
 from flakehell._patched import FlakeHellApplication
 
 

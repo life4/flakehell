@@ -2,9 +2,9 @@
 import subprocess
 import sys
 from io import BytesIO
-from unittest.mock import patch, Mock
 from pathlib import Path
 from textwrap import dedent
+from unittest.mock import Mock, patch
 
 # external
 import pytest

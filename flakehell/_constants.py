@@ -1,6 +1,6 @@
 # built-in
-from types import MappingProxyType
 from enum import IntEnum
+from types import MappingProxyType
 
 # app
 from ._version import __version__
