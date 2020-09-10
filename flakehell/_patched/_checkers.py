@@ -1,5 +1,6 @@
 # built-in
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Tuple, Optional
 
 # external
@@ -29,6 +30,7 @@ class FlakeHellCheckersManager(Manager):
     """
     Patched flake8.checker.Manager to provide `plugins` support
     """
+
     def __init__(self, baseline: Optional[str], **kwargs):
         self.baseline = set()
         if baseline:
@@ -132,6 +134,36 @@ class FlakeHellCheckersManager(Manager):
                 plugins=exceptions,
             )
         return rules
+
+    def is_path_excluded(self, filename: str) -> bool:
+        """Patched `is_path_excluded`.
+
+        We patch it to exclude files not specified explicitly.
+        It is helpful when you want to run flakehell with `--diff`
+        and explicitly passed paths at the same time.
+
+        Run flakehell only on changes in example.py:
+
+            git diff | flakehell lint --diff example.py
+        """
+        if filename == "-":
+            filename = self.options.stdin_display_name
+        if super().is_path_excluded(path=filename):
+            return True
+        if not self.arguments:
+            return False
+
+        # include file only if it is a subpath of
+        # an explicitly specified CLI argument.
+        path = Path(filename).absolute()
+        parents = path.parents
+        for base_filename in self.arguments:
+            base_path = Path(base_filename).absolute()
+            if base_path == path:
+                return False
+            if base_path in parents:
+                return False
+        return True
 
     def report(self) -> Tuple[int, int]:
         """Reloaded report generation to filter out excluded error codes.
