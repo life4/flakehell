@@ -2,11 +2,9 @@
 import sys
 from typing import List, NoReturn
 
-# external
-from termcolor import colored
-
 # app
 from ._constants import ExitCode
+from ._logic import colored
 from ._types import CommandResult
 from .commands import COMMANDS
 

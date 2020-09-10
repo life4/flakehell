@@ -1,9 +1,6 @@
-# external
-from termcolor import colored
-
 # app
 from .._constants import NAME, VERSION, ExitCode
-from .._logic import get_installed, get_plugin_rules
+from .._logic import colored, get_installed, get_plugin_rules
 from .._patched import FlakeHellApplication
 from .._types import CommandResult
 

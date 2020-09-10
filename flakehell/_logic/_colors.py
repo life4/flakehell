@@ -1,8 +1,34 @@
 # built-in
 import re
+from typing import List
 
-# external
-from termcolor import colored
+# project
+from colorama import Fore, init, Style
+
+
+init()
+
+COLOR_CODES = dict(
+    grey=Fore.BLACK,
+    red=Fore.RED,
+    green=Fore.GREEN,
+    yellow=Fore.YELLOW,
+    blue=Fore.BLUE,
+    magenta=Fore.MAGENTA,
+    cyan=Fore.CYAN,
+    white=Fore.WHITE,
+)
+RESET = '\033[0m'
+
+
+def colored(text: object, color: str, attrs: List[str] = None) -> str:
+    """termcolor.colored implementation on top of colorama
+    """
+    result = COLOR_CODES[color] + str(text) + Style.RESET_ALL
+    if attrs:
+        if 'bold' in attrs or 'underline' in attrs:
+            result = Style.BRIGHT + result
+    return result
 
 
 COLORS = dict(

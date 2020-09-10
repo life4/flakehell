@@ -8,7 +8,7 @@ pycodestyle = ["+*"]
 pyflakes = ["+*"]
 flake8-commas = ["+*"]
 flake8-quotes = ["+*"]
-pylint = ["+F*", "+E*", "-E0611", "-E1101", "-E0401", "-E1102"]
+pylint = ["+F*", "+E*", "-E0611", "-E1101", "-E0401", "-E1102", "-E1123"]
 
 # -- DEPHELL -- #
 
@@ -65,11 +65,11 @@ author-email="master_fess@mail.ru"
 home-page="https://github.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
+    "colorama",
     "entrypoints",
     "flake8>=3.8.0",
     "pygments",
     "pylint",
-    "termcolor",
     "toml",
     "urllib3",
 ]
