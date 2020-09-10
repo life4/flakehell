@@ -12,12 +12,14 @@ class GitlabFormatter(BaseFormatter):
     error_format = '{code} {text}'
 
     def start(self):
+        super().start()
         self._write('[')
         self.newline = ''
         self._first_line = True
 
     def stop(self):
         self._write('\n]\n')
+        super().stop()
 
     def handle(self, error):
         # redefined to never output source
@@ -26,8 +28,6 @@ class GitlabFormatter(BaseFormatter):
 
     def format(self, error):
         filename = error.filename
-        if filename.startswith('./'):
-            filename = filename[2:]
         digest = make_baseline(
             path=filename,
             code=error.code,
