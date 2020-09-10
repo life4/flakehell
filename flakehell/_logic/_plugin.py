@@ -124,7 +124,11 @@ def get_exceptions(
         path = Path(path)
     if root is None:
         root = Path().resolve()
-    path = path.resolve().relative_to(root).as_posix()
+    try:
+        path = path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        # path is not in the project root
+        return dict()
     exceptions = sorted(
         exceptions.items(),
         key=lambda item: len(item[0]),
