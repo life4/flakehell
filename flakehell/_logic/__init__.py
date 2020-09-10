@@ -1,6 +1,6 @@
 # app
 from ._baseline import make_baseline
-from ._colors import color_code, color_description
+from ._colors import colored, color_code, color_description
 from ._config import read_config
 from ._discover import get_installed
 from ._extractors import extract
@@ -12,7 +12,7 @@ from ._yesqa import YesQA
 __all__ = [
     'make_baseline',
     'read_config',
-    'color_code', 'color_description',
+    'colored', 'color_code', 'color_description',
     'get_installed',
     'extract',
     'get_plugin_name', 'get_plugin_rules', 'check_include', 'get_exceptions',

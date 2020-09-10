@@ -7,10 +7,9 @@ from flake8.style_guide import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
-from termcolor import colored
 
 # app
-from .._logic import color_code, color_description
+from .._logic import colored, color_code, color_description
 
 
 REX_TEXT = re.compile('[A-Z]+')

@@ -2,7 +2,24 @@
 import re
 
 # external
-from termcolor import colored
+from colorama import Fore, init
+
+init()
+
+COLOR_CODES = dict(
+    red=Fore.RED,
+    green=Fore.GREEN,
+    yellow=Fore.YELLOW,
+    blue=Fore.BLUE,
+    magenta=Fore.MAGENTA,
+    cyan=Fore.CYAN,
+    white=Fore.WHITE,
+)
+RESET = '\033[0m'
+
+
+def colored(text: str, color: str) -> str:
+    return COLOR_CODES[color] + text + Fore.RESET
 
 
 COLORS = dict(

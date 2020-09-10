@@ -65,14 +65,13 @@ author-email="master_fess@mail.ru"
 home-page="https://github.com/life4/flakehell"
 requires-python=">=3.5"
 requires=[
+    "colorama",
     "entrypoints",
     "flake8>=3.8.0",
     "pygments",
     "pylint",
-    "termcolor",
     "toml",
     "urllib3",
-    "colorama",
 ]
 description-file="README.md"
 classifiers=[

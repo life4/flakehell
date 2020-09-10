@@ -1,21 +1,12 @@
 # built-in
 import sys
-import os
 from typing import List, NoReturn
-
-# external
-from termcolor import colored
-import colorama
 
 # app
 from ._constants import ExitCode
+from ._logic import colored
 from ._types import CommandResult
 from .commands import COMMANDS
-
-
-if os.name == 'nt':
-    # use colorama to make termcolor work on Windows
-    colorama.init()
 
 
 def show_commands():
