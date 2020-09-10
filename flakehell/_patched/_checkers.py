@@ -146,11 +146,14 @@ class FlakeHellCheckersManager(Manager):
 
             git diff | flakehell lint --diff example.py
         """
-        if filename == "-":
+        if filename == '-':
             filename = self.options.stdin_display_name
         if super().is_path_excluded(path=filename):
             return True
-        if not self.arguments:
+
+        # skip subpath check below for stdin
+        arguments = set(self.arguments) - {'.', '-', 'stdin'}
+        if not arguments:
             return False
 
         # include file only if it is a subpath of
