@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 # external
 import pytest
 
@@ -21,6 +23,7 @@ def test_smoke_extract(plugin_name):
         assert code[0].isupper(), 'code must be uppercase'
 
 
+@patch('sys.argv', ['flakehell'])
 @pytest.mark.parametrize('plugin_name', KNOWN_PLUGINS)
 def test_smoke_prefixes(plugin_name):
     app = FlakeHellApplication(program='test', version='1.0.0')
