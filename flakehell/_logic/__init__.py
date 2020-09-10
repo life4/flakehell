@@ -1,6 +1,6 @@
 # app
 from ._baseline import make_baseline
-from ._colors import colored, color_code, color_description
+from ._colors import color_code, color_description, colored
 from ._config import read_config
 from ._discover import get_installed
 from ._extractors import extract

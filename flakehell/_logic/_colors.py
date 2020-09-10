@@ -1,8 +1,9 @@
 # built-in
 import re
 
-# external
+# project
 from colorama import Fore, init
+
 
 init()
 

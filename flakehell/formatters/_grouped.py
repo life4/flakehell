@@ -7,7 +7,7 @@ from flake8.statistics import Statistics
 from flake8.style_guide import Violation
 
 # app
-from .._logic import colored, color_code, color_description
+from .._logic import color_code, color_description, colored
 from ._colored import ColoredFormatter
 
 

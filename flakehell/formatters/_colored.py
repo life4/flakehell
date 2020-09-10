@@ -9,7 +9,7 @@ from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
 
 # app
-from .._logic import colored, color_code, color_description
+from .._logic import color_code, color_description, colored
 
 
 REX_TEXT = re.compile('[A-Z]+')
