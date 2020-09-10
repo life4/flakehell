@@ -1,7 +1,7 @@
 # built-in
 import re
 from collections import defaultdict
-from typing import Any, Dict, Iterator, Iterable
+from typing import Any, Dict, Iterable, Iterator
 
 # app
 from ._plugin import get_plugin_name

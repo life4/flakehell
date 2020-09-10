@@ -1,16 +1,18 @@
 # built-in
 from collections import defaultdict
-from typing import Any, Dict, List, NamedTuple, Tuple, Optional
+from pathlib import Path
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 # external
 from flake8.checker import FileChecker, Manager
 from flake8.utils import filenames_from, fnmatch
 
 # app
-from ._processor import FlakeHellProcessor
 from .._logic import (
-    Snapshot, check_include, get_exceptions, get_plugin_name, get_plugin_rules, make_baseline, prepare_cache,
+    Snapshot, check_include, get_exceptions, get_plugin_name,
+    get_plugin_rules, make_baseline, prepare_cache,
 )
+from ._processor import FlakeHellProcessor
 
 
 DEFAULT_PLUGIN = 'pycodestyle'
@@ -29,6 +31,7 @@ class FlakeHellCheckersManager(Manager):
     """
     Patched flake8.checker.Manager to provide `plugins` support
     """
+
     def __init__(self, baseline: Optional[str], **kwargs):
         self.baseline = set()
         if baseline:
@@ -133,6 +136,39 @@ class FlakeHellCheckersManager(Manager):
             )
         return rules
 
+    def is_path_excluded(self, filename: str) -> bool:
+        """Patched `is_path_excluded`.
+
+        We patch it to exclude files not specified explicitly.
+        It is helpful when you want to run flakehell with `--diff`
+        and explicitly passed paths at the same time.
+
+        Run flakehell only on changes in example.py:
+
+            git diff | flakehell lint --diff example.py
+        """
+        if filename == '-':
+            filename = self.options.stdin_display_name
+        if super().is_path_excluded(path=filename):
+            return True
+
+        # skip subpath check below for stdin
+        arguments = set(self.arguments) - {'.', '-', 'stdin'}
+        if not arguments:
+            return False
+
+        # include file only if it is a subpath of
+        # an explicitly specified CLI argument.
+        path = Path(filename).absolute()
+        parents = path.parents
+        for base_filename in self.arguments:
+            base_path = Path(base_filename).absolute()
+            if base_path == path:
+                return False
+            if base_path in parents:
+                return False
+        return True
+
     def report(self) -> Tuple[int, int]:
         """Reloaded report generation to filter out excluded error codes.
 
@@ -149,7 +185,8 @@ class FlakeHellCheckersManager(Manager):
             if checker.snapshot.exists():
                 all_results = checker.snapshot.results
             else:
-                all_results = sorted(checker.results, key=lambda tup: (tup[1], tup[2]))
+                all_results = sorted(
+                    checker.results, key=lambda tup: (tup[1], tup[2]))
                 checker.snapshot.dump(all_results)
 
             # group results by plugin name

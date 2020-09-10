@@ -1,7 +1,12 @@
+# built-in
 from pathlib import Path
 from typing import List, Type
+
+# external
 from flake8.processor import FileProcessor
-from ..parsers import BaseParser, PARSERS, PythonParser
+
+# app
+from ..parsers import PARSERS, BaseParser, PythonParser
 
 
 class FlakeHellProcessor(FileProcessor):

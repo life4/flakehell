@@ -1,5 +1,6 @@
-from flakehell.parsers import PARSERS
+# project
 from flakehell._constants import DEFAULTS
+from flakehell.parsers import PARSERS
 
 
 def test_default_filename():

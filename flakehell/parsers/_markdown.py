@@ -1,8 +1,10 @@
+# built-in
 from enum import Enum
 from pathlib import Path
 from types import MappingProxyType
-from typing import Optional
-from typing import List
+from typing import List, Optional
+
+# app
 from ._base import BaseParser
 
 
