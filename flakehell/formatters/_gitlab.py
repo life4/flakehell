@@ -26,8 +26,6 @@ class GitlabFormatter(BaseFormatter):
 
     def format(self, error):
         filename = error.filename
-        if filename.startswith('./'):
-            filename = filename[2:]
         digest = make_baseline(
             path=filename,
             code=error.code,
