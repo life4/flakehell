@@ -1,5 +1,6 @@
 # built-in
 from pathlib import Path
+from unittest.mock import patch
 
 # external
 import pytest
@@ -11,6 +12,7 @@ from flakehell._logic import YesQA
 from ..utils import chdir
 
 
+@patch('sys.argv', ['flakehell'])
 def get_modified(content: str, path: Path) -> str:
     path = path / 'tmp.py'
     path.write_text(content)
@@ -18,6 +20,7 @@ def get_modified(content: str, path: Path) -> str:
         return YesQA().get_modified_file(path=path, original=content)
 
 
+@patch('sys.argv', ['flakehell'])
 @pytest.mark.parametrize('content', [
     'print("hello")',
     # don't add not ignored codes
@@ -33,6 +36,7 @@ def test_not_modified(content: str, tmp_path: Path):
     assert get_modified(content=content, path=tmp_path) == content
 
 
+@patch('sys.argv', ['flakehell'])
 @pytest.mark.parametrize('given, expected', [
     # remove one code
     ('err=1 # noqa: E225, E117', 'err=1 # noqa: E225'),

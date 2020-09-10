@@ -43,10 +43,11 @@ command = "mypy --ignore-missing-imports --allow-redefinition flakehell/"
 # -- ISORT -- #
 
 [tool.isort]
-line_length = 120
+line_length = 100
 combine_as_imports = true
 balanced_wrapping = true
 lines_after_imports = 2
+include_trailing_comma = true
 not_skip = "__init__.py"
 multi_line_output = 5
 

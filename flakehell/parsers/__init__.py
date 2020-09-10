@@ -1,6 +1,8 @@
+# built-in
 from types import MappingProxyType
 from typing import Mapping, Type
 
+# app
 from ._base import BaseParser
 from ._jupyter import JupyterParser
 from ._markdown import MarkdownParser
