@@ -1,5 +1,6 @@
 # built-in
 import json
+import os
 from hashlib import md5
 from pathlib import Path
 from time import time
@@ -10,7 +11,7 @@ from flake8.checker import FileChecker
 from flake8.options.manager import OptionManager
 
 
-CACHE_PATH = Path.home() / '.cache' / 'flakehell'
+CACHE_PATH = Path(os.environ.get('FLAKEHELL_CACHE', Path.home() / '.cache' / 'flakehell'))
 THRESHOLD = 3600 * 24  # 1 day
 
 
