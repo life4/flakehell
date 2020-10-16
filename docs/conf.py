@@ -30,7 +30,7 @@ project = 'FlakeHell'
 copyright = '{}, Gram (@orsinium)'.format(date.today().year)
 author = 'Gram (@orsinium)'
 
-version = '0.6.1'
+version = '0.7.0'
 release = version
 
 language = None
