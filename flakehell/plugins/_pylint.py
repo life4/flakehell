@@ -4,9 +4,14 @@ from tokenize import TokenInfo
 from typing import Sequence
 
 # external
-from pylint.__pkginfo__ import version
-from pylint.lint import Run
-from pylint.reporters import BaseReporter
+try:
+    from pylint.__pkginfo__ import version
+    from pylint.lint import Run
+    from pylint.reporters import BaseReporter
+except ImportError:
+    version = '0.0.0'
+    Run = None
+    BaseReporter = object
 
 
 STDIN = 'stdin'
@@ -42,6 +47,10 @@ class PyLintChecker:
         self.file_tokens = file_tokens
 
     def run(self):
+        # pylint is not installed, skip
+        if Run is None:
+            return
+
         reporter = Reporter()
         Run([self.filename], reporter=reporter, do_exit=False)
         for error in reporter.errors:
