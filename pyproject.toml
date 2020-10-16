@@ -69,7 +69,6 @@ requires=[
     "entrypoints",
     "flake8>=3.8.0",
     "pygments",
-    "pylint",
     "toml",
     "urllib3",
 ]
