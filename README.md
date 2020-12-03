@@ -1,7 +1,7 @@
 # ![FlakeHell](./assets/logo.png)
 
 [![PyPI version](https://badge.fury.io/py/flakehell.svg)](https://badge.fury.io/py/flakehell)
-[![Build Status](https://travis-ci.org/life4/flakehell.svg?branch=master)](https://travis-ci.org/life4/flakehell)
+[![Build Status](https://cloud.drone.io/api/badges/life4/flakehell/status.svg)](https://cloud.drone.io/life4/flakehell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Documentation](https://readthedocs.org/projects/flakehell/badge/?version=latest)](https://flakehell.readthedocs.io/)
 
