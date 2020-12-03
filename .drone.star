@@ -38,6 +38,7 @@ def step(env, python):
             "export DEPHELL_ENV={}".format(env),
             "dephell venv create",
             "dephell deps install --silent",
+            "dephell project register --traceback --level=DEBUG",
             # run
             "dephell venv run",
         ],
