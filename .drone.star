@@ -11,7 +11,7 @@ def main(ctx):
             step(env="pytest", python="3.7"),
             step(env="pytest", python="3.8"),
             step(env="pytest", python="3.9"),
-            step(env="flake8", python="3.8"),
+            step(env="main", python="3.8"),
             step(env="typing", python="3.8"),
         ],
     )
