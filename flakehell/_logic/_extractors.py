@@ -336,15 +336,11 @@ def extract_flake8_scrapy() -> Dict[str, str]:
 def extract_flake8_executable() -> Dict[str, str]:
     import flake8_executable
 
+    path = Path(flake8_executable.__file__)
+    content = path.read_text()
     codes = dict()
-    for name in dir(flake8_executable):
-        cls = getattr(flake8_executable, name, None)
-        if not isinstance(cls, type):
-            continue
-        if '0' not in cls.__name__:
-            continue
-        obj = cls(line_number=1, offset=1, filename='', shebang='{shebang}')
-        codes[obj.error_code] = obj.message
+    for code, msg in re.findall(r"'(EXE00\d)', '(.*)'", content):
+        codes[code] = msg
     return codes
 
 
