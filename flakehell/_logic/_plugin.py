@@ -135,18 +135,20 @@ def get_exceptions(
         reverse=True,
     )
 
+    aggregated_rules = dict()
+
     # prefix
     for path_rule, rules in exceptions:
         if '*' in path_rule:
             continue
         if path.startswith(path_rule):
-            return rules
+            aggregated_rules.update(rules)
 
     # glob
     for path_rule, rules in exceptions:
         if '*' not in path_rule:
             continue
         if fnmatch(filename=path, patterns=[path_rule]):
-            return rules
+            aggregated_rules.update(rules)
 
-    return dict()
+    return aggregated_rules

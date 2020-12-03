@@ -30,3 +30,19 @@ def test_get_exceptions(tmp_path: Path):
     source_path.touch()
     result = get_exceptions(path=source_path, exceptions=exceptions, root=tmp_path)
     assert result == {}
+
+
+def test_get_exceptions_with_intersections(tmp_path: Path):
+    exceptions = {
+        'tests/': {'pyflakes': ['+*']},
+        '**/test.py': {'pycodestyle': ['+*']},
+    }
+
+    tests_dir = tmp_path / 'tests'
+    tests_dir.mkdir()
+
+    test_file_path = tests_dir / 'test.py'
+    test_file_path.touch()
+
+    result = get_exceptions(path=test_file_path, exceptions=exceptions, root=tmp_path)
+    assert result == {'pyflakes': ['+*'], 'pycodestyle': ['+*']}
