@@ -32,7 +32,7 @@ class Reporter(BaseReporter):
         self.errors.append(dict(
             row=msg.line,
             col=msg.column,
-            text='{} {}'.format(msg.msg_id, msg.msg or ''),
+            text='{} {} ({})'.format(msg.msg_id, msg.msg or '', msg.symbol),
             code=msg.msg_id,
         ))
 
