@@ -9,7 +9,6 @@ from ._lint import lint_command
 from ._missed import missed_command
 from ._plugins import plugins_command
 from ._version import version_command
-from ._dropqa import dropqa_command
 
 
 __all__ = [
@@ -22,7 +21,6 @@ __all__ = [
     'missed_command',
     'plugins_command',
     'version_command',
-    'dropqa_command',
 ]
 
 
@@ -33,6 +31,5 @@ COMMANDS = MappingProxyType({
     'lint': lint_command,
     'missed': missed_command,
     'plugins': plugins_command,
-    'dropqa': dropqa_command,
     '--version': version_command,
 })
