@@ -19,13 +19,13 @@ def get_paths(paths):
         yield path
 
 
-def yesqa_command(argv) -> CommandResult:
+def dropqa_command(argv) -> CommandResult:
     """Remove bare and unused noqa comments.
     """
     if not argv:
         return ExitCode.NOT_ENOUGH_ARGS, 'no file path provided'
     if argv[0] == '--help':
-        print(yesqa_command.__doc__)
+        print(dropqa_command.__doc__)
         return ExitCode.OK, ''
 
     paths = get_paths(Path(fname) for fname in argv)
