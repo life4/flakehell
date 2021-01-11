@@ -6,7 +6,6 @@ from ._discover import get_installed
 from ._extractors import extract
 from ._plugin import check_include, get_exceptions, get_plugin_name, get_plugin_rules
 from ._snapshot import Snapshot, prepare_cache
-from ._yesqa import YesQA
 
 
 __all__ = [

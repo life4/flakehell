@@ -12,7 +12,6 @@ It's a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 + [Check that all required plugins are installed](https://flakehell.readthedocs.io/commands/missed.html).
 + [Syntax highlighting in messages and code snippets](https://flakehell.readthedocs.io/formatters.html#colored-with-source-code).
 + [PyLint](https://github.com/PyCQA/pylint) integration.
-+ [Remove unused noqa](https://flakehell.readthedocs.io/commands/dropqa.html).
 + [Powerful GitLab support](https://flakehell.readthedocs.io/formatters.html#gitlab).
 + Codes management:
     + Manage codes per plugin.
@@ -49,5 +48,4 @@ FlakeHell supports all flake8 plugins, formatters, and configs. However, FlakeHe
     commands/codes
     commands/code
     commands/missed
-    commands/dropqa
 ```
