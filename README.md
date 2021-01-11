@@ -1,3 +1,9 @@
+# THE PROJECT IS ARCHIVED
+
+Forks: https://github.com/orsinium/forks
+
+---
+
 # ![FlakeHell](./assets/logo.png)
 
 [![PyPI version](https://badge.fury.io/py/flakehell.svg)](https://badge.fury.io/py/flakehell)
